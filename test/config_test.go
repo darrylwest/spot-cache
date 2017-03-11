@@ -11,16 +11,16 @@ func TestConfig(t *testing.T) {
 	g := Goblin(t)
 
 	g.Describe("Config", func() {
-		spotcache.CreateLogger(spotcashe.NewConfigForEnvironment("test"))
+		// spotcache.CreateLogger(spotcashe.NewConfigForEnvironment("test"))
 
 		g.It("should create a config struct", func() {
-			cfg := new(webserver.Config)
+			cfg := new(spotcache.Config)
 
 			g.Assert(cfg.GetShutdownPort()).Equal(0)
 		})
 
 		g.It("should create a context struct with defaults set", func() {
-			cfg := webserver.NewDefaultConfig()
+			cfg := spotcache.NewDefaultConfig()
 
 			g.Assert(cfg.GetShutdownPort()).Equal(3009)
 
@@ -38,7 +38,7 @@ func TestConfig(t *testing.T) {
 		})
 
 		g.It("should create context from args", func() {
-			cfg := webserver.ParseArgs()
+			cfg := spotcache.ParseArgs()
 
 			g.Assert(cfg.GetShutdownPort()).Equal(3009)
 
