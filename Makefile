@@ -1,8 +1,9 @@
 SHELL := /bin/bash
+export GOPATH:=$(HOME)/.gopath:$(PWD)
 
 build: 
 	@[ -d bin ] || mkdir bin
-	( . ./.setpath ; go build -o bin/webserver src/main.go )
+	( go build -o bin/spotcache src/main.go )
 
 install-deps:
 	go get github.com/pborman/uuid
@@ -10,13 +11,13 @@ install-deps:
 	go get github.com/franela/goblin
 
 format:
-	( gofmt -s -w src/*.go src/webserver/*.go test/*.go )
+	( gofmt -s -w src/*.go src/spotcache/*.go test/*.go )
 
 qtest:
-	@( . ./.setpath ; cd test ; go test )
+	@( cd test ; go test )
 
 test:
-	@( . ./.setpath ; go vet src/webserver/*.go ; go vet src/*.go ; cd test ; go test )
+	@( go vet src/spotcache/*.go ; go vet src/*.go ; cd test ; go test )
 
 watch:
 	./watcher.js

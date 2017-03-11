@@ -4,12 +4,12 @@
 // 2015.03.04
 'use strict';
 
-const fs = require('fs'),
-    spawn = require('child_process').spawn,
-    clearScreen = '[H[2J',
-    files = [],
-    tid,
-    lastRun;
+const fs = require('fs');
+const spawn = require('child_process').spawn;
+const clearScreen = '[H[2J';
+let files = [];
+let tid;
+let lastRun;
 
 const run = function() {
     process.stdout.write( clearScreen ); 
