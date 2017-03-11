@@ -1,6 +1,6 @@
 # Spot Cache
 
-_A fast targeted application cache backed by leveldb._
+_A fast stand-alone or containerized cache backed by leveldb._
 
 # Overview
 
@@ -37,4 +37,4 @@ Socket protocol is asynchronous request/replay that uses a thin envelope to matc
 | stat |            | data |
 | halt |    			| err  |
 
-###### darryl.west | 2017-03-11 | Version 0.90.100
+###### darryl.west | 2017-03-11 | Version 0.90.101-alpha
