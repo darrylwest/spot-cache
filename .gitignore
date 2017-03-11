@@ -1,4 +1,6 @@
 .DS_*
-dist/
+bin/*
+db/*
 *.out
 *.swp
+

@@ -11,7 +11,7 @@ func TestConfig(t *testing.T) {
 	g := Goblin(t)
 
 	g.Describe("Config", func() {
-		// spotcache.CreateLogger(spotcashe.NewConfigForEnvironment("test"))
+        spotcache.CreateLogger(spotcache.NewConfigForEnvironment("test"))
 
 		g.It("should create a config struct", func() {
 			cfg := new(spotcache.Config)

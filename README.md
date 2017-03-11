@@ -4,14 +4,18 @@ _A small targeted application cache._
 
 # Overview
 
+A fast cache service written in golang and backed by leveldb.  Server connections are via TCP sockets with cluster/replication to support multiple local machine instances.  It can also be used as a single instance in a small network of machines.
+
+Socket protocol is asynchronous request/replay that uses a thin envelope to match the correct response to it's request.
+
 ## Server
 
-* levelup backed
-* socket API (req/resp)
-* clusterable
+* level-db backed
+* socket API (request/response)
+* cluster/replication support
 * written in golang
 * zero mq (inspired)
-* dockerfile included
+* Dockerfile to enable containerization
 
 ### Data Types
 
@@ -25,7 +29,7 @@ _A small targeted application cache._
 
 | func | params     | response         |
 |------|------------|------------------|
-| get  | key        | data,err         |
+| get  | key        | data, err        |
 | put  | key, value | err              |
 | del  | key        | err              |
 | has  | key        | t/f, err         |
@@ -33,4 +37,4 @@ _A small targeted application cache._
 | stat |            | data |
 | halt |    			| err  |
 
-###### darryl.west | 2017-03-10
+###### darryl.west | 2017-03-11 | Version 0.90.100
