@@ -8,14 +8,15 @@
 package main
 
 import (
-    "fmt"
     "spotcache"
 )
 
 func main() {
     cfg := spotcache.ParseArgs()
+    log := spotcache.CreateLogger(cfg)
+
     /*
-    err := spotcache.StartServer(cfg)
+    err := spotcache.StartService(cfg)
 
     if err != nil {
         fmt.Println("error starting service: ", err)
@@ -23,5 +24,5 @@ func main() {
     }
     */
 
-    fmt.Printf("Socket service started: %v\n", cfg.ToMap())
+    log.Info("Socket service started: %v\n", cfg.ToMap())
 }

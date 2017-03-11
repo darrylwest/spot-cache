@@ -1,6 +1,6 @@
 # Spot Cache
 
-_A small targeted application cache._
+_A fast targeted application cache backed by leveldb._
 
 # Overview
 
