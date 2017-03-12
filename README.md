@@ -10,6 +10,8 @@ Socket protocol is asynchronous request/replay that uses a thin envelope to matc
 
 **Note: this project is in the early stages and doesn't expect to go live until Q2-2017.**
 
+_This project was inspired in part by [Suryandaru Triandana](https://github.com/syndtr/goleveldb)'s excellent port of leveldb to golang._
+
 ## Server
 
 * level-db backed
@@ -55,13 +57,13 @@ The socket channel is binary based using little endian.  For go-lang the encodin
 
 The message format is as follows:
 
-| description | size | examples | comments
+| description | bytes | examples | comments
 |-------------|------|-----|---|
-| command id  | 16 bytes | 01BB20AAGCDCW60MZZNP7F7T8H | a [standard ulid](https://github.com/alizain/ulid) works best
-| command op  | 2 bytes  | pu, ge, de, ha, pi | first two chars from the full command, put, get, del, etc.
-| key size | 2 bytes | 32 | the size in bytes of the data key
-| data size | 4 bytes | 256 | the size in bytes of the data value (can be zero)
-| data key  | n bytes | mykey:2344 | specified by the key size
-| data value | n bytes | my value for this key | 
+| id  | 16 | 01BB20AAGCDCW60MZZNP7F7T8H | a [standard ulid](https://github.com/alizain/ulid) works best
+| op  | 2  | pu, ge, de, ha, pi | first two chars from the full command, put, get, del, etc.
+| key size | 2 | 32 | the size in bytes of the data key
+| data size | 4 | 256 | the size in bytes of the data value (can be zero)
+| data key  | n | mykey:2344 | specified by the key size
+| data value | n | my value for this key | 
 
 ###### darryl.west | 2017-03-12 | Version 0.90.103-alpha
