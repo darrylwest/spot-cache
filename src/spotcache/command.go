@@ -16,10 +16,12 @@ import (
 
 const (
     ok string = "ok"
+    fail string = "fail"
 )
 
 var (
     RESP_OK []byte = []byte(ok)
+    RESP_FAIL []byte = []byte(fail)
 )
 
 type Command struct {
@@ -62,8 +64,27 @@ func ParseCommand(buf []byte) (*Command, error) {
 }
 
 func (cmd *Command) Exec() error {
-    err := db.Put(cmd.key, cmd.value, nil)
-    cmd.resp = RESP_OK
+    // need a hash map of functions to support the API
+    var err error
+    op := string(cmd.op)
+
+    // TODO: put this into a hash map
+    switch (op) {
+    case "put":
+        err = db.Put(cmd.key, cmd.value, nil)
+        cmd.resp = RESP_OK
+    case "get":
+        cmd.resp, err = db.Get(cmd.key, nil)
+    case "has":
+        r, err := db.Has(cmd.key, nil)
+        if err == nil && r {
+            cmd.resp = RESP_OK ;
+        }
+    case "ping":
+    case "stat":
+    case "halt":
+    }
+
     return err
 }
 

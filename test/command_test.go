@@ -33,12 +33,21 @@ func TestCommand(t *testing.T) {
             
             err := cmd.Exec()
             g.Assert(err).Equal(nil)
-            fmt.Println(cmd.ToString())
             g.Assert(cmd.GetResp()).Equal(spotcache.RESP_OK)
         })
 
 		g.It("should parse a get command")
-		g.It("should execute a get command")
+		g.It("should execute a get command", func() {
+            id := []byte("01BB01P6QMY0DJB7V412A29TJB")
+            op := []byte("get")
+            key := []byte("mykey")
+
+            cmd := spotcache.CreateCommand(id, op, key, nil)
+            
+            err := cmd.Exec()
+            g.Assert(err).Equal(nil)
+            fmt.Println(cmd.ToString())
+        })
 
 		g.It("should parse a has command")
 		g.It("should execute a has command")
