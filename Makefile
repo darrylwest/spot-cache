@@ -6,7 +6,7 @@ build:
 	( go build -o bin/spotcache src/main.go )
 
 install-deps:
-	go get github.com/pborman/uuid
+	go get github.com/oklog/ulid
 	go get -u github.com/darrylwest/cassava-logger/logger
 	go get github.com/franela/goblin
 
