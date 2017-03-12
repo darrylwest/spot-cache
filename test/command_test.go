@@ -12,14 +12,13 @@ func TestCommand(t *testing.T) {
 	g := Goblin(t)
 
 	var (
-		ok = []byte(spotcache.RESP_OK)
+		ok   = []byte(spotcache.RESP_OK)
 		fail = []byte(spotcache.RESP_FAIL)
-		yes = []byte(spotcache.RESP_TRUE)
+		yes  = []byte(spotcache.RESP_TRUE)
 		// no = []byte(spotcache.RESP_FALSE)
 		pong       = []byte(spotcache.RESP_PONG)
 		knownValue = []byte("this is my test value")
 	)
-
 
 	g.Describe("Command", func() {
 		g.Before(func() {
@@ -96,7 +95,7 @@ func TestCommand(t *testing.T) {
 
 			g.Assert(err).Equal(nil)
 			g.Assert(cmd.GetResp()).Equal(ok)
-        })
+		})
 
 		g.It("should parse a shutdown command")
 		g.It("should execute a shutdown command", func() {
@@ -107,9 +106,9 @@ func TestCommand(t *testing.T) {
 
 			g.Assert(err).Equal(nil)
 			g.Assert(cmd.GetResp()).Equal(fail)
-        })
+		})
 
-        g.It("should reject an unknown command", func() {
+		g.It("should reject an unknown command", func() {
 			id := CreateCommandId()
 			op := []byte("wtfisthis?")
 			cmd := spotcache.CreateCommand(id, op, nil, nil)
@@ -117,6 +116,6 @@ func TestCommand(t *testing.T) {
 
 			g.Assert(err != nil).IsTrue("error should not be nil")
 			g.Assert(cmd.GetResp()).Equal(fail)
-        })
+		})
 	})
 }

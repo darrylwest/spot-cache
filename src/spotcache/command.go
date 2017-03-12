@@ -8,8 +8,8 @@
 package spotcache
 
 import (
+	"errors"
 	"fmt"
-    "errors"
 
 	"github.com/syndtr/goleveldb/leveldb"
 	"github.com/syndtr/goleveldb/leveldb/opt"
@@ -107,8 +107,8 @@ func (cmd *Command) Exec() error {
 		cmd.resp = fail
 	default:
 		msg := fmt.Sprintf("unknown command: %s", op)
-        log.Warn(msg)
-        err = errors.New(msg)
+		log.Warn(msg)
+		err = errors.New(msg)
 		cmd.resp = fail
 	}
 
@@ -137,4 +137,3 @@ func CreateCommand(id, op, key, value []byte) *Command {
 
 	return &cmd
 }
-
