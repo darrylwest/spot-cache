@@ -48,6 +48,5 @@ func TestConfig(t *testing.T) {
 			g.Assert(hash["shutdownPort"]).Equal(3009)
 			g.Assert(hash["timeout"]).Equal(int64(600))
 		})
-
 	})
 }

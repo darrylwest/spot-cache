@@ -9,6 +9,7 @@ package spotcache
 
 import (
 	"fmt"
+    "errors"
 
 	"github.com/syndtr/goleveldb/leveldb"
 	"github.com/syndtr/goleveldb/leveldb/opt"
@@ -92,14 +93,16 @@ func (cmd *Command) Exec() error {
 		}
 	case "ping":
 		cmd.resp = pong
-	case "stat":
+	case "status":
 		cmd.resp = ok
 		log.Info("status: %s", cmd.resp)
 	case "shutdown":
 		log.Info("shutdown command received...")
 		cmd.resp = fail
 	default:
-		log.Warn("unknown command: %s", op)
+		msg := fmt.Sprintf("unknown command: %s", op)
+        log.Warn(msg)
+        err = errors.New(msg)
 		cmd.resp = fail
 	}
 

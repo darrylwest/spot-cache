@@ -13,7 +13,7 @@ func TestCommand(t *testing.T) {
 
 	var (
 		ok = []byte(spotcache.RESP_OK)
-		// fail = []byte(spotcache.RESP_FAIL)
+		fail = []byte(spotcache.RESP_FAIL)
 		yes = []byte(spotcache.RESP_TRUE)
 		// no = []byte(spotcache.RESP_FALSE)
 		pong       = []byte(spotcache.RESP_PONG)
@@ -87,10 +87,35 @@ func TestCommand(t *testing.T) {
 		})
 
 		g.It("should parse a stat command")
-		g.It("should execute a stat command")
+		g.It("should execute a stat command", func() {
+			id := []byte("01BB01P6QMY0DJB7V412A29TJB")
+			op := []byte("status")
+			cmd := spotcache.CreateCommand(id, op, nil, nil)
+			err := cmd.Exec()
 
-		g.It("should parse a halt command")
-		g.It("should execute a halt command")
+			g.Assert(err).Equal(nil)
+			g.Assert(cmd.GetResp()).Equal(ok)
+        })
 
+		g.It("should parse a shutdown command")
+		g.It("should execute a shutdown command", func() {
+			id := []byte("01BB01P6QMY0DJB7V412A29TJB")
+			op := []byte("shutdown")
+			cmd := spotcache.CreateCommand(id, op, nil, nil)
+			err := cmd.Exec()
+
+			g.Assert(err).Equal(nil)
+			g.Assert(cmd.GetResp()).Equal(fail)
+        })
+
+        g.It("should reject an unknown command", func() {
+			id := []byte("01BB01P6QMY0DJB7V412A29TJB")
+			op := []byte("wtfisthis?")
+			cmd := spotcache.CreateCommand(id, op, nil, nil)
+			err := cmd.Exec()
+
+			g.Assert(err != nil).IsTrue("error should not be nil")
+			g.Assert(cmd.GetResp()).Equal(fail)
+        })
 	})
 }
