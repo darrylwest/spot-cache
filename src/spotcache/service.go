@@ -13,9 +13,12 @@ import (
 )
 
 /**
- * start the main socket service; block forever...
+ * open the cache database and start the main socket service; block forever...
  */
 func StartService(cfg *Config) error {
+    OpenDb(cfg)
+    defer CloseDb()
+
 	host := fmt.Sprintf(":%d", cfg.baseport)
 	ss, err := net.Listen("tcp", host)
 
