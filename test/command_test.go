@@ -25,11 +25,11 @@ func TestCommand(t *testing.T) {
 		g.Before(func() {
 			conf := spotcache.NewConfigForEnvironment("test")
 			spotcache.CreateLogger(conf)
-			spotcache.Opendb(conf)
+			spotcache.OpenDb(conf)
 		})
 
 		g.After(func() {
-			spotcache.Closedb()
+			spotcache.CloseDb()
 		})
 
 		g.It("should parse a put command")
