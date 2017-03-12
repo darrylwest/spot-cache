@@ -8,28 +8,36 @@
 package spotcache
 
 import (
-    "fmt"
+	"fmt"
 
 	"github.com/syndtr/goleveldb/leveldb"
 	"github.com/syndtr/goleveldb/leveldb/opt"
 )
 
+// public constants
 const (
-    ok string = "ok"
-    fail string = "fail"
+	RESP_OK    = "ok"
+	RESP_FAIL  = "fail"
+	RESP_TRUE  = "true"
+	RESP_FALSE = "false"
+	RESP_PONG  = "pong"
 )
 
+// private responses
 var (
-    RESP_OK []byte = []byte(ok)
-    RESP_FAIL []byte = []byte(fail)
+	ok   = []byte(RESP_OK)
+	fail = []byte(RESP_FAIL)
+	yes  = []byte(RESP_TRUE)
+	no   = []byte(RESP_FALSE)
+	pong = []byte(RESP_PONG)
 )
 
 type Command struct {
-	id     []byte
-	op     []byte
-    key    []byte
-	value  []byte
-    resp   []byte
+	id    []byte
+	op    []byte
+	key   []byte
+	value []byte
+	resp  []byte
 }
 
 var db *leveldb.DB
@@ -64,40 +72,50 @@ func ParseCommand(buf []byte) (*Command, error) {
 }
 
 func (cmd *Command) Exec() error {
-    // need a hash map of functions to support the API
-    var err error
-    op := string(cmd.op)
+	// need a hash map of functions to support the API
+	var err error
+	op := string(cmd.op)
 
-    // TODO: put this into a hash map
-    switch (op) {
-    case "put":
-        err = db.Put(cmd.key, cmd.value, nil)
-        cmd.resp = RESP_OK
-    case "get":
-        cmd.resp, err = db.Get(cmd.key, nil)
-    case "has":
-        r, err := db.Has(cmd.key, nil)
-        if err == nil && r {
-            cmd.resp = RESP_OK ;
-        }
-    case "ping":
-    case "stat":
-    case "halt":
-    }
+	// TODO: put this into a hash map
+	switch op {
+	case "put":
+		err = db.Put(cmd.key, cmd.value, nil)
+		cmd.resp = ok
+	case "get":
+		cmd.resp, err = db.Get(cmd.key, nil)
+	case "has":
+		r, err := db.Has(cmd.key, nil)
+		if err == nil && r {
+			cmd.resp = yes
+		} else {
+			cmd.resp = no
+		}
+	case "ping":
+		cmd.resp = pong
+	case "stat":
+		cmd.resp = ok
+		log.Info("status: %s", cmd.resp)
+	case "shutdown":
+		log.Info("shutdown command received...")
+		cmd.resp = fail
+	default:
+		log.Warn("unknown command: %s", op)
+		cmd.resp = fail
+	}
 
-    return err
+	return err
 }
 
 func (cmd *Command) ToString() string {
-    return fmt.Sprintf("id:%s,op:%s,key:%s,value:%s,resp:%s", cmd.id, cmd.op, cmd.key, cmd.value, cmd.resp)
+	return fmt.Sprintf("id:%s,op:%s,key:%s,value:%s,resp:%s", cmd.id, cmd.op, cmd.key, cmd.value, cmd.resp)
 }
 
 func (cmd *Command) GetResp() []byte {
-    return cmd.resp
+	return cmd.resp
 }
 
 func CreateCommand(id, op, key, value []byte) *Command {
-    cmd := Command{ id:id, op:op, key:key, value:value }
+	cmd := Command{id: id, op: op, key: key, value: value}
 
-    return &cmd
+	return &cmd
 }

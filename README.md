@@ -8,6 +8,8 @@ A fast cache service written in golang and backed by leveldb.  Server connection
 
 Socket protocol is asynchronous request/replay that uses a thin envelope to match the correct response to it's request.
 
+**Note: this project is in the early stages and doesn't expect to go live until Q2-2017.**
+
 ## Server
 
 * level-db backed
@@ -27,14 +29,14 @@ Socket protocol is asynchronous request/replay that uses a thin envelope to matc
 
 ## API
 
-| func | params     | response         |
-|------|------------|------------------|
-| get  | key        | data, err        |
-| put  | key, value | err              |
-| del  | key        | err              |
-| has  | key        | t/f, err         |
-| ping |            | pong |
-| stat |            | data |
-| halt |    			| err  |
+| func     | params     | response         |
+|----------|------------|------------------|
+| get      | key        | data, err        |
+| put      | key, value | err              |
+| del      | key        | err              |
+| has      | key        | t/f, err         |
+| ping     |            | pong |
+| status   |            | data |
+| shutdown |            | err  |
 
-###### darryl.west | 2017-03-11 | Version 0.90.101-alpha
+###### darryl.west | 2017-03-12 | Version 0.90.102-alpha
