@@ -12,7 +12,15 @@ func TestCommand(t *testing.T) {
 	g := Goblin(t)
 
 	g.Describe("Command", func() {
-        spotcache.CreateLogger(spotcache.NewConfigForEnvironment("test"))
+        g.Before(func() {
+            conf := spotcache.NewConfigForEnvironment("test")
+            spotcache.CreateLogger(conf)
+            spotcache.Opendb(conf)
+        })
+
+        g.After(func() {
+            spotcache.Closedb()
+        })
 
 		g.It("should parse a put command")
 		g.It("should execute a put command", func() {
@@ -22,7 +30,11 @@ func TestCommand(t *testing.T) {
             value := []byte("this is my test value")
 
             cmd := spotcache.CreateCommand(id, op, key, value)
+            
+            err := cmd.Exec()
+            g.Assert(err).Equal(nil)
             fmt.Println(cmd.ToString())
+            g.Assert(cmd.GetResp()).Equal(spotcache.RESP_OK)
         })
 
 		g.It("should parse a get command")
