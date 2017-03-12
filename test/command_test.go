@@ -3,6 +3,7 @@ package spotcache_test
 import (
 	"testing"
 	"spotcache"
+    "fmt"
 
 	. "github.com/franela/goblin"
 )
@@ -14,7 +15,15 @@ func TestCommand(t *testing.T) {
         spotcache.CreateLogger(spotcache.NewConfigForEnvironment("test"))
 
 		g.It("should parse a put command")
-		g.It("should execute a put command")
+		g.It("should execute a put command", func() {
+            id := []byte("01BB01P6QMY0DJB7V412A29TJB")
+            op := []byte("put")
+            key := []byte("mykey")
+            value := []byte("this is my test value")
+
+            cmd := spotcache.CreateCommand(id, op, key, value)
+            fmt.Println(cmd.ToString())
+        })
 
 		g.It("should parse a get command")
 		g.It("should execute a get command")

@@ -6,4 +6,3 @@
  */
 
 package spotcache
-

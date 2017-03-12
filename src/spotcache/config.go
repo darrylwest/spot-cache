@@ -7,14 +7,14 @@ import (
 	"path"
 )
 
-type Config  struct {
-	env           string // defaults to production
-	logpath       string
-	logname       string
-    dbpath        string
-	baseport      int
-	shutdownPort  int
-	timeout       int64
+type Config struct {
+	env          string // defaults to production
+	logpath      string
+	logname      string
+	dbpath       string
+	baseport     int
+	shutdownPort int
+	timeout      int64
 }
 
 func (c *Config) GetShutdownPort() int {
@@ -28,7 +28,7 @@ func (c *Config) ToMap() map[string]interface{} {
 	hash["logpath"] = c.logpath
 	hash["logname"] = c.logname
 
-    hash["dbpath"] = c.dbpath
+	hash["dbpath"] = c.dbpath
 	hash["baseport"] = c.baseport
 	hash["shutdownPort"] = c.shutdownPort
 	hash["timeout"] = c.timeout
@@ -43,7 +43,7 @@ func NewDefaultConfig() *Config {
 	cfg.logpath = path.Join(os.Getenv("HOME"), "logs")
 	cfg.logname = "spotcache"
 
-    cfg.dbpath = "cachedb"
+	cfg.dbpath = "cachedb"
 
 	cfg.baseport = 3001
 	cfg.shutdownPort = 3009
@@ -105,5 +105,5 @@ func ParseArgs() *Config {
 }
 
 func IsProduction(env string) bool {
-    return env == "production"
+	return env == "production"
 }

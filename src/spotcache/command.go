@@ -8,47 +8,59 @@
 package spotcache
 
 import (
-    "github.com/syndtr/goleveldb/leveldb"
-    "github.com/syndtr/goleveldb/leveldb/opt"
+    "fmt"
+
+	"github.com/syndtr/goleveldb/leveldb"
+	"github.com/syndtr/goleveldb/leveldb/opt"
 )
 
 type Command struct {
-    reqid string
-    cmd string
-    params interface{}
+	id     []byte
+	op     []byte
+    key    []byte
+	value  []byte
 }
 
 var db *leveldb.DB
 
 func opendb(cfg *Config) {
-    log.Info("open database in %s", cfg.dbpath)
+	log.Info("open database in %s", cfg.dbpath)
 
-    var err error
+	var err error
 
-    db, err = leveldb.OpenFile(cfg.dbpath, CreateOptions(cfg))
+	db, err = leveldb.OpenFile(cfg.dbpath, CreateOptions(cfg))
 
-    if err != nil {
-        panic(err)
-    }
+	if err != nil {
+		panic(err)
+	}
 }
 
 func CreateOptions(dfg *Config) *opt.Options {
-    opts := opt.Options{}
+	opts := opt.Options{}
 
-    return &opts
+	return &opts
 }
 
 func closedb() {
-    if db != nil {
-        log.Info("closing the database")
-        db.Close()
-    }
+	if db != nil {
+		log.Info("closing the database")
+		db.Close()
+	}
 }
 
 func ParseCommand(buf []byte) (*Command, error) {
-    return nil, nil
+	return nil, nil
 }
 
-func (command *Command) exec() {
+func (cmd *Command) exec() {
 }
 
+func (cmd *Command) ToString() string {
+    return fmt.Sprintf("id:%s,op:%s,key:%s,value:%s", cmd.id, cmd.op, cmd.key, cmd.value)
+}
+
+func CreateCommand(id, op, key, value []byte) *Command {
+    cmd := Command{ id:id, op:op, key:key, value:value }
+
+    return &cmd
+}
