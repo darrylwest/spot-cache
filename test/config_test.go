@@ -1,4 +1,4 @@
-package spotcache_test
+package test
 
 import (
 	"spotcache"

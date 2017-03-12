@@ -109,7 +109,7 @@ func (cmd *Command) Exec() error {
 	return err
 }
 
-func (cmd *Command) ToString() string {
+func (cmd *Command) String() string {
 	return fmt.Sprintf("id:%s,op:%s,key:%s,value:%s,resp:%s", cmd.id, cmd.op, cmd.key, cmd.value, cmd.resp)
 }
 
