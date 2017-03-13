@@ -1,9 +1,7 @@
-/**
- * command - parse and response to commands.
- *
- * @author darryl.west <darryl.west@raincitysoftware.com>
- * @created 2017-03-11 13:56:46
- */
+// command - parse and response to commands.
+//
+// @author darryl.west <darryl.west@raincitysoftware.com>
+// @created 2017-03-11 13:56:46
 
 package spotcache
 
@@ -68,16 +66,14 @@ func CloseDb() {
 	}
 }
 
-/**
- * parse the buffer and return a command structure, or error if parse is not possible
- */
+//
+// parse the buffer and return a command structure, or error if parse is not possible
+//
 func ParseCommand(buf []byte) (*Command, error) {
 	return nil, nil
 }
 
-/**
- * execute the command as specified in the command structure
- */
+// execute the command as specified in the command structure
 func (cmd *Command) Exec() error {
 	// need a hash map of functions to support the API
 	var err error
@@ -115,23 +111,17 @@ func (cmd *Command) Exec() error {
 	return err
 }
 
-/**
- * a string representation of the command buffer
- */
+// a string representation of the command buffer
 func (cmd *Command) String() string {
 	return fmt.Sprintf("id:%s,op:%s,key:%s,value:%s,resp:%s", cmd.id, cmd.op, cmd.key, cmd.value, cmd.resp)
 }
 
-/**
- * public method that returns the command response
- */
+// public method that returns the command response
 func (cmd *Command) GetResp() []byte {
 	return cmd.resp
 }
 
-/**
- * a public helper method to create a full comman structure, less the response
- */
+// a public helper method to create a full comman structure, less the response
 func CreateCommand(id, op, key, value []byte) *Command {
 	cmd := Command{id: id, op: op, key: key, value: value}
 

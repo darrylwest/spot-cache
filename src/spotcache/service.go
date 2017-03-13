@@ -1,9 +1,7 @@
-/**
- * service - the TCP interface
- *
- * @author darryl.west <darryl.west@raincitysoftware.com>
- * @created 2017-03-11 11:42:53
- */
+// service - the TCP interface
+//
+// @author darryl.west <darryl.west@raincitysoftware.com>
+// @created 2017-03-11 11:42:53
 
 package spotcache
 
@@ -12,9 +10,7 @@ import (
 	"net"
 )
 
-/**
- * open the cache database and start the main socket service; block forever...
- */
+// open the cache database and start the main socket service; block forever...
 func StartService(cfg *Config) error {
 	OpenDb(cfg)
 	defer CloseDb()
@@ -40,9 +36,7 @@ func StartService(cfg *Config) error {
 	}
 }
 
-/**
- * handle client requests as long as they stay connected
- */
+// handle client requests as long as they stay connected
 func handleClient(conn net.Conn) {
 	buf := make([]byte, 8192)
 	defer conn.Close()

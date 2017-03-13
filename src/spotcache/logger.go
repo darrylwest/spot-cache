@@ -1,9 +1,7 @@
-/**
- * logger
- *
- * @author darryl.west <darryl.west@raincitysoftware.com>
- * @created 2017-03-11 10:57:53
- */
+// logger
+//
+// @author darryl.west <darryl.west@raincitysoftware.com>
+// @created 2017-03-11 10:57:53
 
 package spotcache
 

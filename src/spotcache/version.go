@@ -1,9 +1,7 @@
-/**
- * simple verion
- *
- * @author darryl.west <darryl.west@raincitysoftware.com>
- * @created 2017-03-11 09:59:37
- */
+// simple verion
+//
+// @author darryl.west <darryl.west@raincitysoftware.com>
+// @created 2017-03-11 09:59:37
 
 package spotcache
 
