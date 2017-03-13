@@ -1,10 +1,10 @@
 # Spot Cache
 
-_A fast stand-alone or containerized cache backed by leveldb._
+_A fast, light-weight cache service written in golang and backed by leveldb._
 
 # Overview
 
-A fast cache service written in golang and backed by leveldb.  Server connections are via TCP sockets with cluster/replication to support multiple local machine instances.  It can also be used as a single instance in a small network of machines.
+A fast cache service written in golang and backed by leveldb.  Server connections are via TCP sockets with cluster/replication to support multiple machines.  It can also be used as a single instance in a small network of machines.
 
 Socket protocol is asynchronous request/replay that uses a thin envelope to match the correct response to it's request.
 
