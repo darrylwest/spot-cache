@@ -34,6 +34,9 @@ ping:
 shutdown:
 	@( echo "implement a socket client that will request a shutdown..." )
 
+edit:
+	vi -O2 src/*/*.go test/*.go src/*.go
+
 .PHONY: format
 .PHONY: test
 .PHONY: qtest
