@@ -63,12 +63,14 @@ The message format is as follows:
 
 | description | bytes | examples | comments
 |-------------|------|-----|---|
-| id  | 16 | 01BB20AAGCDCW60MZZNP7F7T8H | a [standard ulid](https://github.com/alizain/ulid) works best
-| op  | 2  | pu, ge, de, ha, pi | first two chars from the full command, put, get, del, etc.
-| key size | 2 | 32 | the size in bytes of the data key
-| data size | 4 | 256 | the size in bytes of the data value (can be zero)
+| id   | 26 | 01BB20AAGCDCW60MZZNP7F7T8H | a [standard ulid](https://github.com/alizain/ulid) works best
+| session | 8 | 11112222 | session id granted by server (necessary?)
+| op   | 2  | pu, ge, de, ha, pi | first two chars from the full command, put, get, del, etc.
+| key size | 2 | 32, 128 | the size in bytes of the data key
+| data size | 4 | 256, 64,000 | the size in bytes of the data value (can be zero)
 | data key  | n | mykey:2344 | specified by the key size
 | data value | n | my value for this key | 
+| hmac | 64 | ?? | optional sha256 hmac signature of the key and value signed with session key + salt
 
 
 ## Contributors
