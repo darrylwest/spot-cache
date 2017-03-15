@@ -7,6 +7,16 @@ import (
 	"time"
 )
 
+func getSession(conn net.Conn) string {
+    buf := make([]byte, 250)
+    n, err := conn.Read(buf)
+    if err != nil {
+        panic(err)
+    }
+
+    return string(buf[:n])
+}
+
 func main() {
 	id := time.Now().UnixNano()
 
@@ -23,10 +33,12 @@ func main() {
 	defer conn.Close()
 	count := 0
 
-    buf := make([]byte, 2048)
-
     key := fmt.Sprintf("client:%d", id)
 
+    sess := getSession(conn)
+    fmt.Printf("my session: %s\n", sess);
+
+    buf := make([]byte, 2048)
 	for {
 		count++
 		text := fmt.Sprintf("put:%d %s 'my value %d'", count, key, time.Now().Unix())
@@ -48,4 +60,7 @@ func main() {
 
 		time.Sleep(time.Second)
 	}
+
+
 }
+
