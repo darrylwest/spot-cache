@@ -67,6 +67,7 @@ func handleClient(conn net.Conn) {
 	}
 }
 
+// create a client session id and send to the new client
 func startSession(conn net.Conn) (string, error) {
     sess := strconv.FormatInt(time.Now().UTC().UnixNano(), 36)
 

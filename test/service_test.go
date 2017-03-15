@@ -14,6 +14,8 @@ func TestService(t *testing.T) {
 		spotcache.CreateLogger(spotcache.NewConfigForEnvironment("test"))
 
 		g.It("should start a mock service")
-		g.It("should handle a mock client connection")
+		g.It("should handle a mock client connection and suspend shutdown")
+		g.It("should handle a mock client connection and suspend on error")
+        g.It("should start a client session with session id")
 	})
 }
