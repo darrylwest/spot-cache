@@ -9,6 +9,7 @@ install-deps:
 	go get github.com/oklog/ulid
 	go get -u github.com/darrylwest/cassava-logger/logger
 	go get github.com/franela/goblin
+	go get github.com/syndtr/goleveldb/leveldb
 
 format:
 	( gofmt -s -w src/*.go src/spotcache/*.go test/*.go )
