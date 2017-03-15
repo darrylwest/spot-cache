@@ -8,6 +8,8 @@ package spotcache
 import (
 	"fmt"
 	"net"
+    "strconv"
+    "time"
 )
 
 // open the cache database and start the main socket service; block forever...
@@ -41,6 +43,14 @@ func handleClient(conn net.Conn) {
 	buf := make([]byte, 8192)
 	defer conn.Close()
 
+    sess, err := startSession(conn)
+    if err != nil {
+        log.Info("session error, aboring...")
+        return
+    }
+
+    log.Info("session started: %s", sess)
+
 	for {
 		n, err := conn.Read(buf)
 		if err != nil {
@@ -55,4 +65,17 @@ func handleClient(conn net.Conn) {
 
 		fmt.Fprintf(conn, resp)
 	}
+}
+
+func startSession(conn net.Conn) (string, error) {
+    sess := strconv.FormatInt(time.Now().UTC().UnixNano(), 36)
+
+    if _, err := fmt.Fprintf(conn, sess); err != nil {
+        log.Error("session create error: %v", err)
+        return sess, err
+    } else {
+        log.Info("started session: %s", sess);
+    }
+
+    return sess, nil
 }

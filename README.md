@@ -8,8 +8,6 @@ A fast cache service written in golang and backed by leveldb.  Server connection
 
 Socket protocol is asynchronous request/replay that uses a thin envelope to match the correct response to it's request.
 
-
-
 _This project was inspired in part by [Suryandaru Triandana](https://github.com/syndtr/goleveldb)'s excellent port of leveldb to golang._
 
 ## Installation
@@ -24,7 +22,6 @@ _This project was inspired in part by [Suryandaru Triandana](https://github.com/
 * written in golang
 * asynchronous request/response (zeromq inspired)
 * Dockerfile to enable containerization
-
 
 ## Client(s)
 
@@ -64,7 +61,7 @@ The message format is as follows:
 | description | bytes | examples | comments
 |-------------|------|-----|---|
 | id   | 26 | 01BB20AAGCDCW60MZZNP7F7T8H | a [standard ulid](https://github.com/alizain/ulid) works best
-| session | 8 | 11112222 | session id granted by server (necessary?)
+| session | 8 | 11112222 | session id granted by server
 | op   | 2  | pu, ge, de, ha, pi | first two chars from the full command, put, get, del, etc.
 | key size | 2 | 32, 128 | the size in bytes of the data key
 | data size | 4 | 256, 64,000 | the size in bytes of the data value (can be zero)
