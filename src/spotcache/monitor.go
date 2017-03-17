@@ -26,12 +26,13 @@ type MonitorCommand struct {
 	resp []byte
 }
 
-func OpenMonitorSocket(cfg *Config) {
-	// remove any left over socket file
+func NewMonitor(cfg *Config) Monitor {
+    m := Monitor{}
 
-	// open the socket
+    m.Sockfile = cfg.unixsock
+	m.CreateDate = time.Now().UTC()
 
-	// return the connection?
+    return m
 }
 
 func (m *Monitor) OpenAndServe() {
@@ -44,17 +45,20 @@ func (m *Monitor) OpenAndServe() {
 
 	defer ss.Close()
 
+    // set the start listen date/time
 	m.CreateDate = time.Now().UTC()
 
 	for {
 		conn, err := ss.Accept()
 		if err != nil {
 			log.Error("Unix socket connection fail: %v", err)
-			return
+			break
 		}
 
 		go m.ClientHandler(conn)
 	}
+
+	log.Info("closing monitor service")
 }
 
 // handle a new monitor client
@@ -79,7 +83,7 @@ func (m *Monitor) ClientHandler(conn net.Conn) {
 
 		// parse and respond to command...
 		request := buf[:n]
-		fmt.Println("rcvd: %s", request)
+		fmt.Printf("rcvd: %s", request)
 
 		_, err = conn.Write([]byte(fmt.Sprintf(fmt.Sprintf("echo %s", request))))
 		if err != nil {
