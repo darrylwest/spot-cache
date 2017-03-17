@@ -44,19 +44,20 @@ var db *leveldb.DB
 
 // open the cache database
 // maybe this should live in it's own module with an interface to enable mocking?
-func OpenDb(cfg *Config) {
-	log.Info("open database in %s", cfg.dbpath)
+func OpenDb(path string) {
+	log.Info("open database in %s", path)
 
 	var err error
 
-	db, err = leveldb.OpenFile(cfg.dbpath, CreateOptions(cfg))
+	db, err = leveldb.OpenFile(path, CreateOptions())
 
 	if err != nil {
 		panic(err)
 	}
 }
 
-func CreateOptions(dfg *Config) *opt.Options {
+// set the level db options
+func CreateOptions() *opt.Options {
 	opts := opt.Options{}
 
 	return &opts

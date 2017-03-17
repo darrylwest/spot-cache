@@ -29,9 +29,13 @@ func TestCommand(t *testing.T) {
 
 	g.Describe("Command", func() {
 		g.Before(func() {
-			conf := spotcache.NewConfigForEnvironment("test")
-			spotcache.CreateLogger(conf)
-			spotcache.OpenDb(conf)
+			cfg := spotcache.NewConfigForEnvironment("test")
+			spotcache.CreateLogger(cfg)
+			conf := cfg.ToMap()
+
+			if dbpath, ok := conf["dbpath"]; ok {
+				spotcache.OpenDb(dbpath.(string))
+			}
 		})
 
 		g.After(func() {

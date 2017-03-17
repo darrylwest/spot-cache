@@ -12,47 +12,59 @@ import (
 	"time"
 )
 
+type CacheService struct {
+	ClientCount int
+	CreateDate  time.Time
+	Port        int
+	DbPath      string
+}
+
+func NewCacheService(cfg *Config) CacheService {
+	s := CacheService{}
+
+	s.Port = cfg.baseport
+	s.DbPath = cfg.dbpath
+
+	return s
+}
+
 // open the cache database and start the main socket service; block forever...
-func StartService(cfg *Config) error {
-	OpenDb(cfg)
+func (s *CacheService) OpenAndServe(stop <-chan bool) {
+	OpenDb(s.DbPath)
 	defer CloseDb()
 
 	// OpenSocketService
-	host := fmt.Sprintf(":%d", cfg.baseport)
+	host := fmt.Sprintf(":%d", s.Port)
 	ss, err := net.Listen("tcp", host)
 
 	if err != nil {
 		log.Error("error creating connection: %v", err)
-		return err
+		return
 	}
 
 	defer ss.Close()
 	log.Info("listinging on port: %s", host)
 
-	// create the monitor channel
+	go func() {
+		for {
+			conn, err := ss.Accept()
+			if err != nil {
+				log.Error("error on accept: %v", err)
+				break
+			}
 
-	// create the monitor listener (unixsock)
-	// ms, err = OpenMonitorService(monitor chan)
-	// defer ms.Close()
+			go s.OpenClientHandler(conn)
 
-	// put this in a go routine
-	// go func() {
-	for {
-		conn, err := ss.Accept()
-		if err != nil {
-			log.Error("error on accept: ", err.Error())
+			// should probably shove the clint conn into a map
 		}
+	}()
 
-		go handleClient(conn)
-	}
-
-	// loop and wait for shutdown message;
-	// ms.Accept()
-	// if shutdown mchan <- true
+	// wait for the stop message
+	<-stop
 }
 
 // handle client requests as long as they stay connected
-func handleClient(conn net.Conn) {
+func (s *CacheService) OpenClientHandler(conn net.Conn) {
 	buf := make([]byte, 8192)
 	defer conn.Close()
 
@@ -68,7 +80,7 @@ func handleClient(conn net.Conn) {
 		n, err := conn.Read(buf)
 		if err != nil {
 			log.Warn("client connection error, connection lost...")
-			return
+			break
 		}
 
 		log.Info("REQ: %s", buf[:n])

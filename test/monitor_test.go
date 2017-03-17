@@ -11,8 +11,8 @@ import (
 	"spotcache"
 	"testing"
 	// "fmt"
-    "os"
-    "time"
+	"os"
+	"time"
 
 	. "github.com/franela/goblin"
 )
@@ -23,41 +23,40 @@ func TestMonitor(t *testing.T) {
 	g.Describe("Monitor", func() {
 		// before?
 		// after?
-        cfg := spotcache.NewConfigForEnvironment("test")
-        cmap := cfg.ToMap()
+		cfg := spotcache.NewConfigForEnvironment("test")
+		cmap := cfg.ToMap()
 
-        g.It("should create a new monitor struct", func() {
-            monitor := spotcache.NewMonitor(cfg)
-            
-            g.Assert(monitor.Sockfile).Equal(cmap["unixsock"])
-            g.Assert(monitor.CreateDate.IsZero()).IsTrue("should be a zero date")
-        });
+		g.It("should create a new monitor struct", func() {
+			monitor := spotcache.NewMonitor(cfg)
+
+			g.Assert(monitor.Sockfile).Equal(cmap["unixsock"])
+			g.Assert(monitor.CreateDate.IsZero()).IsTrue("should be a zero date")
+		})
 
 		g.It("should open and serve then close a unix socket when messaged to stop", func(done Done) {
-            monitor := spotcache.NewMonitor(cfg)
+			monitor := spotcache.NewMonitor(cfg)
 
-            stop := make(chan bool)
-            go func() {
-                time.Sleep(time.Millisecond * 10)
-                info, err := os.Stat(monitor.Sockfile)
+			stop := make(chan bool)
+			go func() {
+				time.Sleep(time.Millisecond * 10)
+				info, err := os.Stat(monitor.Sockfile)
 
-                // fmt.Println(info)
-                
-                g.Assert( err == nil ).IsTrue("error should be nil")
-                g.Assert( info.Name() ).Equal("spot.sock")
+				// fmt.Println(info)
 
-                stop <- true
-            }()
+				g.Assert(err == nil).IsTrue("error should be nil")
+				g.Assert(info.Name()).Equal("spot.sock")
 
-            monitor.OpenAndServe(stop)
+				stop <- true
+			}()
 
-            // just wait for it to get the stop message and insure that the createdate is not zero...
-            g.Assert(monitor.CreateDate.Year()).Equal( time.Now().UTC().Year() )
-            done()
-        })
+			monitor.OpenAndServe(stop)
+
+			// just wait for it to get the stop message and insure that the createdate is not zero...
+			g.Assert(monitor.CreateDate.Year()).Equal(time.Now().UTC().Year())
+			done()
+		})
 
 		g.It("should parse a monitor command")
 		g.It("should handle a shutdown command")
 	})
 }
-
