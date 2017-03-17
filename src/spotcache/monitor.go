@@ -30,12 +30,14 @@ func NewMonitor(cfg *Config) Monitor {
     m := Monitor{}
 
     m.Sockfile = cfg.unixsock
-	m.CreateDate = time.Now().UTC()
 
     return m
 }
 
-func (m *Monitor) OpenAndServe() {
+// open the socket service until stop message arrives
+func (m *Monitor) OpenAndServe(stop <-chan bool) {
+	// os.Remove(m.Sockfile)
+
 	defer os.Remove(m.Sockfile)
 	ss, err := net.Listen("unix", m.Sockfile)
 
@@ -48,15 +50,21 @@ func (m *Monitor) OpenAndServe() {
     // set the start listen date/time
 	m.CreateDate = time.Now().UTC()
 
-	for {
-		conn, err := ss.Accept()
-		if err != nil {
-			log.Error("Unix socket connection fail: %v", err)
-			break
-		}
+    /*
+    go func() {
+        for {
+            conn, err := ss.Accept()
+            if err != nil {
+                log.Error("Unix socket connection fail: %v", err)
+                break
+            }
 
-		go m.ClientHandler(conn)
-	}
+            go m.ClientHandler(conn)
+        }
+    }()
+    */
+
+    <-stop
 
 	log.Info("closing monitor service")
 }
