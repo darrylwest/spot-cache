@@ -18,6 +18,7 @@ qtest:
 	@( cd test ; go test )
 
 test:
+	[ -d $(HOME)/.spotcache ] || mkdir $(HOME)/.spotcache
 	@( go vet src/spotcache/*.go ; go vet src/*.go ; cd test ; go test )
 
 watch:
