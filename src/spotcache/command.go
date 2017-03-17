@@ -1,3 +1,4 @@
+//
 // command - parse and response to commands.
 //
 // @author darryl.west <darryl.west@raincitysoftware.com>
