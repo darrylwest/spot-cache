@@ -17,6 +17,7 @@ func StartService(cfg *Config) error {
 	OpenDb(cfg)
 	defer CloseDb()
 
+    // OpenSocketService
 	host := fmt.Sprintf(":%d", cfg.baseport)
 	ss, err := net.Listen("tcp", host)
 
@@ -28,6 +29,14 @@ func StartService(cfg *Config) error {
 	defer ss.Close()
 	log.Info("listinging on port: %s", host)
 
+    // create the monitor channel
+
+    // create the monitor listener (unixsock)
+    // ms, err = OpenMonitorService(monitor chan) 
+    // defer ms.Close()
+
+    // put this in a go routine
+    // go func() {
 	for {
 		conn, err := ss.Accept()
 		if err != nil {
@@ -36,6 +45,12 @@ func StartService(cfg *Config) error {
 
 		go handleClient(conn)
 	}
+
+    // loop and wait for shutdown message;
+    // ms.Accept()
+    // if shutdown mchan <- true
+
+    return nil
 }
 
 // handle client requests as long as they stay connected
