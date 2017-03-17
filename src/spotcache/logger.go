@@ -16,7 +16,7 @@ var log *logger.Logger
 
 func CreateLogger(cfg *Config) *logger.Logger {
 	if log == nil {
-		filename := path.Join(cfg.logpath, cfg.logname)
+		filename := path.Join(cfg.Logpath, cfg.Logname)
 		handler, err := logger.NewRotatingDayHandler(filename)
 
 		if err != nil {

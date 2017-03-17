@@ -22,8 +22,8 @@ type CacheService struct {
 func NewCacheService(cfg *Config) CacheService {
 	s := CacheService{}
 
-	s.Port = cfg.baseport
-	s.DbPath = cfg.dbpath
+	s.Port = cfg.Baseport
+	s.DbPath = cfg.Dbpath
 
 	return s
 }

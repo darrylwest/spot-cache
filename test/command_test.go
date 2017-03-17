@@ -31,11 +31,8 @@ func TestCommand(t *testing.T) {
 		g.Before(func() {
 			cfg := spotcache.NewConfigForEnvironment("test")
 			spotcache.CreateLogger(cfg)
-			conf := cfg.ToMap()
 
-			if dbpath, ok := conf["dbpath"]; ok {
-				spotcache.OpenDb(dbpath.(string))
-			}
+			spotcache.OpenDb(cfg.Dbpath)
 		})
 
 		g.After(func() {

@@ -17,12 +17,11 @@ func TestService(t *testing.T) {
 		// after?
 		cfg := spotcache.NewConfigForEnvironment("test")
 		spotcache.CreateLogger(cfg)
-		cmap := cfg.ToMap()
 
 		g.It("should create a new cache service object", func() {
 			service := spotcache.NewCacheService(cfg)
 
-			g.Assert(service.Port).Equal(cmap["baseport"])
+			g.Assert(service.Port).Equal(cfg.Baseport)
 			g.Assert(service.CreateDate.IsZero()).IsTrue("should be a zero date")
 			g.Assert(service.ClientCount).Equal(0)
 		})

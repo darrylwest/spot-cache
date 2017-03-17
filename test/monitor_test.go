@@ -25,12 +25,11 @@ func TestMonitor(t *testing.T) {
 		// after?
 		cfg := spotcache.NewConfigForEnvironment("test")
 		spotcache.CreateLogger(cfg)
-		cmap := cfg.ToMap()
 
 		g.It("should create a new monitor struct", func() {
 			monitor := spotcache.NewMonitorService(cfg)
 
-			g.Assert(monitor.Sockfile).Equal(cmap["unixsock"])
+			g.Assert(monitor.Sockfile).Equal(cfg.Unixsock)
 			g.Assert(monitor.CreateDate.IsZero()).IsTrue("should be a zero date")
 		})
 

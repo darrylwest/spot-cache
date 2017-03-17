@@ -29,7 +29,7 @@ type MonitorCommand struct {
 func NewMonitorService(cfg *Config) MonitorService {
 	m := MonitorService{}
 
-	m.Sockfile = cfg.unixsock
+	m.Sockfile = cfg.Unixsock
 
 	return m
 }

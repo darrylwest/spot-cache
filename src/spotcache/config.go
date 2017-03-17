@@ -14,34 +14,14 @@ import (
 )
 
 type Config struct {
-	home     string // defaults to user's home
-	env      string // defaults to production
-	logpath  string
-	logname  string
-	dbpath   string
-	baseport int
-	unixsock string
-	timeout  int64
-}
-
-func (c *Config) GetUnixSock() string {
-	return c.unixsock
-}
-
-func (c *Config) ToMap() map[string]interface{} {
-	hash := make(map[string]interface{})
-
-	hash["home"] = c.home
-	hash["env"] = c.env
-	hash["logpath"] = c.logpath
-	hash["logname"] = c.logname
-
-	hash["dbpath"] = c.dbpath
-	hash["baseport"] = c.baseport
-	hash["unixsock"] = c.unixsock
-	hash["timeout"] = c.timeout
-
-	return hash
+	Home     string // defaults to user's home
+	Env      string // defaults to production
+	Logpath  string
+	Logname  string
+	Dbpath   string
+	Baseport int
+	Unixsock string
+	Timeout  int64
 }
 
 func NewDefaultConfig() *Config {
@@ -52,18 +32,18 @@ func NewDefaultConfig() *Config {
 		home = path.Join(os.Getenv("HOME"), ".spotcache")
 	}
 
-	cfg.home = home
+	cfg.Home = home
 
-	cfg.env = "production"
-	cfg.logpath = path.Join(home, "logs")
-	cfg.logname = "spotcache"
+	cfg.Env = "production"
+	cfg.Logpath = path.Join(home, "logs")
+	cfg.Logname = "spotcache"
 
-	cfg.dbpath = path.Join(home, "cachedb")
+	cfg.Dbpath = path.Join(home, "cachedb")
 
-	cfg.baseport = 3001
-	cfg.unixsock = path.Join(home, "spot.sock")
+	cfg.Baseport = 3001
+	cfg.Unixsock = path.Join(home, "spot.sock")
 
-	cfg.timeout = int64(10 * 60) // seconds in unix time
+	cfg.Timeout = int64(10 * 60) // seconds in unix time
 
 	return cfg
 }
@@ -71,10 +51,10 @@ func NewDefaultConfig() *Config {
 func NewConfigForEnvironment(env string) *Config {
 	cfg := NewDefaultConfig()
 
-	cfg.env = env
+	cfg.Env = env
 
 	if !IsProduction(env) {
-		cfg.logname = env + "-spotcache"
+		cfg.Logname = env + "-spotcache"
 	}
 
 	return cfg
@@ -85,17 +65,17 @@ func ParseArgs() *Config {
 
 	vers := flag.Bool("version", false, "show the version and exit")
 
-	home := flag.String("home", dflt.home, "set the run-time home folder, defaults to "+os.Getenv("HOME"))
-	env := flag.String("env", dflt.env, "set the environment, defaults to "+dflt.env)
+	home := flag.String("home", dflt.Home, "set the run-time home folder, defaults to "+os.Getenv("HOME"))
+	env := flag.String("env", dflt.Env, "set the environment, defaults to "+dflt.Env)
 
-	baseport := flag.Int("baseport", dflt.baseport, "set the server's base port number (e.g., 3001)...")
-	unixsock := flag.String("unixsock", dflt.unixsock, "set the service status/shutdown socket")
+	baseport := flag.Int("baseport", dflt.Baseport, "set the server's base port number (e.g., 3001)...")
+	unixsock := flag.String("unixsock", dflt.Unixsock, "set the service status/shutdown socket")
 
-	logpath := flag.String("logpath", dflt.logpath, "set the log directory")
-	logname := flag.String("logname", dflt.logname, "set the name of the rolling log file")
+	logpath := flag.String("logpath", dflt.Logpath, "set the log directory")
+	logname := flag.String("logname", dflt.Logname, "set the name of the rolling log file")
 
-	dbpath := flag.String("dbpath", dflt.dbpath, "set the database directory")
-	timeout := flag.Int64("timeout", dflt.timeout, "set the timeout in seconds")
+	dbpath := flag.String("dbpath", dflt.Dbpath, "set the database directory")
+	timeout := flag.Int64("timeout", dflt.Timeout, "set the timeout in seconds")
 
 	flag.Parse()
 
@@ -107,16 +87,16 @@ func ParseArgs() *Config {
 
 	cfg := new(Config)
 
-	cfg.home = *home
-	cfg.env = *env
-	cfg.logpath = *logpath
-	cfg.logname = *logname
+	cfg.Home = *home
+	cfg.Env = *env
+	cfg.Logpath = *logpath
+	cfg.Logname = *logname
 
-	cfg.dbpath = *dbpath
+	cfg.Dbpath = *dbpath
 
-	cfg.baseport = *baseport
-	cfg.unixsock = *unixsock
-	cfg.timeout = *timeout
+	cfg.Baseport = *baseport
+	cfg.Unixsock = *unixsock
+	cfg.Timeout = *timeout
 
 	return cfg
 }

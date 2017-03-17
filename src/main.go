@@ -19,14 +19,14 @@ func main() {
 	cfg := spotcache.ParseArgs()
 	log := spotcache.CreateLogger(cfg)
 	service := spotcache.NewCacheService(cfg)
-    monitor := spotcache.NewMonitorService(cfg)
+	monitor := spotcache.NewMonitorService(cfg)
 
 	sigchan := make(chan os.Signal, 1)
 	stop := make(chan bool)
 
 	go func() {
-        // start the monitor service...
-        monitor.OpenAndServe(stop)
+		// start the monitor service...
+		monitor.OpenAndServe(stop)
 
 		sig := <-sigchan
 		log.Info("recived signal %v", sig)
@@ -40,7 +40,7 @@ func main() {
 	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
 	pid := os.Getpid()
-	log.Info("Starting socket service started: %v, pid: %d\n", cfg.ToMap(), pid)
+	log.Info("Starting socket service started: %v, pid: %d\n", cfg, pid)
 	fmt.Println("pid", pid)
 
 	service.OpenAndServe(stop)
