@@ -80,3 +80,4 @@ func startSession(conn net.Conn) (string, error) {
 
     return sess, nil
 }
+

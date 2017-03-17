@@ -8,29 +8,31 @@ import (
 )
 
 type Config struct {
+    home         string // defaults to user's home
 	env          string // defaults to production
 	logpath      string
 	logname      string
 	dbpath       string
 	baseport     int
-	shutdownPort int
+	unixsock     string
 	timeout      int64
 }
 
-func (c *Config) GetShutdownPort() int {
-	return c.shutdownPort
+func (c *Config) GetUnixSock() string {
+	return c.unixsock
 }
 
 func (c *Config) ToMap() map[string]interface{} {
 	hash := make(map[string]interface{})
 
+	hash["home"] = c.home
 	hash["env"] = c.env
 	hash["logpath"] = c.logpath
 	hash["logname"] = c.logname
 
 	hash["dbpath"] = c.dbpath
 	hash["baseport"] = c.baseport
-	hash["shutdownPort"] = c.shutdownPort
+	hash["unixsock"] = c.unixsock
 	hash["timeout"] = c.timeout
 
 	return hash
@@ -39,14 +41,21 @@ func (c *Config) ToMap() map[string]interface{} {
 func NewDefaultConfig() *Config {
 	cfg := new(Config)
 
+    home := os.Getenv("SPOTCACHE_HOME")
+    if home == "" {
+        home = path.Join(os.Getenv("HOME"), ".spotcache")
+    }
+
+    cfg.home = home
+
 	cfg.env = "production"
-	cfg.logpath = path.Join(os.Getenv("HOME"), "logs")
+	cfg.logpath = path.Join(home, "logs")
 	cfg.logname = "spotcache"
 
-	cfg.dbpath = "cachedb"
+	cfg.dbpath = path.Join(home, "cachedb")
 
 	cfg.baseport = 3001
-	cfg.shutdownPort = 3009
+	cfg.unixsock = path.Join(home, "spot.sock")
 
 	cfg.timeout = int64(10 * 60) // seconds in unix time
 
@@ -70,10 +79,11 @@ func ParseArgs() *Config {
 
 	vers := flag.Bool("version", false, "show the version and exit")
 
+	home := flag.String("home", dflt.home, "set the run-time home folder, defaults to " + os.Getenv("HOME"))
 	env := flag.String("env", dflt.env, "set the environment, defaults to "+dflt.env)
 
 	baseport := flag.Int("baseport", dflt.baseport, "set the server's base port number (e.g., 3001)...")
-	shutdownPort := flag.Int("shutdownPort", dflt.shutdownPort, "set the service shutdown port")
+	unixsock  := flag.String("unixsock", dflt.unixsock, "set the service status/shutdown socket")
 
 	logpath := flag.String("logpath", dflt.logpath, "set the log directory")
 	logname := flag.String("logname", dflt.logname, "set the name of the rolling log file")
@@ -91,6 +101,7 @@ func ParseArgs() *Config {
 
 	cfg := new(Config)
 
+    cfg.home = *home
 	cfg.env = *env
 	cfg.logpath = *logpath
 	cfg.logname = *logname
@@ -98,7 +109,7 @@ func ParseArgs() *Config {
 	cfg.dbpath = *dbpath
 
 	cfg.baseport = *baseport
-	cfg.shutdownPort = *shutdownPort
+	cfg.unixsock = *unixsock
 	cfg.timeout = *timeout
 
 	return cfg

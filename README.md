@@ -22,6 +22,7 @@ _This project was inspired in part by [Suryandaru Triandana](https://github.com/
 * written in golang
 * asynchronous request/response (zeromq inspired)
 * Dockerfile to enable containerization
+* unix socket for status and shutdown
 
 ## Client(s)
 
