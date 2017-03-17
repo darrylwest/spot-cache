@@ -47,11 +47,11 @@ func (m *Monitor) OpenAndServe(stop <-chan bool) {
 
 	defer ss.Close()
 
-    // set the start listen date/time
-	m.CreateDate = time.Now().UTC()
 
-    /*
     go func() {
+        // set the start listen date/time
+        m.CreateDate = time.Now().UTC()
+
         for {
             conn, err := ss.Accept()
             if err != nil {
@@ -62,7 +62,6 @@ func (m *Monitor) OpenAndServe(stop <-chan bool) {
             go m.ClientHandler(conn)
         }
     }()
-    */
 
     <-stop
 

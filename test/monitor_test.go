@@ -11,6 +11,7 @@ import (
 	"spotcache"
 	"testing"
 	// "fmt"
+    "os"
     "time"
 
 	. "github.com/franela/goblin"
@@ -38,6 +39,13 @@ func TestMonitor(t *testing.T) {
             stop := make(chan bool)
             go func() {
                 time.Sleep(time.Millisecond * 10)
+                info, err := os.Stat(monitor.Sockfile)
+
+                // fmt.Println(info)
+                
+                g.Assert( err == nil ).IsTrue("error should be nil")
+                g.Assert( info.Name() ).Equal("spot.sock")
+
                 stop <- true
             }()
 
