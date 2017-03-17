@@ -15,6 +15,6 @@ func TestService(t *testing.T) {
 
 		g.It("should handle a client shutdown request")
 		g.It("should handle a client connection shutdown on error")
-        g.It("should start a client session with session id")
+		g.It("should start a client session with session id")
 	})
 }

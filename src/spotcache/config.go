@@ -1,3 +1,9 @@
+//
+// config  - application specification and CLI parsing
+//
+// @author darryl.west <darryl.west@raincitysoftware.com>
+// @created 2017-03-11 13:56:46
+
 package spotcache
 
 import (
@@ -8,14 +14,14 @@ import (
 )
 
 type Config struct {
-    home         string // defaults to user's home
-	env          string // defaults to production
-	logpath      string
-	logname      string
-	dbpath       string
-	baseport     int
-	unixsock     string
-	timeout      int64
+	home     string // defaults to user's home
+	env      string // defaults to production
+	logpath  string
+	logname  string
+	dbpath   string
+	baseport int
+	unixsock string
+	timeout  int64
 }
 
 func (c *Config) GetUnixSock() string {
@@ -41,12 +47,12 @@ func (c *Config) ToMap() map[string]interface{} {
 func NewDefaultConfig() *Config {
 	cfg := new(Config)
 
-    home := os.Getenv("SPOTCACHE_HOME")
-    if home == "" {
-        home = path.Join(os.Getenv("HOME"), ".spotcache")
-    }
+	home := os.Getenv("SPOTCACHE_HOME")
+	if home == "" {
+		home = path.Join(os.Getenv("HOME"), ".spotcache")
+	}
 
-    cfg.home = home
+	cfg.home = home
 
 	cfg.env = "production"
 	cfg.logpath = path.Join(home, "logs")
@@ -79,11 +85,11 @@ func ParseArgs() *Config {
 
 	vers := flag.Bool("version", false, "show the version and exit")
 
-	home := flag.String("home", dflt.home, "set the run-time home folder, defaults to " + os.Getenv("HOME"))
+	home := flag.String("home", dflt.home, "set the run-time home folder, defaults to "+os.Getenv("HOME"))
 	env := flag.String("env", dflt.env, "set the environment, defaults to "+dflt.env)
 
 	baseport := flag.Int("baseport", dflt.baseport, "set the server's base port number (e.g., 3001)...")
-	unixsock  := flag.String("unixsock", dflt.unixsock, "set the service status/shutdown socket")
+	unixsock := flag.String("unixsock", dflt.unixsock, "set the service status/shutdown socket")
 
 	logpath := flag.String("logpath", dflt.logpath, "set the log directory")
 	logname := flag.String("logname", dflt.logname, "set the name of the rolling log file")
@@ -101,7 +107,7 @@ func ParseArgs() *Config {
 
 	cfg := new(Config)
 
-    cfg.home = *home
+	cfg.home = *home
 	cfg.env = *env
 	cfg.logpath = *logpath
 	cfg.logname = *logname

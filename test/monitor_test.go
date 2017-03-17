@@ -16,14 +16,14 @@ import (
 )
 
 func TestMonitor(t *testing.T) {
-    g := Goblin(t)
+	g := Goblin(t)
 
-    g.Describe("Monitor", func() {
-        // before?
-        // after?
+	g.Describe("Monitor", func() {
+		// before?
+		// after?
 
-        g.It("should parse a monitor command")
-        g.It("should handle a shutdown command")
-    })
+		g.It("should open and close a unix socket")
+		g.It("should parse a monitor command")
+		g.It("should handle a shutdown command")
+	})
 }
-

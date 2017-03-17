@@ -1,9 +1,9 @@
 package test
 
 import (
+	"os"
 	"spotcache"
 	"testing"
-    "os"
 
 	. "github.com/franela/goblin"
 )
@@ -13,7 +13,7 @@ func TestConfig(t *testing.T) {
 
 	g.Describe("Config", func() {
 		spotcache.CreateLogger(spotcache.NewConfigForEnvironment("test"))
-        home := os.Getenv("HOME") + "/.spotcache"
+		home := os.Getenv("HOME") + "/.spotcache"
 
 		g.It("should create a config struct", func() {
 			cfg := new(spotcache.Config)
@@ -42,7 +42,6 @@ func TestConfig(t *testing.T) {
 
 		g.It("should create context from args", func() {
 			cfg := spotcache.ParseArgs()
-
 
 			hash := cfg.ToMap()
 

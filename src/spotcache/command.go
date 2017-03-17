@@ -1,5 +1,5 @@
 //
-// command - parse and response to commands.
+// command - parse and response to commands.  fetch and update database/cache;
 //
 // @author darryl.west <darryl.west@raincitysoftware.com>
 // @created 2017-03-11 13:56:46
@@ -42,6 +42,8 @@ type Command struct {
 
 var db *leveldb.DB
 
+// open the cache database
+// maybe this should live in it's own module with an interface to enable mocking?
 func OpenDb(cfg *Config) {
 	log.Info("open database in %s", cfg.dbpath)
 
