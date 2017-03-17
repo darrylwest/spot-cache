@@ -24,17 +24,18 @@ func TestMonitor(t *testing.T) {
 		// before?
 		// after?
 		cfg := spotcache.NewConfigForEnvironment("test")
+		spotcache.CreateLogger(cfg)
 		cmap := cfg.ToMap()
 
 		g.It("should create a new monitor struct", func() {
-			monitor := spotcache.NewMonitor(cfg)
+			monitor := spotcache.NewMonitorService(cfg)
 
 			g.Assert(monitor.Sockfile).Equal(cmap["unixsock"])
 			g.Assert(monitor.CreateDate.IsZero()).IsTrue("should be a zero date")
 		})
 
 		g.It("should open and serve then close a unix socket when messaged to stop", func(done Done) {
-			monitor := spotcache.NewMonitor(cfg)
+			monitor := spotcache.NewMonitorService(cfg)
 
 			stop := make(chan bool)
 			go func() {

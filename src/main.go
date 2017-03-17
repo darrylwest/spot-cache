@@ -19,11 +19,15 @@ func main() {
 	cfg := spotcache.ParseArgs()
 	log := spotcache.CreateLogger(cfg)
 	service := spotcache.NewCacheService(cfg)
+    monitor := spotcache.NewMonitorService(cfg)
 
 	sigchan := make(chan os.Signal, 1)
 	stop := make(chan bool)
 
 	go func() {
+        // start the monitor service...
+        monitor.OpenAndServe(stop)
+
 		sig := <-sigchan
 		log.Info("recived signal %v", sig)
 		stop <- true

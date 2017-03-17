@@ -1,5 +1,5 @@
 //
-// Monitor - create the monitor socket; listen for requests; process and return responses; broadcast events
+// MonitorService - create the monitor socket; listen for requests; process and return responses; broadcast events
 //
 // @author darryl west <darryl.west@raincitysoftware.com>
 // @created 2017-03-17 08:32:48
@@ -14,7 +14,7 @@ import (
 	"time"
 )
 
-type Monitor struct {
+type MonitorService struct {
 	Sockfile   string
 	CreateDate time.Time
 }
@@ -26,8 +26,8 @@ type MonitorCommand struct {
 	resp []byte
 }
 
-func NewMonitor(cfg *Config) Monitor {
-	m := Monitor{}
+func NewMonitorService(cfg *Config) MonitorService {
+	m := MonitorService{}
 
 	m.Sockfile = cfg.unixsock
 
@@ -35,7 +35,7 @@ func NewMonitor(cfg *Config) Monitor {
 }
 
 // open the socket service until stop message arrives
-func (m *Monitor) OpenAndServe(stop <-chan bool) {
+func (m *MonitorService) OpenAndServe(stop <-chan bool) {
 	// os.Remove(m.Sockfile)
 
 	defer os.Remove(m.Sockfile)
@@ -68,7 +68,7 @@ func (m *Monitor) OpenAndServe(stop <-chan bool) {
 }
 
 // handle a new monitor client
-func (m *Monitor) OpenClientHandler(conn net.Conn) {
+func (m *MonitorService) OpenClientHandler(conn net.Conn) {
 	buf := make([]byte, 512)
 	defer conn.Close()
 
