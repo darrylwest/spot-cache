@@ -30,6 +30,8 @@ func NewCacheService(cfg *Config) CacheService {
 
 // open the cache database and start the main socket service; block forever...
 func (s *CacheService) OpenAndServe(stop <-chan bool) {
+	s.CreateDate = time.Now().UTC()
+
 	OpenDb(s.DbPath)
 	defer CloseDb()
 
