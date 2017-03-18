@@ -10,7 +10,7 @@ import "fmt"
 const (
 	major = 0
 	minor = 90
-	patch = 104
+	patch = 105
 )
 
 func Version() string {
