@@ -28,18 +28,18 @@ func TestService(t *testing.T) {
 
 		g.It("should open and serve then close the service", func(done Done) {
 			service := spotcache.NewCacheService(cfg)
+			service.Timeout = 1e6
 
-			stop := make(chan bool)
+			ss, err := service.CreateListener()
+			g.Assert(err).Equal(nil)
 
 			go func() {
-				time.Sleep(time.Millisecond * 10)
-
-				stop <- true
+				service.ListenAndServe(ss)
+				g.Assert(service.CreateDate.Year()).Equal(time.Now().UTC().Year())
 			}()
 
-			service.OpenAndServe(stop)
-
-			g.Assert(service.CreateDate.Year()).Equal(time.Now().UTC().Year())
+			time.Sleep(time.Millisecond * 100)
+			service.Shutdown()
 
 			done()
 		})

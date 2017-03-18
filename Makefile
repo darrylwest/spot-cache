@@ -27,6 +27,9 @@ watch:
 run:
 	( go run src/main.go --env=development )
 
+start:
+	( ./bin/spotcache & )
+
 status:
 	@( echo "implement a socket client that will request status..." )
 
