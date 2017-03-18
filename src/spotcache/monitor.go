@@ -89,7 +89,7 @@ func (m *MonitorService) OpenClientHandler(conn net.Conn) {
 
 		// parse and respond to command...
 		request := buf[:n]
-		fmt.Printf("rcvd: %s", request)
+		log.Info("monitor rcvd: %s", request)
 
 		_, err = conn.Write([]byte(fmt.Sprintf(fmt.Sprintf("echo %s", request))))
 		if err != nil {
