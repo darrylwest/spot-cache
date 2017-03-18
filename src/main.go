@@ -20,6 +20,7 @@ func main() {
 	pid := os.Getpid()
 
 	service := spotcache.NewCacheService(cfg)
+	service.InitializeCache(cfg)
 	ss, err := service.CreateListener()
 	if err != nil {
 		panic(err)

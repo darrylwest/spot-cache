@@ -25,18 +25,21 @@ func TestCommand(t *testing.T) {
 		// no = []byte(spotcache.RESP_FALSE)
 		pong       = []byte(spotcache.RESP_PONG)
 		knownValue = []byte("this is my test value")
+		cache      *spotcache.Cache
 	)
 
 	g.Describe("Command", func() {
-		g.Before(func() {
-			cfg := spotcache.NewConfigForEnvironment("test")
-			spotcache.CreateLogger(cfg)
+		cfg := spotcache.NewConfigForEnvironment("test")
 
-			spotcache.OpenDb(cfg.Dbpath)
+		g.Before(func() {
+			spotcache.CreateLogger(cfg)
+			cache = spotcache.NewCache(cfg)
+
+			cache.Open()
 		})
 
 		g.After(func() {
-			spotcache.CloseDb()
+			cache.Close()
 		})
 
 		g.It("should parse a put command")

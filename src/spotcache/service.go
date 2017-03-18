@@ -23,6 +23,9 @@ type CacheService struct {
 	waitGroup   *sync.WaitGroup
 }
 
+var command *Commander
+var cachedb *Cache
+
 func NewCacheService(cfg *Config) CacheService {
 	s := CacheService{}
 
@@ -36,6 +39,13 @@ func NewCacheService(cfg *Config) CacheService {
 	return s
 }
 
+// configure the commander and cache database
+func (s *CacheService) InitializeCache(cfg *Config) {
+	cache := NewCache(cfg)
+	command = NewCommander(cache)
+}
+
+// create the listener for the specified address/port
 func (s *CacheService) CreateListener() (*net.TCPListener, error) {
 	host := fmt.Sprintf("127.0.0.1:%d", s.Port)
 	laddr, err := net.ResolveTCPAddr("tcp", host)
@@ -49,10 +59,18 @@ func (s *CacheService) CreateListener() (*net.TCPListener, error) {
 func (s *CacheService) ListenAndServe(ss *net.TCPListener) {
 	s.CreateDate = time.Now().UTC()
 
-	// TODO: open and pass the database into service...
-	OpenDb(s.DbPath)
-	defer CloseDb()
+	if command == nil || cache == nil {
+		log.Error("must initialize cache prior to calling ListenAndServe...")
+		panic("initialize error")
+	}
 
+	// open the cache db
+	if err := cache.Open(); err != nil {
+		log.Error("error opening cache, aborting...")
+		panic(err)
+	}
+
+	defer cache.Close()
 	defer ss.Close()
 	log.Info("listinging on port: %v", ss.Addr())
 
