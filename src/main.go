@@ -6,6 +6,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
@@ -16,6 +17,7 @@ import (
 func main() {
 	cfg := spotcache.ParseArgs()
 	log := spotcache.CreateLogger(cfg)
+	defer log.Close()
 	// TODO : do this in config and write the pid to the pid file...
 	pid := os.Getpid()
 
@@ -33,5 +35,9 @@ func main() {
 
 	sigchan := make(chan os.Signal, 1)
 	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
-	log.Warn("signal caught: %v", <-sigchan)
+	sig := <-sigchan
+	log.Info("signal caught: %v", sig)
+
+	fmt.Println("signal caught:", sig)
+	fmt.Println("stopped...")
 }
