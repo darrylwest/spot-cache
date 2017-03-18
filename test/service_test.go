@@ -53,6 +53,13 @@ func TestService(t *testing.T) {
 			done()
 		})
 
+		g.It("should execute shutdown even if not open", func() {
+            service := spotcache.NewCacheService(cfg)
+            service.Shutdown()
+
+            g.Assert(true).IsTrue()
+        })
+
 		g.It("should handle a client connection shutdown on error")
 		g.It("should start a client session with session id")
 	})
