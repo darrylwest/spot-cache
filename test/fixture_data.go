@@ -15,10 +15,6 @@ import (
 	"spotcache"
 )
 
-type RequestBuilder struct {
-	session []byte
-}
-
 var entropy io.Reader = rand.New(rand.NewSource(time.Now().UnixNano()))
 
 func genulid(entropy io.Reader, ts uint64) (ulid.ULID, error) {
@@ -54,6 +50,10 @@ func CreateRandomData() []byte {
 
 // TODO : create helper "CommandFactory" "RequestBuilder", etc methods that will be
 // eventually ported to the client application
+
+type RequestBuilder struct {
+	session []byte
+}
 
 func NewRequestBuilder(sess []byte) *RequestBuilder {
 	b := RequestBuilder{session: sess}

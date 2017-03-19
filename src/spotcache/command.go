@@ -7,8 +7,6 @@
 package spotcache
 
 import (
-	"bytes"
-	"encoding/binary"
 	"errors"
 	"fmt"
 )
@@ -42,19 +40,6 @@ type Command struct {
 	Key   []byte
 	Value []byte
 	Resp  []byte
-}
-
-// request object as created by the client
-type Request struct {
-	Id       []byte
-	Session  []byte
-	Op       []byte
-	MetaSize uint16
-	KeySize  uint16
-	DataSize uint32
-	Metadata []byte
-	Key      []byte
-	Value    []byte
 }
 
 // create a new command object
