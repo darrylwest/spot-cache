@@ -42,5 +42,10 @@ func TestCache(t *testing.T) {
 		g.It("should attempt get with null return after data expires")
 		g.It("should return true if data exists and update ttl")
 		g.It("should return false if data does not exist")
+		g.It("should return all keys for the current cache", func() {
+			keys, _ := cache.Keys()
+
+			g.Assert(len(keys) > 0).IsTrue()
+		})
 	})
 }

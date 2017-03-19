@@ -16,7 +16,8 @@ import (
 
 var db *leveldb.DB
 
-type TTL uint64
+// compatible with time.Unix() in seconds
+type TTL int64
 
 type Cache struct {
 	path string
@@ -71,4 +72,15 @@ func (c *Cache) Ttl(key []byte) TTL {
 	return 0
 }
 
-// should have a way of dumping the entire database or at least generating stats
+// return all keys in the database
+func (c *Cache) Keys() ([]string, error) {
+	keys := []string{}
+
+	iter := db.NewIterator(nil, nil)
+	for iter.Next() {
+		keys = append(keys, string(iter.Key()))
+	}
+	iter.Release()
+
+	return keys, iter.Error()
+}
