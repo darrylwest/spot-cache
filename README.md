@@ -57,18 +57,44 @@ Unit tests are in the test folder.  Run them with 'make test'.  Integration test
 
 The socket channel is binary based using little endian.  For go-lang the encoding/binary package provides an easy way to create a custom client.  
 
-The message format is as follows:
+#### Request Messages
+
+Requests are usually sent by the client and include operations to manipulate data to be cached, accessed or expired.  Other ops include the ability to list and subscribe to available events.  There are also requests that may come from the server to one or more clients.
+
+The message request format is as follows:
 
 | description | bytes | examples | comments
 |-------------|------|-----|---|
 | id   | 26 | 01BB20AAGCDCW60MZZNP7F7T8H | a [standard ulid](https://github.com/alizain/ulid) works best
 | session | 12 | bbeof787vpkw | session id granted by server (nano seconds at base 36)
 | op   | 2  | pu, ge, de, ha, pi | first two chars from the full command, put, get, del, etc.
+| meta size | 2 | 0, 128 | the size in bytes of any associated meta data, and/or hmac or other signature
 | key size | 2 | 32, 128 | the size in bytes of the data key
 | data size | 4 | 256, 64,000 | the size in bytes of the data value (can be zero)
-| data key  | n | mykey:2344 | specified by the key size
-| data value | n | my value for this key | 
-| hmac | 64 | ?? | optional sha256 hmac signature of the key and value signed with session key + salt
+| metadata | n | anything | this can be zero to any length
+| key  | n | mykey:2344 | specified by the key size
+| value | n | my value for this key | this could be encrypted, compressed, plain, JSON encoded or whatever
+
+#### Response Messages
+
+After a request has been processed a response is returned that includes the following:
+
+| description | bytes | examples | comments
+|-------------|------|-----|---|
+| id   | 26 | 01BB20AAGCDCW60MZZNP7F7T8H | a [standard ulid](https://github.com/alizain/ulid) works best
+| status | 12 | 0 (ok), > 0 error code | the status of ok/fail is returned here where 0 = success
+| meta size | 2 | 0, 128 | the size in bytes of any associated meta data, and/or hmac or other signature
+| key size | 2 | 32, 128 | the size in bytes of the data key (may be zero)
+| data size | 4 | 256, 64,000 | the size in bytes of the data value (can be zero)
+| metadata | n | anything | this can be zero to any length
+| key  | n | mykey:2344 | specified by the key size
+| value | n | my value, if any | data or status message, etc. | 
+
+#### Event Messages
+
+(TBD) 
+
+Events could include signals to switch to an alternate route, an alert that a set of cached items is about to expire, a request to suspend ops and reconnect in n-seconds (for updates), etc.
 
 ## Contributors
 
@@ -85,4 +111,4 @@ Here are the rules:
 
 Apache 2.0
 
-###### darryl.west | 2017-03-12 | Version 0.90.104-alpha
+###### darryl.west | 2017-03-19 | Version 0.90.105-alpha
