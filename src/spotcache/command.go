@@ -7,6 +7,8 @@
 package spotcache
 
 import (
+	"bytes"
+	"encoding/binary"
 	"errors"
 	"fmt"
 )
@@ -33,12 +35,26 @@ var (
 type Commander struct {
 }
 
+// command object to support executions
 type Command struct {
-	id    []byte
-	op    []byte
-	key   []byte
-	value []byte
-	resp  []byte
+	Id    []byte
+	Op    []byte
+	Key   []byte
+	Value []byte
+	Resp  []byte
+}
+
+// request object as created by the client
+type Request struct {
+	Id       []byte
+	Session  []byte
+	Op       []byte
+	MetaSize uint16
+	KeySize  uint16
+	DataSize uint32
+	Metadata []byte
+	Key      []byte
+	Value    []byte
 }
 
 // create a new command object
@@ -48,13 +64,11 @@ func NewCommander(db *Cache) *Commander {
 	return &Commander{}
 }
 
-//
 // parse the buffer and return a command structure, or error if parse is not possible
-//
 func ParseRequest(buf []byte) (*Command, error) {
-    cmd := Command{}
-    cmd.id = []byte("flarb")
-    cmd.op = []byte("ping")
+	cmd := Command{}
+	cmd.Id = []byte("flarb")
+	cmd.Op = []byte("ping")
 
 	return &cmd, nil
 }
@@ -63,35 +77,35 @@ func ParseRequest(buf []byte) (*Command, error) {
 func (cmd *Command) Exec() error {
 	// need a hash map of functions to support the API
 	var err error
-	op := string(cmd.op)
+	op := string(cmd.Op)
 
 	// TODO: put this into a hash map
 	switch op {
 	case "put":
-		err = cache.Put(cmd.key, cmd.value, 0)
-		cmd.resp = ok
+		err = cache.Put(cmd.Key, cmd.Value, 0)
+		cmd.Resp = ok
 	case "get":
-		cmd.resp, err = cache.Get(cmd.key)
+		cmd.Resp, err = cache.Get(cmd.Key)
 	case "has":
-		r, err := cache.Has(cmd.key)
+		r, err := cache.Has(cmd.Key)
 		if err == nil && r {
-			cmd.resp = yes
+			cmd.Resp = yes
 		} else {
-			cmd.resp = no
+			cmd.Resp = no
 		}
 	case "ping":
-		cmd.resp = pong
+		cmd.Resp = pong
 	case "status":
-		cmd.resp = ok
-		log.Info("status: %s", cmd.resp)
+		cmd.Resp = ok
+		log.Info("status: %s", cmd.Resp)
 	case "shutdown":
 		log.Info("shutdown command received...")
-		cmd.resp = fail
+		cmd.Resp = fail
 	default:
 		msg := fmt.Sprintf("unknown command: %s", op)
 		log.Warn(msg)
 		err = errors.New(msg)
-		cmd.resp = fail
+		cmd.Resp = fail
 	}
 
 	return err
@@ -99,17 +113,14 @@ func (cmd *Command) Exec() error {
 
 // a string representation of the command buffer
 func (cmd *Command) String() string {
-	return fmt.Sprintf("id:%s,op:%s,key:%s,value:%s,resp:%s", cmd.id, cmd.op, cmd.key, cmd.value, cmd.resp)
+	return fmt.Sprintf("Id:%s,Op:%s,Key:%s,Value:%s,Resp:%s", cmd.Id, cmd.Op, cmd.Key, cmd.Value, cmd.Resp)
 }
 
-// public method that returns the command response
-func (cmd *Command) GetResp() []byte {
-	return cmd.resp
-}
+// TODO : create a command helper object to enable createing put, get, has, etc to share with client applications
 
-// a public helper method to create a full comman structure, less the response
+// a public helper method to create a full comman structure
 func CreateCommand(id, op, key, value []byte) *Command {
-	cmd := Command{id: id, op: op, key: key, value: value}
+	cmd := Command{Id: id, Op: op, Key: key, Value: value}
 
 	return &cmd
 }

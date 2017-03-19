@@ -10,7 +10,6 @@ package test
 import (
 	"spotcache"
 	"testing"
-	// "fmt"
 
 	. "github.com/franela/goblin"
 )
@@ -30,6 +29,8 @@ func TestCommand(t *testing.T) {
 
 	g.Describe("Command", func() {
 		cfg := spotcache.NewConfigForEnvironment("test")
+		session := []byte("test1234")
+		builder := NewRequestBuilder(session)
 
 		g.Before(func() {
 			spotcache.CreateLogger(cfg)
@@ -42,7 +43,17 @@ func TestCommand(t *testing.T) {
 			cache.Close()
 		})
 
-		g.It("should parse a put command")
+		g.It("should parse a put command", func() {
+			key := []byte("mytestkey")
+			value := CreateRandomData()
+			metadata := []byte("ttl:60;")
+			request := builder.CreatePutCommand(key, value, metadata)
+
+			g.Assert(string(request.Op)).Equal("pu")
+			// cmd := spotcache.ParseRequest(ToByteArray(request))
+			// fmt.Println( request.ToByteArray() );
+		})
+
 		g.It("should execute a put command", func() {
 			id := CreateCommandId()
 			op := []byte("put")
@@ -52,7 +63,7 @@ func TestCommand(t *testing.T) {
 
 			err := cmd.Exec()
 			g.Assert(err).Equal(nil)
-			g.Assert(cmd.GetResp()).Equal(ok)
+			g.Assert(cmd.Resp).Equal(ok)
 		})
 
 		g.It("should parse a get command")
@@ -67,7 +78,7 @@ func TestCommand(t *testing.T) {
 			g.Assert(err).Equal(nil)
 			// fmt.Println(cmd.ToString())
 			// now check for the response
-			g.Assert(cmd.GetResp()).Equal(knownValue)
+			g.Assert(cmd.Resp).Equal(knownValue)
 		})
 
 		g.It("should parse a has command")
@@ -80,20 +91,20 @@ func TestCommand(t *testing.T) {
 
 			err := cmd.Exec()
 			g.Assert(err).Equal(nil)
-			g.Assert(cmd.GetResp()).Equal(yes)
+			g.Assert(cmd.Resp).Equal(yes)
 		})
 
 		g.It("should parse a del command")
 		g.It("should execute a del command")
 
 		g.It("should parse a ping  command", func() {
-            req := []byte("")
+			req := []byte("")
 			cmd, err := spotcache.ParseRequest(req)
 
-            g.Assert(err == nil).IsTrue()
-            err = cmd.Exec()
+			g.Assert(err == nil).IsTrue()
+			err = cmd.Exec()
 
-        })
+		})
 		g.It("should execute a ping command", func() {
 			id := CreateCommandId()
 			op := []byte("ping")
@@ -101,7 +112,7 @@ func TestCommand(t *testing.T) {
 			err := cmd.Exec()
 
 			g.Assert(err).Equal(nil)
-			g.Assert(cmd.GetResp()).Equal(pong)
+			g.Assert(cmd.Resp).Equal(pong)
 		})
 
 		g.It("should parse a stat command")
@@ -112,7 +123,7 @@ func TestCommand(t *testing.T) {
 			err := cmd.Exec()
 
 			g.Assert(err).Equal(nil)
-			g.Assert(cmd.GetResp()).Equal(ok)
+			g.Assert(cmd.Resp).Equal(ok)
 		})
 
 		g.It("should parse a shutdown command")
@@ -123,7 +134,7 @@ func TestCommand(t *testing.T) {
 			err := cmd.Exec()
 
 			g.Assert(err).Equal(nil)
-			g.Assert(cmd.GetResp()).Equal(fail)
+			g.Assert(cmd.Resp).Equal(fail)
 		})
 
 		g.It("should reject an unknown command", func() {
@@ -133,7 +144,7 @@ func TestCommand(t *testing.T) {
 			err := cmd.Exec()
 
 			g.Assert(err != nil).IsTrue("error should not be nil")
-			g.Assert(cmd.GetResp()).Equal(fail)
+			g.Assert(cmd.Resp).Equal(fail)
 		})
 	})
 }
