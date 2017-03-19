@@ -86,7 +86,14 @@ func TestCommand(t *testing.T) {
 		g.It("should parse a del command")
 		g.It("should execute a del command")
 
-		g.It("should parse a ping  command")
+		g.It("should parse a ping  command", func() {
+            req := []byte("")
+			cmd, err := spotcache.ParseRequest(req)
+
+            g.Assert(err == nil).IsTrue()
+            err = cmd.Exec()
+
+        })
 		g.It("should execute a ping command", func() {
 			id := CreateCommandId()
 			op := []byte("ping")

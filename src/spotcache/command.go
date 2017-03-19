@@ -51,8 +51,12 @@ func NewCommander(db *Cache) *Commander {
 //
 // parse the buffer and return a command structure, or error if parse is not possible
 //
-func ParseCommand(buf []byte) (*Command, error) {
-	return nil, nil
+func ParseRequest(buf []byte) (*Command, error) {
+    cmd := Command{}
+    cmd.id = []byte("flarb")
+    cmd.op = []byte("ping")
+
+	return &cmd, nil
 }
 
 // execute the command as specified in the command structure
