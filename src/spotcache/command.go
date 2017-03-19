@@ -101,8 +101,6 @@ func (cmd *Command) String() string {
 	return fmt.Sprintf("Id:%s,Op:%s,Key:%s,Value:%s,Resp:%s", cmd.Id, cmd.Op, cmd.Key, cmd.Value, cmd.Resp)
 }
 
-// TODO : create a command helper object to enable createing put, get, has, etc to share with client applications
-
 // a public helper method to create a full comman structure
 func CreateCommand(id, op, key, value []byte) *Command {
 	cmd := Command{Id: id, Op: op, Key: key, Value: value}
