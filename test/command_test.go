@@ -25,18 +25,21 @@ func TestCommand(t *testing.T) {
 		// no = []byte(spotcache.RESP_FALSE)
 		pong       = []byte(spotcache.RESP_PONG)
 		knownValue = []byte("this is my test value")
+		cache      *spotcache.Cache
 	)
 
 	g.Describe("Command", func() {
-		g.Before(func() {
-			cfg := spotcache.NewConfigForEnvironment("test")
-			spotcache.CreateLogger(cfg)
+		cfg := spotcache.NewConfigForEnvironment("test")
 
-			spotcache.OpenDb(cfg.Dbpath)
+		g.Before(func() {
+			spotcache.CreateLogger(cfg)
+			cache = spotcache.NewCache(cfg)
+
+			cache.Open()
 		})
 
 		g.After(func() {
-			spotcache.CloseDb()
+			cache.Close()
 		})
 
 		g.It("should parse a put command")
@@ -83,7 +86,14 @@ func TestCommand(t *testing.T) {
 		g.It("should parse a del command")
 		g.It("should execute a del command")
 
-		g.It("should parse a ping  command")
+		g.It("should parse a ping  command", func() {
+            req := []byte("")
+			cmd, err := spotcache.ParseRequest(req)
+
+            g.Assert(err == nil).IsTrue()
+            err = cmd.Exec()
+
+        })
 		g.It("should execute a ping command", func() {
 			id := CreateCommandId()
 			op := []byte("ping")

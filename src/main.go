@@ -10,7 +10,6 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 
 	"spotcache"
 )
@@ -18,32 +17,27 @@ import (
 func main() {
 	cfg := spotcache.ParseArgs()
 	log := spotcache.CreateLogger(cfg)
+	defer log.Close()
+	// TODO : do this in config and write the pid to the pid file...
+	pid := os.Getpid()
+
 	service := spotcache.NewCacheService(cfg)
-	monitor := spotcache.NewMonitorService(cfg)
+	service.InitializeCache(cfg)
+	ss, err := service.CreateListener()
+	if err != nil {
+		panic(err)
+	}
+
+	log.Info("Starting socket service started: %v, pid: %d\n", cfg, pid)
+
+	go service.ListenAndServe(ss)
+	defer service.Shutdown()
 
 	sigchan := make(chan os.Signal, 1)
-	stop := make(chan bool)
-
-	go func() {
-		// start the monitor service...
-		monitor.OpenAndServe(stop)
-
-		sig := <-sigchan
-		log.Info("recived signal %v", sig)
-		stop <- true
-
-		time.Sleep(time.Duration(50 * time.Millisecond))
-		log.Info("shutdown complete...")
-		time.Sleep(time.Duration(1 * time.Second))
-	}()
-
 	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
+	sig := <-sigchan
+	log.Info("signal caught: %v", sig)
 
-	pid := os.Getpid()
-	log.Info("Starting socket service started: %v, pid: %d\n", cfg, pid)
-	fmt.Println("pid", pid)
-
-	service.OpenAndServe(stop)
-
-	time.Sleep(time.Duration(100 * time.Millisecond))
+	fmt.Println("signal caught:", sig)
+	fmt.Println("stopped...")
 }

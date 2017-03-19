@@ -9,9 +9,6 @@ package spotcache
 import (
 	"errors"
 	"fmt"
-
-	"github.com/syndtr/goleveldb/leveldb"
-	"github.com/syndtr/goleveldb/leveldb/opt"
 )
 
 // public constants
@@ -25,12 +22,16 @@ const (
 
 // private responses
 var (
-	ok   = []byte(RESP_OK)
-	fail = []byte(RESP_FAIL)
-	yes  = []byte(RESP_TRUE)
-	no   = []byte(RESP_FALSE)
-	pong = []byte(RESP_PONG)
+	cache *Cache
+	ok    = []byte(RESP_OK)
+	fail  = []byte(RESP_FAIL)
+	yes   = []byte(RESP_TRUE)
+	no    = []byte(RESP_FALSE)
+	pong  = []byte(RESP_PONG)
 )
+
+type Commander struct {
+}
 
 type Command struct {
 	id    []byte
@@ -40,41 +41,22 @@ type Command struct {
 	resp  []byte
 }
 
-var db *leveldb.DB
+// create a new command object
+func NewCommander(db *Cache) *Commander {
+	cache = db
 
-// open the cache database
-// maybe this should live in it's own module with an interface to enable mocking?
-func OpenDb(path string) {
-	log.Info("open database in %s", path)
-
-	var err error
-
-	db, err = leveldb.OpenFile(path, CreateOptions())
-
-	if err != nil {
-		panic(err)
-	}
-}
-
-// set the level db options
-func CreateOptions() *opt.Options {
-	opts := opt.Options{}
-
-	return &opts
-}
-
-func CloseDb() {
-	if db != nil {
-		log.Info("closing the database")
-		db.Close()
-	}
+	return &Commander{}
 }
 
 //
 // parse the buffer and return a command structure, or error if parse is not possible
 //
-func ParseCommand(buf []byte) (*Command, error) {
-	return nil, nil
+func ParseRequest(buf []byte) (*Command, error) {
+    cmd := Command{}
+    cmd.id = []byte("flarb")
+    cmd.op = []byte("ping")
+
+	return &cmd, nil
 }
 
 // execute the command as specified in the command structure
@@ -86,12 +68,12 @@ func (cmd *Command) Exec() error {
 	// TODO: put this into a hash map
 	switch op {
 	case "put":
-		err = db.Put(cmd.key, cmd.value, nil)
+		err = cache.Put(cmd.key, cmd.value, 0)
 		cmd.resp = ok
 	case "get":
-		cmd.resp, err = db.Get(cmd.key, nil)
+		cmd.resp, err = cache.Get(cmd.key)
 	case "has":
-		r, err := db.Has(cmd.key, nil)
+		r, err := cache.Has(cmd.key)
 		if err == nil && r {
 			cmd.resp = yes
 		} else {
