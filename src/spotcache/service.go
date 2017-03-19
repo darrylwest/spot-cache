@@ -144,7 +144,7 @@ func (s *CacheService) OpenClientHandler(conn net.Conn) {
 
 // create a client session id and send to the new client (move to sock utils?)
 func StartClientSession(conn net.Conn) (string, error) {
-	sess := strconv.FormatInt(time.Now().UTC().UnixNano(), 36)
+	sess := CreateSessionId()
 
 	if _, err := fmt.Fprintf(conn, sess); err != nil {
 		log.Error("session create error: %v", err)
@@ -154,4 +154,16 @@ func StartClientSession(conn net.Conn) (string, error) {
 	}
 
 	return sess, nil
+}
+
+// returns a string of 12 chars
+func CreateSessionId() string {
+	sess := strconv.FormatInt(time.Now().UTC().UnixNano(), 36)
+	if len(sess) == 12 {
+		return sess
+	} else if len(sess) < 12 {
+		return (sess + "000")[:12]
+	} else {
+		return sess[:12]
+	}
 }

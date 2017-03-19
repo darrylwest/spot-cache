@@ -30,7 +30,7 @@ func TestCommand(t *testing.T) {
 	g.Describe("Command", func() {
 		cfg := spotcache.NewConfigForEnvironment("test")
 		session := []byte("test1234")
-		builder := NewRequestBuilder(session)
+		builder := spotcache.NewRequestBuilder(session)
 
 		g.Before(func() {
 			spotcache.CreateLogger(cfg)

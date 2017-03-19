@@ -16,6 +16,8 @@ import (
 
 var db *leveldb.DB
 
+type TTL uint64
+
 type Cache struct {
 	path string
 }
@@ -53,7 +55,7 @@ func (c Cache) Close() {
 }
 
 // define the methods get, put, delete, has, ttl, etc...
-func (c *Cache) Put(key, value []byte, ttl int) error {
+func (c *Cache) Put(key, value []byte, ttl TTL) error {
 	return db.Put(key, value, nil)
 }
 
@@ -64,3 +66,9 @@ func (c *Cache) Get(key []byte) ([]byte, error) {
 func (c *Cache) Has(key []byte) (bool, error) {
 	return db.Has(key, nil)
 }
+
+func (c *Cache) Ttl(key []byte) TTL {
+	return 0
+}
+
+// should have a way of dumping the entire database or at least generating stats

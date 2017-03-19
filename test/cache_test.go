@@ -22,15 +22,25 @@ func TestCache(t *testing.T) {
 	g.Describe("Cache", func() {
 		cfg := spotcache.NewConfigForEnvironment("test")
 		spotcache.CreateLogger(cfg)
+		cache := spotcache.NewCache(cfg)
 
-		// before
-		// after
+		g.Before(func() {
+			cache.Open()
+		})
+
+		g.After(func() {
+			cache.Close()
+		})
 
 		g.It("should create a cache object", func() {
-			cache := spotcache.NewCache(cfg)
-
 			g.Assert(reflect.TypeOf(cache).String()).Equal("*spotcache.Cache")
 			// test stuff...
 		})
+
+		g.It("should put data with ttl")
+		g.It("should get data that has not expired and update ttl")
+		g.It("should attempt get with null return after data expires")
+		g.It("should return true if data exists and update ttl")
+		g.It("should return false if data does not exist")
 	})
 }

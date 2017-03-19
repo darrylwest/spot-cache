@@ -11,8 +11,7 @@ import (
 	"io"
 	"math/rand"
 	"time"
-
-	"spotcache"
+	// "spotcache"
 )
 
 var entropy io.Reader = rand.New(rand.NewSource(time.Now().UnixNano()))
@@ -46,34 +45,4 @@ func CreateCommandId() []byte {
 
 func CreateRandomData() []byte {
 	return []byte(CreateRandomId() + "..." + CreateULID())
-}
-
-// TODO : create helper "CommandFactory" "RequestBuilder", etc methods that will be
-// eventually ported to the client application
-
-type RequestBuilder struct {
-	session []byte
-}
-
-func NewRequestBuilder(sess []byte) *RequestBuilder {
-	b := RequestBuilder{session: sess}
-
-	return &b
-}
-
-// create a valid request object with a put op, random key and value
-func (b *RequestBuilder) CreatePutCommand(key, value, metadata []byte) spotcache.Request {
-	req := spotcache.Request{}
-
-	req.Id = CreateCommandId()
-	req.Session = b.session
-	req.Op = []byte("pu")
-	req.MetaSize = uint16(len(metadata))
-	req.KeySize = uint16(len(key))
-	req.DataSize = uint32(len(value))
-	req.Metadata = metadata
-	req.Key = key
-	req.Value = value
-
-	return req
 }
