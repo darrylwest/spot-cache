@@ -1,16 +1,15 @@
 # Spot Cache
 
-_A fast, light-weight cache service written in golang and backed by leveldb._
-
-
 ```
                        _____                          ______       
  ________________________  /_      ____________ _________  /______ 
  ___  ___/__  __ \  __ \  __/_______  ___/  __ `/  ___/_  __ \  _ \
  __(__  )__  /_/ / /_/ / /_ _/_____/ /__ / /_/ // /__ _  / / /  __/
   /____/ _  .___/\____/\__/        \___/ \__,_/ \___/ /_/ /_/\___/ 
-                            /_/                                                       
+         /_/                                                       
 ```
+
+_A fast, light-weight cache service written in golang and backed by leveldb._
 
 # Overview
 
