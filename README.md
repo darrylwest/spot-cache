@@ -2,6 +2,16 @@
 
 _A fast, light-weight cache service written in golang and backed by leveldb._
 
+
+```
+                       _____                          ______       
+ ________________________  /_      ____________ _________  /______ 
+ ___  ___/__  __ \  __ \  __/_______  ___/  __ `/  ___/_  __ \  _ \
+ __(__  )__  /_/ / /_/ / /_ _/_____/ /__ / /_/ // /__ _  / / /  __/
+  /____/ _  .___/\____/\__/        \___/ \__,_/ \___/ /_/ /_/\___/ 
+                            /_/                                                       
+```
+
 # Overview
 
 Spot cache is a fast, highly available cache service written in golang and backed by leveldb.  Server connections are via TCP sockets with cluster/replication to support multiple machines.  It can also be used as a single instance in a small network of machines.
