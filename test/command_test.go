@@ -52,10 +52,9 @@ func TestCommand(t *testing.T) {
 			request := builder.CreatePutCommand(key, value, metadata)
 
 			g.Assert(request.Op).Equal(spotcache.PUT)
-			// cmd := spotcache.ParseRequest(ToByteArray(request))
             bytes, err := request.ToBytes()
 
-			fmt.Printf("%v\n", bytes )
+			// fmt.Printf("%v\n", bytes )
             g.Assert(err).Equal(nil)
             g.Assert(len(bytes) > 30)
 			fmt.Printf("%s\n", request)

@@ -125,5 +125,9 @@ func (req *Request) ToBytes() ([]byte, error) {
 }
 
 func (req *Request) String() string {
-    return fmt.Sprintf("Id:%s,Session:%s", req.Id, req.Session)
+    return fmt.Sprintf(
+        "Id:%s,Session:%s,Op:%d,MetaSize:%d,KeySize:%d,DataSize:%d,Metadata:%s,Key:%s,Value:%v", 
+        req.Id, req.Session, req.Op, 
+        req.MetaSize, req.KeySize, req.DataSize,
+        req.Metadata, req.Key, req.Value)
 }
