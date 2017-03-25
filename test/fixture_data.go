@@ -38,11 +38,6 @@ func CreateRandomId() string {
 	return fmt.Sprintf("%x%x", r.Intn(9e7)+1e8, r.Intn(9e7)+1e8)
 }
 
-// create a command id (ulid)
-func CreateCommandId() []byte {
-	return []byte(CreateULID())
-}
-
 func CreateRandomData() []byte {
 	return []byte(CreateRandomId() + "..." + CreateULID())
 }

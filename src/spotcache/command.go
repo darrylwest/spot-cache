@@ -53,7 +53,7 @@ type Commander struct {
 
 // command object to support executions
 type Command struct {
-	Id    []byte
+	Id    IdType
 	Op    CommandOp
 	Key   []byte
 	Value []byte
@@ -70,7 +70,7 @@ func NewCommander(db *Cache) *Commander {
 // parse the buffer and return a command structure, or error if parse is not possible
 func ParseRequest(buf []byte) (*Command, error) {
 	cmd := Command{}
-	cmd.Id = []byte("flarb")
+	// cmd.Id =
 	cmd.Op = PING
 
 	return &cmd, nil
@@ -119,7 +119,7 @@ func (cmd *Command) String() string {
 }
 
 // a public helper method to create a full comman structure
-func CreateCommand(id []byte, op CommandOp, key, value []byte) *Command {
+func CreateCommand(id IdType, op CommandOp, key, value []byte) *Command {
 	cmd := Command{Id: id, Op: op, Key: key, Value: value}
 
 	return &cmd

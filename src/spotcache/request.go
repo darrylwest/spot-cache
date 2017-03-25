@@ -10,7 +10,7 @@ package spotcache
 import (
 	"bytes"
 	"encoding/binary"
-    "fmt"
+	"fmt"
 	"github.com/oklog/ulid"
 	"io"
 	"math/rand"
@@ -62,12 +62,19 @@ func NewRequestBuilder(sess SessionType) *RequestBuilder {
 	return &b
 }
 
+func CreateCommandId() IdType {
+	var id IdType
+	copy(id[:26], []byte(CreateULID()))
+
+	return id
+}
+
 // create a put command with the current session
 func (rb *RequestBuilder) CreatePutCommand(key, value, metadata []byte) *Request {
 	req := Request{}
 
 	// create the request id...
-	copy(req.Id[:26], []byte(CreateULID()))
+	req.Id = CreateCommandId()
 	req.Session = rb.session
 	req.Op = PUT
 	req.MetaSize = uint16(len(metadata))
@@ -81,37 +88,63 @@ func (rb *RequestBuilder) CreatePutCommand(key, value, metadata []byte) *Request
 	return &req
 }
 
-/*
-func RequestFromBytes(buf []byte) (*Request, error) {
-    req := new(Request)
-    br := bytes.NewReader(buf)
-    fmt.Println(br)
-    if err := binary.Read(br, binary.LittleEndian, req.Id); err != nil {
-        return nil, err
-    }
+func RequestFromBytes(ba []byte) (*Request, error) {
+	// buf := bytes.NewReader(ba)
 
-    if err := binary.Read(br, binary.LittleEndian, req.Session); err != nil {
-        return nil, err
-    }
+	req := Request{}
 
-    return req, nil
+	sz := len(req.Id)
+	idx, idy := 0, sz
+
+	copy(req.Id[0:sz], ba[idx:idy])
+
+	sz = len(req.Session)
+	idx, idy = idy, idy+sz
+	copy(req.Session[0:sz], ba[idx:idy])
+
+	sz = 1
+	idx, idy = idy, idy+sz
+	req.Op = CommandOp(ba[idx])
+
+	sz = 2
+	idx, idy = idy, idy+sz
+	req.MetaSize = uint16(ba[idx:idy][0])
+
+	idx, idy = idy, idy+sz
+	req.KeySize = uint16(ba[idx:idy][0])
+
+	sz = 4
+	idx, idy = idy, idy+sz
+	req.DataSize = uint32(ba[idx:idy][0])
+
+	idx, idy = idy, idy+int(req.MetaSize)
+	req.Metadata = ba[idx:idy]
+
+	idx, idy = idy, idy+int(req.KeySize)
+	req.Key = ba[idx:idy]
+
+	idx, idy = idy, idy+int(req.DataSize)
+	req.Value = ba[idx:idy]
+
+	// log.Debug("%s\n", req.Value )
+
+	return &req, nil
 }
-*/
 
 // encode the request into a stream of little endian bytes; return error if encoding fails
 func (req *Request) ToBytes() ([]byte, error) {
 	buf := new(bytes.Buffer)
 	var data = []interface{}{
-        req.Id,
-        req.Session,
-        req.Op,
-        req.MetaSize,
-        req.KeySize,
-        req.DataSize,
-        req.Metadata,
-        req.Key,
-        req.Value,
-    }
+		req.Id,
+		req.Session,
+		req.Op,
+		req.MetaSize,
+		req.KeySize,
+		req.DataSize,
+		req.Metadata,
+		req.Key,
+		req.Value,
+	}
 
 	for _, v := range data {
 		err := binary.Write(buf, binary.LittleEndian, v)
@@ -125,9 +158,9 @@ func (req *Request) ToBytes() ([]byte, error) {
 }
 
 func (req *Request) String() string {
-    return fmt.Sprintf(
-        "Id:%s,Session:%s,Op:%d,MetaSize:%d,KeySize:%d,DataSize:%d,Metadata:%s,Key:%s,Value:%v", 
-        req.Id, req.Session, req.Op, 
-        req.MetaSize, req.KeySize, req.DataSize,
-        req.Metadata, req.Key, req.Value)
+	return fmt.Sprintf(
+		"Id:%s,Session:%s,Op:%d,MetaSize:%d,KeySize:%d,DataSize:%d,Metadata:%s,Key:%s,Value:%v",
+		req.Id, req.Session, req.Op,
+		req.MetaSize, req.KeySize, req.DataSize,
+		req.Metadata, req.Key, req.Value)
 }

@@ -23,7 +23,7 @@ func TestRequest(t *testing.T) {
 		cfg := spotcache.NewConfigForEnvironment("test")
 		spotcache.CreateLogger(cfg)
 		var session spotcache.SessionType
-        copy(session[:12], []byte(spotcache.CreateSessionId()))
+		copy(session[:12], []byte(spotcache.CreateSessionId()))
 
 		builder := spotcache.NewRequestBuilder(session)
 		key := []byte("mytestkey")
