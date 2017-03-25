@@ -26,9 +26,9 @@ func TestRequest(t *testing.T) {
 		copy(session[:12], []byte(spotcache.CreateSessionId()))
 
 		builder := spotcache.NewRequestBuilder(session)
-		key := []byte("mytestkey")
+		key := []byte(spotcache.CreateULID())
 		value := CreateRandomData()
-		metadata := []byte("ttl:40;")
+		metadata := []byte("expire:40;")
 
 		g.It("should create a put instance of Request", func() {
 			req := builder.CreatePutCommand(key, value, metadata)
@@ -36,8 +36,23 @@ func TestRequest(t *testing.T) {
 			g.Assert(reflect.TypeOf(req).String()).Equal("*spotcache.Request")
 			g.Assert(len(req.Id)).Equal(26)
 			g.Assert(len(req.Session)).Equal(12)
+			g.Assert(req.Op).Equal(spotcache.PUT)
 		})
 
+		g.It("should create a get request")
+		g.It("should create a has request")
+		g.It("should create a delete request")
+		g.It("should create an expire request")
+		g.It("should create a ttl request")
+		g.It("should create a subscribe request")
+		g.It("should create an unsubscribe request")
+		g.It("should create a publish request")
+		g.It("should create a status request")
+		g.It("should create a ping request")
+		g.It("should create a shutdown request")
+
 		g.It("should create an instance of RequestBuilder")
+		g.It("should create a byte stream from a request object")
+		g.It("should read and parse a byte stream into a request object")
 	})
 }
