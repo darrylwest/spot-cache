@@ -62,7 +62,11 @@ Unit tests are in the test folder.  Run them with 'make test'.  Integration test
 | put      | key, value | err              |
 | del      | key        | err              |
 | has      | key        | t/f, err         |
-| ttl      | key, value | ttl, err  |
+| expire   | key, seconds | err  |
+| ttl      | key   | seconds, err  |
+| subscribe | name | |
+| unsubscribe | name | |
+| publish  | name, message | |
 | ping     |            | pong |
 | status   |            | data |
 | shutdown |            | err  |
@@ -78,12 +82,13 @@ The message format is as follows:
 |-------------|------|-----|---|
 | id   | 26 | 01BB20AAGCDCW60MZZNP7F7T8H | a [standard ulid](https://github.com/alizain/ulid) works best
 | session | 12 | bbeof787vpkw | session id granted by server (nano seconds at base 36)
-| op   | 2  | pu, ge, de, ha, pi | first two chars from the full command, put, get, del, etc.
+| op   | 1  | see op codes | op codes for put, get, del, etc.
+| meta size | 2 | 0, 32, 128 | the size of any meta data (can be zero), expire, hmac, etc.
 | key size | 2 | 32, 128 | the size in bytes of the data key
 | data size | 4 | 256, 64,000 | the size in bytes of the data value (can be zero)
+| meta data | n | expire:60 | any meta data, e.g., expire, hmac, app-key, etc
 | data key  | n | mykey:2344 | specified by the key size
 | data value | n | my value for this key | 
-| hmac | 64 | ?? | optional sha256 hmac signature of the key and value signed with session key + salt
 
 ## Contributors
 
@@ -102,4 +107,4 @@ Apache 2.0
 
 _This project was inspired in part by [Suryandaru Triandana](https://github.com/syndtr/goleveldb)'s excellent port of leveldb to golang._
 
-###### darryl.west | 2017-03-12 | Version 0.90.103-alpha
+###### darryl.west | 2017-03-25 | Version 0.90.104-alpha

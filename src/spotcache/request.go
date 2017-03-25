@@ -39,7 +39,7 @@ func CreateULID() string {
 type Request struct {
 	Id       []byte
 	Session  []byte
-	Op       []byte
+	Op       CommandOp
 	MetaSize uint16
 	KeySize  uint16
 	DataSize uint32
