@@ -56,7 +56,7 @@ func TestCommand(t *testing.T) {
 
 		g.It("should execute a put command", func() {
 			id := CreateCommandId()
-			op := []byte("put")
+			op := spotcache.PUT
 			key := []byte("mykey")
 
 			cmd := spotcache.CreateCommand(id, op, key, knownValue)
@@ -69,7 +69,7 @@ func TestCommand(t *testing.T) {
 		g.It("should parse a get command")
 		g.It("should execute a get command", func() {
 			id := CreateCommandId()
-			op := []byte("get")
+			op := spotcache.GET
 			key := []byte("mykey")
 
 			cmd := spotcache.CreateCommand(id, op, key, nil)
@@ -84,7 +84,7 @@ func TestCommand(t *testing.T) {
 		g.It("should parse a has command")
 		g.It("should execute a has command", func() {
 			id := CreateCommandId()
-			op := []byte("has")
+			op := spotcache.HAS
 			key := []byte("mykey")
 
 			cmd := spotcache.CreateCommand(id, op, key, nil)
@@ -107,7 +107,7 @@ func TestCommand(t *testing.T) {
 		})
 		g.It("should execute a ping command", func() {
 			id := CreateCommandId()
-			op := []byte("ping")
+			op := spotcache.PING
 			cmd := spotcache.CreateCommand(id, op, nil, nil)
 			err := cmd.Exec()
 
@@ -118,7 +118,7 @@ func TestCommand(t *testing.T) {
 		g.It("should parse a stat command")
 		g.It("should execute a stat command", func() {
 			id := CreateCommandId()
-			op := []byte("status")
+			op := spotcache.STATUS
 			cmd := spotcache.CreateCommand(id, op, nil, nil)
 			err := cmd.Exec()
 
@@ -129,7 +129,7 @@ func TestCommand(t *testing.T) {
 		g.It("should parse a shutdown command")
 		g.It("should execute a shutdown command", func() {
 			id := CreateCommandId()
-			op := []byte("shutdown")
+			op := spotcache.SHUTDOWN
 			cmd := spotcache.CreateCommand(id, op, nil, nil)
 			err := cmd.Exec()
 
@@ -139,7 +139,7 @@ func TestCommand(t *testing.T) {
 
 		g.It("should reject an unknown command", func() {
 			id := CreateCommandId()
-			op := []byte("wtfisthis?")
+			op := spotcache.CommandOp(250)
 			cmd := spotcache.CreateCommand(id, op, nil, nil)
 			err := cmd.Exec()
 

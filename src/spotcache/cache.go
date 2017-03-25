@@ -17,7 +17,7 @@ import (
 var db *leveldb.DB
 
 // compatible with time.Unix() in seconds
-type TTL int64
+type TTLSeconds int64
 
 type Cache struct {
 	path string
@@ -56,7 +56,7 @@ func (c Cache) Close() {
 }
 
 // define the methods get, put, delete, has, ttl, etc...
-func (c *Cache) Put(key, value []byte, ttl TTL) error {
+func (c *Cache) Put(key, value []byte, ttl TTLSeconds) error {
 	return db.Put(key, value, nil)
 }
 
@@ -68,7 +68,7 @@ func (c *Cache) Has(key []byte) (bool, error) {
 	return db.Has(key, nil)
 }
 
-func (c *Cache) Ttl(key []byte) TTL {
+func (c *Cache) Ttl(key []byte) TTLSeconds {
 	return 0
 }
 

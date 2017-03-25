@@ -20,6 +20,24 @@ const (
 	RESP_PONG  = "pong"
 )
 
+type CommandOp uint8
+
+const (
+	NOOP        = CommandOp(0)
+	PUT         = CommandOp(1)
+	GET         = CommandOp(2)
+	HAS         = CommandOp(3)
+	DEL         = CommandOp(4)
+	EXPIRE      = CommandOp(10)
+	TTL         = CommandOp(11)
+	SUBSCRIBE   = CommandOp(20)
+	UNSUBSCRIBE = CommandOp(21)
+	PUBLISH     = CommandOp(22)
+	STATUS      = CommandOp(64)
+	PING        = CommandOp(128)
+	SHUTDOWN    = CommandOp(255)
+)
+
 // private responses
 var (
 	cache *Cache
@@ -36,7 +54,7 @@ type Commander struct {
 // command object to support executions
 type Command struct {
 	Id    []byte
-	Op    []byte
+	Op    CommandOp
 	Key   []byte
 	Value []byte
 	Resp  []byte
@@ -53,7 +71,7 @@ func NewCommander(db *Cache) *Commander {
 func ParseRequest(buf []byte) (*Command, error) {
 	cmd := Command{}
 	cmd.Id = []byte("flarb")
-	cmd.Op = []byte("ping")
+	cmd.Op = PING
 
 	return &cmd, nil
 }
@@ -62,32 +80,31 @@ func ParseRequest(buf []byte) (*Command, error) {
 func (cmd *Command) Exec() error {
 	// need a hash map of functions to support the API
 	var err error
-	op := string(cmd.Op)
 
 	// TODO: put this into a hash map
-	switch op {
-	case "put":
+	switch cmd.Op {
+	case PUT:
 		err = cache.Put(cmd.Key, cmd.Value, 0)
 		cmd.Resp = ok
-	case "get":
+	case GET:
 		cmd.Resp, err = cache.Get(cmd.Key)
-	case "has":
+	case HAS:
 		r, err := cache.Has(cmd.Key)
 		if err == nil && r {
 			cmd.Resp = yes
 		} else {
 			cmd.Resp = no
 		}
-	case "ping":
+	case PING:
 		cmd.Resp = pong
-	case "status":
+	case STATUS:
 		cmd.Resp = ok
 		log.Info("status: %s", cmd.Resp)
-	case "shutdown":
+	case SHUTDOWN:
 		log.Info("shutdown command received...")
 		cmd.Resp = fail
 	default:
-		msg := fmt.Sprintf("unknown command: %s", op)
+		msg := fmt.Sprintf("unknown command id: %d", cmd.Op)
 		log.Warn(msg)
 		err = errors.New(msg)
 		cmd.Resp = fail
@@ -98,11 +115,11 @@ func (cmd *Command) Exec() error {
 
 // a string representation of the command buffer
 func (cmd *Command) String() string {
-	return fmt.Sprintf("Id:%s,Op:%s,Key:%s,Value:%s,Resp:%s", cmd.Id, cmd.Op, cmd.Key, cmd.Value, cmd.Resp)
+	return fmt.Sprintf("Id:%s,Op:%d,Key:%s,Value:%s,Resp:%s", cmd.Id, cmd.Op, cmd.Key, cmd.Value, cmd.Resp)
 }
 
 // a public helper method to create a full comman structure
-func CreateCommand(id, op, key, value []byte) *Command {
+func CreateCommand(id []byte, op CommandOp, key, value []byte) *Command {
 	cmd := Command{Id: id, Op: op, Key: key, Value: value}
 
 	return &cmd
