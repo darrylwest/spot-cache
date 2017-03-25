@@ -65,7 +65,7 @@ func (rb *RequestBuilder) CreatePutCommand(key, value, metadata []byte) *Request
 	// create the request id...
 	req.Id = []byte(CreateULID())
 	req.Session = rb.session
-	req.Op = []byte("pu")
+	req.Op = PUT
 	req.MetaSize = uint16(len(metadata))
 	req.KeySize = uint16(len(key))
 	req.DataSize = uint32(len(value))

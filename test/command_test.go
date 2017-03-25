@@ -49,7 +49,7 @@ func TestCommand(t *testing.T) {
 			metadata := []byte("ttl:60;")
 			request := builder.CreatePutCommand(key, value, metadata)
 
-			g.Assert(string(request.Op)).Equal("pu")
+			g.Assert(request.Op).Equal(spotcache.PUT)
 			// cmd := spotcache.ParseRequest(ToByteArray(request))
 			// fmt.Println( request.ToByteArray() );
 		})
