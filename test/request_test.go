@@ -22,9 +22,10 @@ func TestRequest(t *testing.T) {
 	g.Describe("Request", func() {
 		cfg := spotcache.NewConfigForEnvironment("test")
 		spotcache.CreateLogger(cfg)
-		session := spotcache.CreateSessionId()
+		var session spotcache.SessionType
+        copy(session[:12], []byte(spotcache.CreateSessionId()))
 
-		builder := spotcache.NewRequestBuilder([]byte(session))
+		builder := spotcache.NewRequestBuilder(session)
 		key := []byte("mytestkey")
 		value := CreateRandomData()
 		metadata := []byte("ttl:40;")

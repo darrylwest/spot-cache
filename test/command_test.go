@@ -8,6 +8,7 @@
 package test
 
 import (
+    "fmt"
 	"spotcache"
 	"testing"
 
@@ -29,7 +30,8 @@ func TestCommand(t *testing.T) {
 
 	g.Describe("Command", func() {
 		cfg := spotcache.NewConfigForEnvironment("test")
-		session := []byte("test1234")
+		var session spotcache.SessionType
+        copy(session[:12], []byte(spotcache.CreateSessionId()))
 		builder := spotcache.NewRequestBuilder(session)
 
 		g.Before(func() {
@@ -46,12 +48,25 @@ func TestCommand(t *testing.T) {
 		g.It("should parse a put command", func() {
 			key := []byte("mytestkey")
 			value := CreateRandomData()
-			metadata := []byte("ttl:60;")
+			metadata := []byte("expire:60;")
 			request := builder.CreatePutCommand(key, value, metadata)
 
 			g.Assert(request.Op).Equal(spotcache.PUT)
 			// cmd := spotcache.ParseRequest(ToByteArray(request))
-			// fmt.Println( request.ToByteArray() );
+            bytes, err := request.ToBytes()
+
+			fmt.Printf("%v\n", bytes )
+            g.Assert(err).Equal(nil)
+            g.Assert(len(bytes) > 30)
+			fmt.Printf("%s\n", request)
+
+            /*
+            req, err := spotcache.RequestFromBytes(bytes)
+
+			fmt.Printf("%s\n", req)
+            fmt.Printf("%v\n", err)
+            // g.Assert(err).Equal(nil)
+            */
 		})
 
 		g.It("should execute a put command", func() {

@@ -10,6 +10,7 @@ package spotcache
 import (
 	"bytes"
 	"encoding/binary"
+    "fmt"
 	"github.com/oklog/ulid"
 	"io"
 	"math/rand"
@@ -35,10 +36,13 @@ func CreateULID() string {
 	return CreateRawULID().String()
 }
 
+type IdType [26]byte
+type SessionType [12]byte
+
 // request object as created by the client
 type Request struct {
-	Id       []byte
-	Session  []byte
+	Id       IdType
+	Session  SessionType
 	Op       CommandOp
 	MetaSize uint16
 	KeySize  uint16
@@ -49,10 +53,10 @@ type Request struct {
 }
 
 type RequestBuilder struct {
-	session []byte
+	session SessionType
 }
 
-func NewRequestBuilder(sess []byte) *RequestBuilder {
+func NewRequestBuilder(sess SessionType) *RequestBuilder {
 	b := RequestBuilder{session: sess}
 
 	return &b
@@ -63,7 +67,7 @@ func (rb *RequestBuilder) CreatePutCommand(key, value, metadata []byte) *Request
 	req := Request{}
 
 	// create the request id...
-	req.Id = []byte(CreateULID())
+	copy(req.Id[:26], []byte(CreateULID()))
 	req.Session = rb.session
 	req.Op = PUT
 	req.MetaSize = uint16(len(metadata))
@@ -77,10 +81,37 @@ func (rb *RequestBuilder) CreatePutCommand(key, value, metadata []byte) *Request
 	return &req
 }
 
+/*
+func RequestFromBytes(buf []byte) (*Request, error) {
+    req := new(Request)
+    br := bytes.NewReader(buf)
+    fmt.Println(br)
+    if err := binary.Read(br, binary.LittleEndian, req.Id); err != nil {
+        return nil, err
+    }
+
+    if err := binary.Read(br, binary.LittleEndian, req.Session); err != nil {
+        return nil, err
+    }
+
+    return req, nil
+}
+*/
+
 // encode the request into a stream of little endian bytes; return error if encoding fails
 func (req *Request) ToBytes() ([]byte, error) {
 	buf := new(bytes.Buffer)
-	var data = []interface{}{}
+	var data = []interface{}{
+        req.Id,
+        req.Session,
+        req.Op,
+        req.MetaSize,
+        req.KeySize,
+        req.DataSize,
+        req.Metadata,
+        req.Key,
+        req.Value,
+    }
 
 	for _, v := range data {
 		err := binary.Write(buf, binary.LittleEndian, v)
@@ -91,4 +122,8 @@ func (req *Request) ToBytes() ([]byte, error) {
 	}
 
 	return buf.Bytes(), nil
+}
+
+func (req *Request) String() string {
+    return fmt.Sprintf("Id:%s,Session:%s", req.Id, req.Session)
 }

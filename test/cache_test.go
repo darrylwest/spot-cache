@@ -37,7 +37,7 @@ func TestCache(t *testing.T) {
 			// test stuff...
 		})
 
-		g.It("should put data with ttl")
+		g.It("should put data with expire/ttl")
 		g.It("should get data that has not expired and update ttl")
 		g.It("should attempt get with null return after data expires")
 		g.It("should return true if data exists and update ttl")
