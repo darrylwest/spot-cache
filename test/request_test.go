@@ -30,6 +30,10 @@ func TestRequest(t *testing.T) {
 		value := CreateRandomData()
 		metadata := []byte("expire:40;")
 
+        keysz := uint16(len(key))
+        metasz := uint16(len(metadata))
+        valsz := uint32(len(value))
+
         g.It("should create a new instance of Request from NewCommand", func() {
             req := builder.NewRequest(spotcache.NOOP)
 
@@ -44,6 +48,13 @@ func TestRequest(t *testing.T) {
 
 			g.Assert(reflect.TypeOf(req).String()).Equal("*spotcache.Request")
 			g.Assert(req.Op).Equal(spotcache.PUT)
+            g.Assert(req.MetaSize).Equal(metasz)
+            g.Assert(req.KeySize).Equal(keysz)
+            g.Assert(req.DataSize).Equal(valsz)
+
+            g.Assert(req.Metadata).Equal(metadata)
+            g.Assert(req.Key).Equal(key)
+            g.Assert(req.Value).Equal(value)
 		})
 
 		g.It("should create a get instance of Request", func() {
