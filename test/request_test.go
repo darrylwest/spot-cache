@@ -62,6 +62,13 @@ func TestRequest(t *testing.T) {
 
 			g.Assert(reflect.TypeOf(req).String()).Equal("*spotcache.Request")
 			g.Assert(req.Op).Equal(spotcache.GET)
+            g.Assert(req.MetaSize).Equal(metasz)
+            g.Assert(req.KeySize).Equal(keysz)
+            g.Assert(req.DataSize).Equal(uint32(0))
+
+            g.Assert(req.Metadata).Equal(metadata)
+            g.Assert(req.Key).Equal(key)
+            g.Assert(req.Value).Equal(make([]byte, 0))
         })
 
 		g.It("should create a has request")
