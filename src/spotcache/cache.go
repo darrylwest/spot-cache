@@ -69,7 +69,7 @@ func (c *Cache) Has(key []byte) (bool, error) {
 }
 
 func (c *Cache) Delete(key []byte) error {
-    return db.Delete(key, nil)
+	return db.Delete(key, nil)
 }
 
 func (c *Cache) Ttl(key []byte) TTLSeconds {

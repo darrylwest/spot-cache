@@ -18,8 +18,8 @@ import (
 )
 
 var (
-    entropy io.Reader = rand.New(rand.NewSource(time.Now().UnixNano()))
-    zerobyte = make([]byte, 0)
+	entropy  io.Reader = rand.New(rand.NewSource(time.Now().UnixNano()))
+	zerobyte           = make([]byte, 0)
 )
 
 func genulid(entropy io.Reader, ts uint64) (ulid.ULID, error) {
@@ -73,14 +73,14 @@ func CreateCommandId() IdType {
 }
 
 func (rb RequestBuilder) NewRequest(op CommandOp) Request {
-    req := Request{}
+	req := Request{}
 
 	// create the request id...
 	req.Id = CreateCommandId()
 	req.Session = rb.session
 	req.Op = op
 
-    return req
+	return req
 }
 
 func (req *Request) updateRequest(key, value, metadata []byte) {
@@ -97,7 +97,7 @@ func (req *Request) updateRequest(key, value, metadata []byte) {
 func (rb *RequestBuilder) CreatePutRequest(key, value, metadata []byte) *Request {
 	req := rb.NewRequest(PUT)
 
-    req.updateRequest(key, value, metadata)
+	req.updateRequest(key, value, metadata)
 
 	return &req
 }
@@ -105,7 +105,7 @@ func (rb *RequestBuilder) CreatePutRequest(key, value, metadata []byte) *Request
 func (rb *RequestBuilder) CreateGetRequest(key, metadata []byte) *Request {
 	req := rb.NewRequest(GET)
 
-    req.updateRequest(key, zerobyte, metadata)
+	req.updateRequest(key, zerobyte, metadata)
 
 	return &req
 }
@@ -113,7 +113,15 @@ func (rb *RequestBuilder) CreateGetRequest(key, metadata []byte) *Request {
 func (rb *RequestBuilder) CreateHasRequest(key, metadata []byte) *Request {
 	req := rb.NewRequest(HAS)
 
-    req.updateRequest(key, zerobyte, zerobyte)
+	req.updateRequest(key, zerobyte, zerobyte)
+
+	return &req
+}
+
+func (rb *RequestBuilder) CreateDeleteRequest(key, metadata []byte) *Request {
+	req := rb.NewRequest(DELETE)
+
+	req.updateRequest(key, zerobyte, zerobyte)
 
 	return &req
 }

@@ -95,9 +95,9 @@ func (cmd *Command) Exec() error {
 		} else {
 			cmd.Resp = no
 		}
-    case DELETE:
+	case DELETE:
 		err = cache.Delete(cmd.Key)
-        cmd.Resp = yes
+		cmd.Resp = yes
 	case PING:
 		cmd.Resp = pong
 	case STATUS:
