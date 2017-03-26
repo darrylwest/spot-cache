@@ -88,10 +88,14 @@ func (rb *RequestBuilder) CreatePutCommand(key, value, metadata []byte) *Request
 	return &req
 }
 
-func RequestFromBytes(ba []byte) (*Request, error) {
-	// buf := bytes.NewReader(ba)
+// decode the little endian bytes and parse into request object
+func RequestFromBytes(buf []byte) (*Request, error) {
+	raw := bytes.NewReader(buf)
+	ba := make([]byte, len(buf))
 
 	req := Request{}
+	// this may be unnecessary if the socket reader does the decoding...
+	err := binary.Read(raw, binary.LittleEndian, ba)
 
 	sz := len(req.Id)
 	idx, idy := 0, sz
@@ -126,9 +130,7 @@ func RequestFromBytes(ba []byte) (*Request, error) {
 	idx, idy = idy, idy+int(req.DataSize)
 	req.Value = ba[idx:idy]
 
-	// log.Debug("%s\n", req.Value )
-
-	return &req, nil
+	return &req, err
 }
 
 // encode the request into a stream of little endian bytes; return error if encoding fails
