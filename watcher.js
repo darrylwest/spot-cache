@@ -42,7 +42,7 @@ const run = function() {
 };
 
 const changeHandler = function(event, filename) {
-    if (filename.indexOf( '.go') > 0) {
+    if (filename.endsWith( '.go') > 0) {
         console.log( 'file change: ', filename);
 
         files.push( filename );

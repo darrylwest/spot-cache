@@ -68,6 +68,10 @@ func (c *Cache) Has(key []byte) (bool, error) {
 	return db.Has(key, nil)
 }
 
+func (c *Cache) Delete(key []byte) error {
+    return db.Delete(key, nil)
+}
+
 func (c *Cache) Ttl(key []byte) TTLSeconds {
 	return 0
 }

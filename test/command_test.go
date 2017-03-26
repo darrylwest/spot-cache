@@ -49,7 +49,7 @@ func TestCommand(t *testing.T) {
 			key := []byte("MyTestKey")
 			value := []byte("My Test Value with a specific length")
 			metadata := []byte("expire:60;")
-			request := builder.CreatePutCommand(key, value, metadata)
+			request := builder.CreatePutRequest(key, value, metadata)
 
 			g.Assert(request.Op).Equal(spotcache.PUT)
 			bytes, err := request.ToBytes()

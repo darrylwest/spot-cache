@@ -69,14 +69,24 @@ func CreateCommandId() IdType {
 	return id
 }
 
-// create a put command with the current session
-func (rb *RequestBuilder) CreatePutCommand(key, value, metadata []byte) *Request {
-	req := Request{}
+func (rb RequestBuilder) NewRequest(op CommandOp) Request {
+    req := Request{}
 
 	// create the request id...
 	req.Id = CreateCommandId()
 	req.Session = rb.session
-	req.Op = PUT
+	req.Op = op
+
+    return req
+}
+
+func (rb *RequestBuilder) updateRequest(key, value, metadata []byte) {
+}
+
+// create a put command with the current session
+func (rb *RequestBuilder) CreatePutRequest(key, value, metadata []byte) *Request {
+	req := rb.NewRequest(PUT)
+
 	req.MetaSize = uint16(len(metadata))
 	req.KeySize = uint16(len(key))
 	req.DataSize = uint32(len(value))
@@ -84,6 +94,18 @@ func (rb *RequestBuilder) CreatePutCommand(key, value, metadata []byte) *Request
 	req.Metadata = metadata
 	req.Key = key
 	req.Value = value
+
+	return &req
+}
+
+func (rb *RequestBuilder) CreateGetRequest(key, metadata []byte) *Request {
+	req := rb.NewRequest(GET)
+
+	req.MetaSize = uint16(len(metadata))
+	req.KeySize = uint16(len(key))
+
+	req.Metadata = metadata
+	req.Key = key
 
 	return &req
 }

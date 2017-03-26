@@ -30,16 +30,29 @@ func TestRequest(t *testing.T) {
 		value := CreateRandomData()
 		metadata := []byte("expire:40;")
 
-		g.It("should create a put instance of Request", func() {
-			req := builder.CreatePutCommand(key, value, metadata)
+        g.It("should create a new instance of Request from NewCommand", func() {
+            req := builder.NewRequest(spotcache.NOOP)
 
-			g.Assert(reflect.TypeOf(req).String()).Equal("*spotcache.Request")
+			g.Assert(reflect.TypeOf(req).String()).Equal("spotcache.Request")
 			g.Assert(len(req.Id)).Equal(26)
 			g.Assert(len(req.Session)).Equal(12)
+            g.Assert(req.Op).Equal(spotcache.NOOP)
+        })
+
+		g.It("should create a put instance of Request", func() {
+			req := builder.CreatePutRequest(key, value, metadata)
+
+			g.Assert(reflect.TypeOf(req).String()).Equal("*spotcache.Request")
 			g.Assert(req.Op).Equal(spotcache.PUT)
 		})
 
-		g.It("should create a get request")
+		g.It("should create a get instance of Request", func() {
+            req := builder.CreateGetRequest(key, metadata)
+
+			g.Assert(reflect.TypeOf(req).String()).Equal("*spotcache.Request")
+			g.Assert(req.Op).Equal(spotcache.GET)
+        })
+
 		g.It("should create a has request")
 		g.It("should create a delete request")
 		g.It("should create an expire request")

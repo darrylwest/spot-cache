@@ -1,5 +1,5 @@
 //
-// CacheTest - test the get/put/has/delete methods
+// CacheTest - test the get/put/has/delete methods; other cache tests exist in the command_test.go file
 //
 // @author darryl.west <darryl.west@raincitysoftware.com>
 // @created 2017-03-18 13:53:58
@@ -47,5 +47,15 @@ func TestCache(t *testing.T) {
 
 			g.Assert(len(keys) > 0).IsTrue()
 		})
+
+        // Put
+
+        // Get
+
+        // Has
+        g.It("should return true from Has if a key exists")
+        g.It("should return false from Has if a key does not exist")
+
+        // Delete
 	})
 }

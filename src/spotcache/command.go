@@ -27,7 +27,7 @@ const (
 	PUT         = CommandOp(1)
 	GET         = CommandOp(2)
 	HAS         = CommandOp(3)
-	DEL         = CommandOp(4)
+	DELETE      = CommandOp(4)
 	EXPIRE      = CommandOp(10)
 	TTL         = CommandOp(11)
 	SUBSCRIBE   = CommandOp(20)
@@ -95,6 +95,9 @@ func (cmd *Command) Exec() error {
 		} else {
 			cmd.Resp = no
 		}
+    case DELETE:
+		err = cache.Delete(cmd.Key)
+        cmd.Resp = yes
 	case PING:
 		cmd.Resp = pong
 	case STATUS:

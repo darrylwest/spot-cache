@@ -15,7 +15,7 @@ format:
 	( gofmt -s -w src/*.go src/spotcache/*.go test/*.go )
 
 qtest:
-	@( cd test ; go test )
+	@( cd test ; clear ; go test | head -47 )
 
 test:
 	[ -d $(HOME)/.spotcache ] || mkdir $(HOME)/.spotcache
