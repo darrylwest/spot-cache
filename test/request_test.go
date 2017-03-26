@@ -1,5 +1,5 @@
 //
-// @RequestTest
+// RequestTest
 //
 // @author darryl.west <darryl.west@raincitysoftware.com>
 // @created 2017-03-19 12:09:24
@@ -71,7 +71,21 @@ func TestRequest(t *testing.T) {
             g.Assert(req.Value).Equal(make([]byte, 0))
         })
 
-		g.It("should create a has request")
+		g.It("should create a has request", func() {
+            req := builder.CreateHasRequest(key, metadata)
+
+			g.Assert(reflect.TypeOf(req).String()).Equal("*spotcache.Request")
+			g.Assert(req.Op).Equal(spotcache.HAS)
+            g.Assert(req.MetaSize).Equal(uint16(0))
+            g.Assert(req.KeySize).Equal(keysz)
+            g.Assert(req.DataSize).Equal(uint32(0))
+
+            z := make([]byte, 0)
+            g.Assert(req.Metadata).Equal(z)
+            g.Assert(req.Key).Equal(key)
+            g.Assert(req.Value).Equal(z)
+        })
+
 		g.It("should create a delete request")
 		g.It("should create an expire request")
 		g.It("should create a ttl request")

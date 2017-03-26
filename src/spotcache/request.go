@@ -110,6 +110,14 @@ func (rb *RequestBuilder) CreateGetRequest(key, metadata []byte) *Request {
 	return &req
 }
 
+func (rb *RequestBuilder) CreateHasRequest(key, metadata []byte) *Request {
+	req := rb.NewRequest(HAS)
+
+    req.updateRequest(key, zerobyte, zerobyte)
+
+	return &req
+}
+
 // decode the little endian bytes and parse into request object
 func RequestFromBytes(buf []byte) (*Request, error) {
 	raw := bytes.NewReader(buf)
