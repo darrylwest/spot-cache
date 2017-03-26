@@ -135,9 +135,16 @@ func (s *CacheService) OpenClientHandler(conn net.Conn) {
 
 		log.Info("REQ: %s", buf[:n])
 
+		// read, decode and parse the request object
+
+		// create the command
+
+		// execute the command and fill the response
+
 		resp := fmt.Sprintf("%s", buf[:n])
 		log.Info("RSP: %s", resp)
 
+		// return the response to requester
 		fmt.Fprintf(conn, resp)
 	}
 }
