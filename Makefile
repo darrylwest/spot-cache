@@ -19,7 +19,7 @@ qtest:
 
 test:
 	[ -d $(HOME)/.spotcache ] || mkdir $(HOME)/.spotcache
-	@( go vet src/spotcache/*.go ; go vet src/*.go ; cd test ; go test )
+	@( go vet src/spotcache/*.go ; go vet src/*.go ; cd test ; go test -cover )
 
 watch:
 	./watcher.js
