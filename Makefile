@@ -18,7 +18,7 @@ qtest:
 	@( cd test ; clear ; go test | head -47 )
 
 test:
-	[ -d $(HOME)/.spotcache ] || mkdir $(HOME)/.spotcache
+	@( [ -d $(HOME)/.spotcache ] || mkdir $(HOME)/.spotcache )
 	@( go vet src/spotcache/*.go ; go vet src/*.go ; cd test ; go test -cover )
 
 watch:

@@ -5,6 +5,8 @@ import (
 	"net"
 	"os"
 	"time"
+
+    _ "spotcache"
 )
 
 func getSession(conn net.Conn) string {
@@ -60,7 +62,5 @@ func main() {
 
 		time.Sleep(time.Second)
 	}
-
-
 }
 
