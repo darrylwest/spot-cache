@@ -107,4 +107,4 @@ Apache 2.0
 
 _This project was inspired in part by [Suryandaru Triandana](https://github.com/syndtr/goleveldb)'s excellent port of leveldb to golang._
 
-###### darryl.west | 2017-03-25 | Version 0.90.104-alpha
+###### darryl.west | 2017-03-26 | Version 0.90.106-alpha
