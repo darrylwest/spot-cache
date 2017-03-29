@@ -5,7 +5,7 @@
 // @created 2017-03-19 12:09:24
 //
 
-package test
+package unit
 
 import (
 	"reflect"

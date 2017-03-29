@@ -5,7 +5,7 @@
 // @created 2017-03-17 08:32:48
 //
 
-package test
+package unit
 
 import (
 	"spotcache"

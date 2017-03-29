@@ -3,7 +3,7 @@
 // @author darryl.west <darryl.west@raincitysoftware.com>
 // @created 2017-03-12 11:39:18
 
-package test
+package unit
 
 import (
 	"fmt"
