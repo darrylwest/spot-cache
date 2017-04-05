@@ -22,6 +22,7 @@ const (
 
 type CommandOp uint8
 
+// manually assign the op codes...
 const (
 	NOOP        = CommandOp(0)
 	PUT         = CommandOp(1)
