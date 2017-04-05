@@ -12,14 +12,14 @@ install-deps:
 	go get github.com/syndtr/goleveldb/leveldb
 
 format:
-	( gofmt -s -w src/*.go src/spotcache/*.go test/*.go )
+	( gofmt -s -w src/*.go src/spotcache/*.go test/*/*.go )
 
 qtest:
-	@( cd test ; clear ; go test | head -47 )
+	@( cd test/unit ; clear ; go test | head -47 )
 
 test:
 	@( [ -d $(HOME)/.spotcache ] || mkdir $(HOME)/.spotcache )
-	@( go vet src/spotcache/*.go ; go vet src/*.go ; cd test ; go test -cover )
+	@( go vet src/spotcache/*.go ; go vet src/*.go ; cd test/unit ; go test -cover )
 
 watch:
 	./watcher.js
@@ -40,7 +40,7 @@ shutdown:
 	@( echo "implement a socket client that will request a shutdown..." )
 
 edit:
-	vi -O2 src/*/*.go test/*.go src/*.go
+	vi -O2 src/*/*.go test/unit/*.go src/*.go
 
 .PHONY: format
 .PHONY: test

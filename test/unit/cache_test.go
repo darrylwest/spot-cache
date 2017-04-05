@@ -5,7 +5,7 @@
 // @created 2017-03-18 13:53:58
 //
 
-package test
+package unit
 
 import (
 	// "fmt"
