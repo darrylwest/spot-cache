@@ -1,3 +1,10 @@
+//
+// test client
+//
+// @author darryl.west <darryl.west@raincitysoftware.com>
+// @created 2017-04-08 09:55:56
+//
+
 package main
 
 import (

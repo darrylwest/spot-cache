@@ -1,3 +1,9 @@
+//
+// monitor client
+//
+// @author darryl.west <darryl.west@raincitysoftware.com>
+// @created 2017-04-08 09:55:41
+//
 package main
 
 import (
