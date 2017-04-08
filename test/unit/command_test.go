@@ -126,7 +126,7 @@ func TestCommand(t *testing.T) {
 
 			g.Assert(err == nil).IsTrue()
 			err = cmd.Exec()
-            g.Assert(err == nil).IsTrue()
+			g.Assert(err == nil).IsTrue()
 
 		})
 		g.It("should execute a ping command", func() {
