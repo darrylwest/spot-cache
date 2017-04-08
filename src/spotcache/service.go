@@ -100,7 +100,7 @@ func (s *CacheService) ListenAndServe(ss *net.TCPListener) {
 			continue
 		}
 
-		// should probably shove the clint conn into a conection array/slice
+		// should probably shove the clint conn into a connection array/slice
 		log.Info("connection on %v", conn.RemoteAddr())
 		s.waitGroup.Add(1)
 		go s.OpenClientHandler(conn)

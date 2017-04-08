@@ -3,8 +3,8 @@ package main
 import (
 	"io"
 	"net"
-    "os"
-    "path"
+	"os"
+	"path"
 	"strings"
 	"time"
 )
@@ -21,12 +21,12 @@ func reader(r io.Reader) {
 }
 
 func main() {
-    home := os.Getenv("SPOTCACHE_HOME")
-    if home == "" {
-        home = path.Join(os.Getenv("HOME"), ".spotcache")
-    }
+	home := os.Getenv("SPOTCACHE_HOME")
+	if home == "" {
+		home = path.Join(os.Getenv("HOME"), ".spotcache")
+	}
 
-    sock := path.Join(home, "spot.sock")
+	sock := path.Join(home, "spot.sock")
 
 	c, err := net.Dial("unix", sock)
 	if err != nil {

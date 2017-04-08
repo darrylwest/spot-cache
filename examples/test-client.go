@@ -6,17 +6,17 @@ import (
 	"os"
 	"time"
 
-    _ "spotcache"
+	_ "spotcache"
 )
 
 func getSession(conn net.Conn) string {
-    buf := make([]byte, 250)
-    n, err := conn.Read(buf)
-    if err != nil {
-        panic(err)
-    }
+	buf := make([]byte, 250)
+	n, err := conn.Read(buf)
+	if err != nil {
+		panic(err)
+	}
 
-    return string(buf[:n])
+	return string(buf[:n])
 }
 
 func main() {
@@ -35,12 +35,12 @@ func main() {
 	defer conn.Close()
 	count := 0
 
-    key := fmt.Sprintf("client:%d", id)
+	key := fmt.Sprintf("client:%d", id)
 
-    sess := getSession(conn)
-    fmt.Printf("my session: %s\n", sess);
+	sess := getSession(conn)
+	fmt.Printf("my session: %s\n", sess)
 
-    buf := make([]byte, 2048)
+	buf := make([]byte, 2048)
 	for {
 		count++
 		text := fmt.Sprintf("put:%d %s 'my value %d'", count, key, time.Now().Unix())
@@ -52,15 +52,14 @@ func main() {
 
 		fmt.Printf("request: %s\n", text)
 
-        n, err := conn.Read(buf)
-        if err != nil {
+		n, err := conn.Read(buf)
+		if err != nil {
 			fmt.Println("lost connection...")
 			return
-        }
+		}
 
-        fmt.Printf("resp: %s\n", buf[:n]);
+		fmt.Printf("resp: %s\n", buf[:n])
 
 		time.Sleep(time.Second)
 	}
 }
-

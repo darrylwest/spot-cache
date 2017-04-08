@@ -18,10 +18,9 @@ Spot cache is a fast, highly available cache service written in golang and backe
 Socket protocol is asynchronous request/replay that uses a thin envelope to match the correct response to it's request.
 
 
-
 ## Installation
 
-**Note: this project is in the early stages and doesn't expect to go live until Q2-2017.**
+**Note: this project is in the early stages and doesn't expect to go live until then end of Q2-2017.**
 
 ## Server
 
@@ -100,6 +99,10 @@ Here are the rules:
 * We follow golang's idioms and best practices.  All code must be formatted using go-fmt.
 * Please submit pull requests. After code reviews and possible modifications your code will be merged.
 * Code of conduct: you known the drill. The ACM's [Code of Ethics and Professional Conduct](https://www.acm.org/about-acm/acm-code-of-ethics-and-professional-conduct) says it all--don't be a dick.
+
+## Go Report Card
+
+
 
 ## License
 
