@@ -23,7 +23,7 @@ func TestRequest(t *testing.T) {
 		cfg := spotcache.NewConfigForEnvironment("test")
 		spotcache.CreateLogger(cfg)
 		var session spotcache.SessionType
-		copy(session[:12], []byte(spotcache.CreateSessionId()))
+		copy(session[:12], []byte(spotcache.CreateSessionID()))
 
 		builder := spotcache.NewRequestBuilder(session)
 		key := []byte(spotcache.CreateULID())
@@ -38,7 +38,7 @@ func TestRequest(t *testing.T) {
 			req := builder.NewRequest(spotcache.NOOP)
 
 			g.Assert(reflect.TypeOf(req).String()).Equal("spotcache.Request")
-			g.Assert(len(req.Id)).Equal(26)
+			g.Assert(len(req.ID)).Equal(26)
 			g.Assert(len(req.Session)).Equal(12)
 			g.Assert(req.Op).Equal(spotcache.NOOP)
 		})

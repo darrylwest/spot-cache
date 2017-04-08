@@ -14,6 +14,7 @@ import (
 
 var log *logger.Logger
 
+// CreateLogger create a new logger based on config
 func CreateLogger(cfg *Config) *logger.Logger {
 	if log == nil {
 		filename := path.Join(cfg.Logpath, cfg.Logname)

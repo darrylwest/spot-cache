@@ -27,6 +27,7 @@ func genulid(entropy io.Reader, ts uint64) (ulid.ULID, error) {
 	return value, err
 }
 
+// CreateRawULID create a raw ulid
 func CreateRawULID() ulid.ULID {
 	ts := uint64(time.Now().UnixNano() / 1000000)
 	v, _ := genulid(entropy, ts)
@@ -34,17 +35,20 @@ func CreateRawULID() ulid.ULID {
 	return v
 }
 
-// generate and return a ulid as a string
+// CreateULID generate and return a ulid as a string
 func CreateULID() string {
 	return CreateRawULID().String()
 }
 
-type IdType [26]byte
+// IDType 26 bytes
+type IDType [26]byte
+
+// SessionType - 12 bytes
 type SessionType [12]byte
 
-// request object as created by the client
+// Request request object as created by the client
 type Request struct {
-	Id       IdType
+	ID       IDType
 	Session  SessionType
 	Op       CommandOp
 	MetaSize uint16
@@ -55,34 +59,39 @@ type Request struct {
 	Value    []byte
 }
 
+// RequestBuilder holds the session
 type RequestBuilder struct {
 	session SessionType
 }
 
+// NewRequestBuilder return a new request builder object
 func NewRequestBuilder(sess SessionType) *RequestBuilder {
 	b := RequestBuilder{session: sess}
 
 	return &b
 }
 
-func CreateCommandId() IdType {
-	var id IdType
+// CreateCommandID create a command id
+func CreateCommandID() IDType {
+	var id IDType
 	copy(id[:26], []byte(CreateULID()))
 
 	return id
 }
 
+// NewRequest create a new request object
 func (rb RequestBuilder) NewRequest(op CommandOp) Request {
 	req := Request{}
 
 	// create the request id...
-	req.Id = CreateCommandId()
+	req.ID = CreateCommandID()
 	req.Session = rb.session
 	req.Op = op
 
 	return req
 }
 
+// updateRequest
 func (req *Request) updateRequest(key, value, metadata []byte) {
 	req.MetaSize = uint16(len(metadata))
 	req.KeySize = uint16(len(key))
@@ -93,7 +102,7 @@ func (req *Request) updateRequest(key, value, metadata []byte) {
 	req.Value = value
 }
 
-// create a put command with the current session
+// CreatePutRequest create a put command with the current session
 func (rb *RequestBuilder) CreatePutRequest(key, value, metadata []byte) *Request {
 	req := rb.NewRequest(PUT)
 
@@ -102,6 +111,7 @@ func (rb *RequestBuilder) CreatePutRequest(key, value, metadata []byte) *Request
 	return &req
 }
 
+// CreateGetRequest create a get request
 func (rb *RequestBuilder) CreateGetRequest(key, metadata []byte) *Request {
 	req := rb.NewRequest(GET)
 
@@ -110,6 +120,7 @@ func (rb *RequestBuilder) CreateGetRequest(key, metadata []byte) *Request {
 	return &req
 }
 
+// CreateHasRequest return the has request op
 func (rb *RequestBuilder) CreateHasRequest(key, metadata []byte) *Request {
 	req := rb.NewRequest(HAS)
 
@@ -118,6 +129,7 @@ func (rb *RequestBuilder) CreateHasRequest(key, metadata []byte) *Request {
 	return &req
 }
 
+// CreateDeleteRequest create a delete request op
 func (rb *RequestBuilder) CreateDeleteRequest(key, metadata []byte) *Request {
 	req := rb.NewRequest(DELETE)
 
@@ -126,7 +138,7 @@ func (rb *RequestBuilder) CreateDeleteRequest(key, metadata []byte) *Request {
 	return &req
 }
 
-// decode the little endian bytes and parse into request object
+// RequestFromBytes decode the little endian bytes and parse into request object
 func RequestFromBytes(buf []byte) (*Request, error) {
 	raw := bytes.NewReader(buf)
 	ba := make([]byte, len(buf))
@@ -135,10 +147,10 @@ func RequestFromBytes(buf []byte) (*Request, error) {
 	// this may be unnecessary if the socket reader does the decoding...
 	err := binary.Read(raw, binary.LittleEndian, ba)
 
-	sz := len(req.Id)
+	sz := len(req.ID)
 	idx, idy := 0, sz
 
-	copy(req.Id[0:sz], ba[idx:idy])
+	copy(req.ID[0:sz], ba[idx:idy])
 
 	sz = len(req.Session)
 	idx, idy = idy, idy+sz
@@ -171,11 +183,11 @@ func RequestFromBytes(buf []byte) (*Request, error) {
 	return &req, err
 }
 
-// encode the request into a stream of little endian bytes; return error if encoding fails
+// ToBytes encode the request into a stream of little endian bytes; return error if encoding fails
 func (req *Request) ToBytes() ([]byte, error) {
 	buf := new(bytes.Buffer)
 	var data = []interface{}{
-		req.Id,
+		req.ID,
 		req.Session,
 		req.Op,
 		req.MetaSize,
@@ -199,8 +211,8 @@ func (req *Request) ToBytes() ([]byte, error) {
 
 func (req *Request) String() string {
 	return fmt.Sprintf(
-		"Id:%s,Session:%s,Op:%d,MetaSize:%d,KeySize:%d,DataSize:%d,Metadata:%s,Key:%s,Value:%v",
-		req.Id, req.Session, req.Op,
+		"ID:%s,Session:%s,Op:%d,MetaSize:%d,KeySize:%d,DataSize:%d,Metadata:%s,Key:%s,Value:%v",
+		req.ID, req.Session, req.Op,
 		req.MetaSize, req.KeySize, req.DataSize,
 		req.Metadata, req.Key, req.Value)
 }

@@ -67,7 +67,7 @@ func TestService(t *testing.T) {
 		g.It("should create a valid session id", func() {
 			// insure that multiple calls always return a 12 char string
 			for i := 0; i < 100; i++ {
-				sess := spotcache.CreateSessionId()
+				sess := spotcache.CreateSessionID()
 				g.Assert(len(sess)).Equal(12)
 			}
 		})

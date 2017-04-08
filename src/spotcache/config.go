@@ -13,6 +13,7 @@ import (
 	"path"
 )
 
+// Config the config structure
 type Config struct {
 	Home     string // defaults to user's home
 	Env      string // defaults to production
@@ -24,6 +25,7 @@ type Config struct {
 	Timeout  int64
 }
 
+// NewDefaultConfig default settings
 func NewDefaultConfig() *Config {
 	cfg := new(Config)
 
@@ -48,6 +50,7 @@ func NewDefaultConfig() *Config {
 	return cfg
 }
 
+// NewConfigForEnvironment configure for a specific environment
 func NewConfigForEnvironment(env string) *Config {
 	cfg := NewDefaultConfig()
 
@@ -60,6 +63,7 @@ func NewConfigForEnvironment(env string) *Config {
 	return cfg
 }
 
+// ParseArgs parse the command line args
 func ParseArgs() *Config {
 	dflt := NewDefaultConfig()
 
@@ -101,6 +105,7 @@ func ParseArgs() *Config {
 	return cfg
 }
 
+// IsProduction return true if the current env is production
 func IsProduction(env string) bool {
 	return env == "production"
 }

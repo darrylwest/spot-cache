@@ -16,13 +16,15 @@ import (
 
 var db *leveldb.DB
 
-// compatible with time.Unix() in seconds
+// TTLSeconds compatible with time.Unix() in seconds
 type TTLSeconds int64
 
+// Cache the cache object
 type Cache struct {
 	path string
 }
 
+// NewCache create a new cache object
 func NewCache(cfg *Config) *Cache {
 	cache := Cache{}
 
@@ -31,12 +33,14 @@ func NewCache(cfg *Config) *Cache {
 	return &cache
 }
 
+// CreateOptions create the cache options
 func (c Cache) CreateOptions() *opt.Options {
 	opts := opt.Options{}
 
 	return &opts
 }
 
+// Open open the cache db
 func (c Cache) Open() error {
 	var err error
 	db, err = leveldb.OpenFile(c.path, c.CreateOptions())
@@ -48,6 +52,7 @@ func (c Cache) Open() error {
 	return err
 }
 
+// Close close the cache db
 func (c Cache) Close() {
 	if db != nil {
 		log.Info("closing cache database...")
@@ -55,28 +60,32 @@ func (c Cache) Close() {
 	}
 }
 
-// define the methods get, put, delete, has, ttl, etc...
+// Put define the methods get, put, delete, has, ttl, etc...
 func (c *Cache) Put(key, value []byte, ttl TTLSeconds) error {
 	return db.Put(key, value, nil)
 }
 
+// Get return the data from key
 func (c *Cache) Get(key []byte) ([]byte, error) {
 	return db.Get(key, nil)
 }
 
+// Has return true if cache has the key
 func (c *Cache) Has(key []byte) (bool, error) {
 	return db.Has(key, nil)
 }
 
+// Delete delete the data based on key
 func (c *Cache) Delete(key []byte) error {
 	return db.Delete(key, nil)
 }
 
-func (c *Cache) Ttl(key []byte) TTLSeconds {
+// TTL return the time to live
+func (c *Cache) TTL(key []byte) TTLSeconds {
 	return 0
 }
 
-// return all keys in the database
+// Keys return all keys in the database
 func (c *Cache) Keys() ([]string, error) {
 	keys := []string{}
 

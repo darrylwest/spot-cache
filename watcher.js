@@ -56,7 +56,7 @@ const changeHandler = function(event, filename) {
 };
 
 fs.watch( './src/', { recursive:true}, changeHandler );
-fs.watch( './test/', { recursive:false}, changeHandler );
+fs.watch( './test/unit', { recursive:true}, changeHandler );
 
 process.stdout.write( clearScreen ); 
 console.log('watching go files...');

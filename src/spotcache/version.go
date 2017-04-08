@@ -10,9 +10,10 @@ import "fmt"
 const (
 	major = 0
 	minor = 90
-	patch = 106
+	patch = 107
 )
 
+// Version - return the version number as a single string
 func Version() string {
 	return fmt.Sprintf("%d.%d.%d", major, minor, patch)
 }
