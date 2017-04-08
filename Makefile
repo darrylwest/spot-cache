@@ -22,7 +22,7 @@ lint:
 	@( golint clients/golang )
 
 qtest:
-	@( cd test/unit ; clear ; go test | head -47 )
+	@( cd test/unit ; clear ; go test -cover )
 
 test:
 	@( [ -d $(HOME)/.spotcache ] || mkdir $(HOME)/.spotcache )
@@ -48,7 +48,7 @@ shutdown:
 	@( echo "implement a socket client that will request a shutdown..." )
 
 edit:
-	vi -O2 src/*/*.go test/unit/*.go src/*.go
+	vi -O3 src/*/*.go test/unit/*.go src/*.go
 
 .PHONY: format
 .PHONY: test
