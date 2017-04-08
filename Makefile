@@ -12,7 +12,7 @@ install-deps:
 	go get github.com/syndtr/goleveldb/leveldb
 
 format:
-	( gofmt -s -w src/*.go src/spotcache/*.go test/*/*.go examples/*.go )
+	( gofmt -s -w src/*.go src/spotcache/*.go clients/golang/*.go test/*/*.go examples/*.go )
 
 qtest:
 	@( cd test/unit ; clear ; go test | head -47 )
