@@ -27,6 +27,7 @@ qtest:
 test:
 	@( [ -d $(HOME)/.spotcache ] || mkdir $(HOME)/.spotcache )
 	@( go vet src/spotcache/*.go ; go vet src/*.go ; cd test/unit ; go test -cover )
+	@( make lint )
 
 watch:
 	./watcher.js

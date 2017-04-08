@@ -13,13 +13,14 @@ import (
 
 // public constants
 const (
-	RESP_OK    = "ok"
-	RESP_FAIL  = "fail"
-	RESP_TRUE  = "true"
-	RESP_FALSE = "false"
-	RESP_PONG  = "pong"
+	ResponseOk    = "ok"
+	ResponseFail  = "fail"
+	ResponseTrue  = "true"
+	ResponseFalse = "false"
+	ResponsePong  = "pong"
 )
 
+// CommandOp the op type
 type CommandOp uint8
 
 // manually assign op codes...
@@ -42,42 +43,43 @@ const (
 // private responses
 var (
 	cache *Cache
-	ok    = []byte(RESP_OK)
-	fail  = []byte(RESP_FAIL)
-	yes   = []byte(RESP_TRUE)
-	no    = []byte(RESP_FALSE)
-	pong  = []byte(RESP_PONG)
+	ok    = []byte(ResponseOk)
+	fail  = []byte(ResponseFail)
+	yes   = []byte(ResponseTrue)
+	no    = []byte(ResponseFalse)
+	pong  = []byte(ResponsePong)
 )
 
+// Commander the commander struct
 type Commander struct {
 }
 
-// command object to support executions
+// Command command object to support executions
 type Command struct {
-	Id    IdType
+	ID    IDType
 	Op    CommandOp
 	Key   []byte
 	Value []byte
 	Resp  []byte
 }
 
-// create a new command object
+// NewCommander create a new command object
 func NewCommander(db *Cache) *Commander {
 	cache = db
 
 	return &Commander{}
 }
 
-// parse the buffer and return a command structure, or error if parse is not possible
+// ParseRequest parse the buffer and return a command structure, or error if parse is not possible
 func ParseRequest(buf []byte) (*Command, error) {
 	cmd := Command{}
-	// cmd.Id =
+	// cmd.ID =
 	cmd.Op = PING
 
 	return &cmd, nil
 }
 
-// execute the command as specified in the command structure
+// Exec execute the command as specified in the command structure
 func (cmd *Command) Exec() error {
 	// need a hash map of functions to support the API
 	var err error
@@ -119,12 +121,12 @@ func (cmd *Command) Exec() error {
 
 // a string representation of the command buffer
 func (cmd *Command) String() string {
-	return fmt.Sprintf("Id:%s,Op:%d,Key:%s,Value:%s,Resp:%s", cmd.Id, cmd.Op, cmd.Key, cmd.Value, cmd.Resp)
+	return fmt.Sprintf("ID:%s,Op:%d,Key:%s,Value:%s,Resp:%s", cmd.ID, cmd.Op, cmd.Key, cmd.Value, cmd.Resp)
 }
 
-// a public helper method to create a full comman structure
-func CreateCommand(id IdType, op CommandOp, key, value []byte) *Command {
-	cmd := Command{Id: id, Op: op, Key: key, Value: value}
+// CreateCommand a public helper method to create a full comman structure
+func CreateCommand(id IDType, op CommandOp, key, value []byte) *Command {
+	cmd := Command{ID: id, Op: op, Key: key, Value: value}
 
 	return &cmd
 }

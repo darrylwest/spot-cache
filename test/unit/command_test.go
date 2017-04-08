@@ -19,11 +19,11 @@ func TestCommand(t *testing.T) {
 	g := Goblin(t)
 
 	var (
-		ok   = []byte(spotcache.RESP_OK)
-		fail = []byte(spotcache.RESP_FAIL)
-		yes  = []byte(spotcache.RESP_TRUE)
-		// no = []byte(spotcache.RESP_FALSE)
-		pong       = []byte(spotcache.RESP_PONG)
+		ok   = []byte(spotcache.ResponseOk)
+		fail = []byte(spotcache.ResponseFail)
+		yes  = []byte(spotcache.ResponseTrue)
+		// no = []byte(spotcache.ResponseFalse)
+		pong       = []byte(spotcache.ResponsePong)
 		knownValue = []byte("this is my test value")
 		cache      *spotcache.Cache
 	)
@@ -31,7 +31,7 @@ func TestCommand(t *testing.T) {
 	g.Describe("Command", func() {
 		cfg := spotcache.NewConfigForEnvironment("test")
 		var session spotcache.SessionType
-		copy(session[:12], []byte(spotcache.CreateSessionId()))
+		copy(session[:12], []byte(spotcache.CreateSessionID()))
 		builder := spotcache.NewRequestBuilder(session)
 
 		g.Before(func() {
@@ -63,7 +63,7 @@ func TestCommand(t *testing.T) {
 
 			// TODO : move this to request tests
 			g.Assert(err).Equal(nil)
-			g.Assert(req.Id).Equal(request.Id)
+			g.Assert(req.ID).Equal(request.ID)
 			g.Assert(req.Session).Equal(request.Session)
 			g.Assert(req.Op).Equal(request.Op)
 			g.Assert(req.MetaSize).Equal(request.MetaSize)
@@ -78,7 +78,7 @@ func TestCommand(t *testing.T) {
 		})
 
 		g.It("should execute a put command", func() {
-			id := spotcache.CreateCommandId()
+			id := spotcache.CreateCommandID()
 			op := spotcache.PUT
 			key := []byte("mykey")
 
@@ -91,7 +91,7 @@ func TestCommand(t *testing.T) {
 
 		g.It("should parse a get command")
 		g.It("should execute a get command", func() {
-			id := spotcache.CreateCommandId()
+			id := spotcache.CreateCommandID()
 			op := spotcache.GET
 			key := []byte("mykey")
 
@@ -106,7 +106,7 @@ func TestCommand(t *testing.T) {
 
 		g.It("should parse a has command")
 		g.It("should execute a has command", func() {
-			id := spotcache.CreateCommandId()
+			id := spotcache.CreateCommandID()
 			op := spotcache.HAS
 			key := []byte("mykey")
 
@@ -130,7 +130,7 @@ func TestCommand(t *testing.T) {
 
 		})
 		g.It("should execute a ping command", func() {
-			id := spotcache.CreateCommandId()
+			id := spotcache.CreateCommandID()
 			op := spotcache.PING
 			cmd := spotcache.CreateCommand(id, op, nil, nil)
 			err := cmd.Exec()
@@ -141,7 +141,7 @@ func TestCommand(t *testing.T) {
 
 		g.It("should parse a stat command")
 		g.It("should execute a stat command", func() {
-			id := spotcache.CreateCommandId()
+			id := spotcache.CreateCommandID()
 			op := spotcache.STATUS
 			cmd := spotcache.CreateCommand(id, op, nil, nil)
 			err := cmd.Exec()
@@ -152,7 +152,7 @@ func TestCommand(t *testing.T) {
 
 		g.It("should parse a shutdown command")
 		g.It("should execute a shutdown command", func() {
-			id := spotcache.CreateCommandId()
+			id := spotcache.CreateCommandID()
 			op := spotcache.SHUTDOWN
 			cmd := spotcache.CreateCommand(id, op, nil, nil)
 			err := cmd.Exec()
@@ -162,7 +162,7 @@ func TestCommand(t *testing.T) {
 		})
 
 		g.It("should reject an unknown command", func() {
-			id := spotcache.CreateCommandId()
+			id := spotcache.CreateCommandID()
 			op := spotcache.CommandOp(250)
 			cmd := spotcache.CreateCommand(id, op, nil, nil)
 			err := cmd.Exec()

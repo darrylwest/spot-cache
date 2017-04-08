@@ -13,6 +13,7 @@ import (
 	"time"
 )
 
+// CacheService - the main struct with client count, port, etc
 type CacheService struct {
 	ClientCount int
 	CreateDate  time.Time
@@ -26,6 +27,7 @@ type CacheService struct {
 var command *Commander
 var cachedb *Cache
 
+// NewCacheService - create a cache service
 func NewCacheService(cfg *Config) CacheService {
 	s := CacheService{}
 
@@ -39,13 +41,13 @@ func NewCacheService(cfg *Config) CacheService {
 	return s
 }
 
-// configure the commander and cache database
+// InitializeCache configure the commander and cache database
 func (s *CacheService) InitializeCache(cfg *Config) {
 	cache := NewCache(cfg)
 	command = NewCommander(cache)
 }
 
-// create the listener for the specified address/port
+// CreateListener create the listener for the specified address/port
 func (s *CacheService) CreateListener() (*net.TCPListener, error) {
 	host := fmt.Sprintf("127.0.0.1:%d", s.Port)
 	laddr, err := net.ResolveTCPAddr("tcp", host)
@@ -55,7 +57,7 @@ func (s *CacheService) CreateListener() (*net.TCPListener, error) {
 	return ss, err
 }
 
-// open the cache database and start the main socket service; block forever...
+// ListenAndServe open the cache database and start the main socket service; block forever...
 func (s *CacheService) ListenAndServe(ss *net.TCPListener) {
 	s.CreateDate = time.Now().UTC()
 
@@ -107,12 +109,13 @@ func (s *CacheService) ListenAndServe(ss *net.TCPListener) {
 	}
 }
 
+// Shutdown - stop everything
 func (s *CacheService) Shutdown() {
 	close(s.stopchan)
 	s.waitGroup.Wait()
 }
 
-// handle client requests as long as they stay connected
+// OpenClientHandler handle client requests as long as they stay connected
 func (s *CacheService) OpenClientHandler(conn net.Conn) {
 	buf := make([]byte, 8192)
 	defer conn.Close()
@@ -149,22 +152,22 @@ func (s *CacheService) OpenClientHandler(conn net.Conn) {
 	}
 }
 
-// create a client session id and send to the new client (move to sock utils?)
+// StartClientSession create a client session id and send to the new client (move to sock utils?)
 func StartClientSession(conn net.Conn) (string, error) {
-	sess := CreateSessionId()
+	sess := CreateSessionID()
 
 	if _, err := fmt.Fprintf(conn, sess); err != nil {
 		log.Error("session create error: %v", err)
 		return sess, err
-	} else {
-		log.Info("started session: %s", sess)
 	}
+
+	log.Info("started session: %s", sess)
 
 	return sess, nil
 }
 
-// returns a string of 12 chars
-func CreateSessionId() string {
+// CreateSessionID returns a string of 12 chars
+func CreateSessionID() string {
 	sess := strconv.FormatInt(time.Now().UTC().UnixNano(), 36)
 	if len(sess) == 12 {
 		return sess

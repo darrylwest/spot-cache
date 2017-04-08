@@ -14,18 +14,20 @@ import (
 	"time"
 )
 
+// MonitorService the monitor service struct with sock file and create date
 type MonitorService struct {
 	Sockfile   string
 	CreateDate time.Time
 }
 
-// simple request/response
+// MonitorCommand  simple request/response
 type MonitorCommand struct {
 	id   []byte
 	op   []byte // shutdown, status, ping
 	resp []byte
 }
 
+// NewMonitorService create a new monitor
 func NewMonitorService(cfg *Config) MonitorService {
 	m := MonitorService{}
 
@@ -34,7 +36,7 @@ func NewMonitorService(cfg *Config) MonitorService {
 	return m
 }
 
-// open the socket service until stop message arrives
+// OpenAndServe open the socket service until stop message arrives
 func (m *MonitorService) OpenAndServe(stop <-chan bool) {
 	// os.Remove(m.Sockfile)
 
@@ -67,7 +69,7 @@ func (m *MonitorService) OpenAndServe(stop <-chan bool) {
 	log.Info("closing monitor service")
 }
 
-// handle a new monitor client
+// OpenClientHandler handle a new monitor client
 func (m *MonitorService) OpenClientHandler(conn net.Conn) {
 	buf := make([]byte, 512)
 	defer conn.Close()
