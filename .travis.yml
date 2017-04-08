@@ -1,8 +1,12 @@
+sudo: false
 language: go
 go:
-  1 1.8
+  - 1.8.x
+  - 1.7.x
 
-before_script:
-  make install-deps
+install:
+  - make install-deps
 
-script: make test
+script:
+  - make qtest
+
