@@ -22,6 +22,7 @@ lint:
 	@( golint clients/golang )
 
 qtest:
+	@( [ -d $(HOME)/.spotcache ] || mkdir $(HOME)/.spotcache )
 	@( cd test/unit ; clear ; go test -cover )
 
 test:
