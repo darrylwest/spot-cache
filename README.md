@@ -11,6 +11,8 @@
 
 _A fast, light-weight cache service written in golang and backed by leveldb._
 
+![reportcard](https://goreportcard.com/badge/github.com/darrylwest/spot-cache)
+
 # Overview
 
 Spot cache is a fast, highly available cache service written in golang and backed by leveldb.  Server connections are via TCP sockets with cluster/replication to support multiple machines.  It can also be used as a single instance in a small network of machines.
@@ -99,9 +101,6 @@ Here are the rules:
 * We follow golang's idioms and best practices.  All code must be formatted using go-fmt.
 * Please submit pull requests. After code reviews and possible modifications your code will be merged.
 * Code of conduct: you known the drill. The ACM's [Code of Ethics and Professional Conduct](https://www.acm.org/about-acm/acm-code-of-ethics-and-professional-conduct) says it all--don't be a dick.
-
-## Go Report Card
-
 
 
 ## License

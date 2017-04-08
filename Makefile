@@ -6,6 +6,7 @@ build:
 	( go build -o bin/spotcache src/main.go )
 
 install-deps:
+    go get -u github.com/golang/lint/golint
 	go get github.com/oklog/ulid
 	go get -u github.com/darrylwest/cassava-logger/logger
 	go get github.com/franela/goblin
@@ -13,6 +14,12 @@ install-deps:
 
 format:
 	( gofmt -s -w src/*.go src/spotcache/*.go clients/golang/*.go test/*/*.go examples/*.go )
+
+lint:
+	@( golint src/... )
+	@( golint test/... )
+	@( golint examples )
+	@( golint clients/golang )
 
 qtest:
 	@( cd test/unit ; clear ; go test | head -47 )
