@@ -4,7 +4,7 @@ go:
   1.8.x
 
 install:
-  - go get -t -v ./...
+  - make install-deps
 
 script:
   - make qtest
