@@ -7,6 +7,10 @@ go:
 install:
   - make install-deps
 
+branches:
+  only:
+    - master
+
 script:
   - make qtest
 
