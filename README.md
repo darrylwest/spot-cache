@@ -63,7 +63,9 @@ Unit tests are in the test folder.  Run them with 'make test'.  Integration test
 | get      | key        | data, err        |
 | put      | key, value | err              |
 | del      | key        | err              |
+| batch    | key, value | data, err        |
 | has      | key        | t/f, err         |
+| keys     | query      | data, err        |
 | expire   | key, seconds | err  |
 | ttl      | key   | seconds, err  |
 | subscribe | name | |
