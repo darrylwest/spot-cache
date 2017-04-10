@@ -63,7 +63,9 @@ Unit tests are in the test folder.  Run them with 'make test'.  Integration test
 | get      | key        | data, err        |
 | put      | key, value | err              |
 | del      | key        | err              |
+| batch    | key, value | data, err        |
 | has      | key        | t/f, err         |
+| keys     | query      | data, err        |
 | expire   | key, seconds | err  |
 | ttl      | key   | seconds, err  |
 | subscribe | name | |
@@ -110,5 +112,4 @@ Apache 2.0
 
 _This project was inspired in part by [Suryandaru Triandana](https://github.com/syndtr/goleveldb)'s excellent port of leveldb to golang._
 
-###### darryl.west | 2017-04-08 | Version 0.90.107
-
+###### Copyright © 2014-2017, Rain City Software | darryl.west | Version 0.90.107
