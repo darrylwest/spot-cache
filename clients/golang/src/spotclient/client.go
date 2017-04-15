@@ -7,16 +7,16 @@
 
 package spotclient
 
-/*
 import (
     // "fmt"
     // spotcache "github.com/darrylwest/spot-cache/"
+    "time"
 )
-*/
 
 // SpotClient - client struct
 type SpotClient struct {
 	Sess string
+    CreateTime time.Time
 	cfg  *Config
 }
 
@@ -25,6 +25,7 @@ func NewSpotClient(cfg *Config) *SpotClient {
 	client := &SpotClient{}
 
 	client.cfg = cfg
+    client.CreateTime = time.Now()
 
 	return client
 }
