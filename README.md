@@ -50,7 +50,7 @@ Socket protocol is asynchronous request/replay that uses a thin envelope to matc
 
 _coming soon..._
 
-## Unit / Integration / Stress Tests
+## Unit / Integration / Benchmark Tests
 
 Unit tests are in the test folder.  Run them with 'make test'.  Integration tests exercise the available clients by generating random data to store and retrieve.  Stress tests are written in go and provide data for the benchmarks below (TBD)...
 
