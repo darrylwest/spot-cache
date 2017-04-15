@@ -7,14 +7,18 @@
 
 package spotclient
 
+/*
 import (
-    "fmt"
+    // "fmt"
     // spotcache "github.com/darrylwest/spot-cache/"
 )
+*/
 
+// SpotClient - client struct
 type SpotClient struct {
 }
 
+// NewClient - create the client
 func NewClient() *SpotClient {
     client := &SpotClient{}
 

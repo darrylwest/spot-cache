@@ -13,10 +13,10 @@ install-deps:
 	go get github.com/syndtr/goleveldb/leveldb
 
 format:
-	( gofmt -s -w src/*.go src/spotcache/*.go clients/golang/*.go test/*/*.go examples/*.go )
+	( gofmt -s -w src/*.go src/spotclient/*.go test/*/*.go )
 
 lint:
-	@( golint src/... && golint test/... && golint examples && golint clients/golang )
+	@( golint src/... && golint test/... )
 
 qtest:
 	@( [ -d $(HOME)/.spotcache ] || mkdir $(HOME)/.spotcache )
@@ -24,7 +24,7 @@ qtest:
 
 test:
 	@( [ -d $(HOME)/.spotcache ] || mkdir $(HOME)/.spotcache )
-	@( go vet src/spotcache/*.go ; go vet src/*.go ; cd test/unit ; go test -cover )
+	@( go vet src/spotclient/*.go ; go vet src/*.go ; cd test/unit ; go test -cover )
 	@( make lint )
 
 watch:
