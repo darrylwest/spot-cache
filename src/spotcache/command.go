@@ -70,21 +70,12 @@ func NewCommander(db *Cache) *Commander {
 	return &Commander{}
 }
 
-// ParseRequest parse the buffer and return a command structure, or error if parse is not possible
-func ParseRequest(buf []byte) (*Command, error) {
-	cmd := Command{}
-	// cmd.ID =
-	cmd.Op = PING
-
-	return &cmd, nil
-}
-
 // Exec execute the command as specified in the command structure
 func (cmd *Command) Exec() error {
 	// need a hash map of functions to support the API
 	var err error
 
-    log.Info("execute op: %s", cmd.Op)
+	log.Debug("execute op: %s", cmd.Op)
 
 	// TODO: put this into a hash map
 	switch cmd.Op {

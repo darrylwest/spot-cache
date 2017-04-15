@@ -1,32 +1,32 @@
 package main
 
 import (
-    "fmt"
-    "os"
+	"fmt"
+	"os"
 
-    "github.com/syndtr/goleveldb/leveldb"
+	"github.com/syndtr/goleveldb/leveldb"
 )
 
 func main() {
-    db, err := leveldb.OpenFile(os.Getenv("HOME") + "/.spotcache/cachedb", nil)
+	db, err := leveldb.OpenFile(os.Getenv("HOME")+"/.spotcache/cachedb", nil)
 
-    if err != nil {
-        panic(err)
-    }
+	if err != nil {
+		panic(err)
+	}
 
-    defer db.Close()
+	defer db.Close()
 
-    iter := db.NewIterator(nil, nil)
-    for iter.Next() {
-        key := iter.Key()
-        value := iter.Value()
+	iter := db.NewIterator(nil, nil)
+	for iter.Next() {
+		key := iter.Key()
+		value := iter.Value()
 
-        fmt.Printf("%s : %s\n", key, value)
-    }
+		fmt.Printf("%s : %s\n", key, value)
+	}
 
-    iter.Release()
-    err = iter.Error()
-    if err != nil {
-        panic(err)
-    }
+	iter.Release()
+	err = iter.Error()
+	if err != nil {
+		panic(err)
+	}
 }

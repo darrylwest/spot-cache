@@ -138,6 +138,14 @@ func (rb *RequestBuilder) CreateDeleteRequest(key, metadata []byte) *Request {
 	return &req
 }
 
+// CreatePingRequest create a simple ping request
+func (rb *RequestBuilder) CreatePingRequest() *Request {
+	req := rb.NewRequest(PING)
+	req.updateRequest(zerobyte, zerobyte, zerobyte)
+
+	return &req
+}
+
 // RequestFromBytes decode the little endian bytes and parse into request object
 func RequestFromBytes(buf []byte) (*Request, error) {
 	raw := bytes.NewReader(buf)
