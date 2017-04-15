@@ -19,7 +19,6 @@ func TestConfig(t *testing.T) {
     g := Goblin(t)
 
     g.Describe("Config", func() {
-		spotclient.CreateLogger(spotclient.NewConfigForEnvironment("test"))
 		home := os.Getenv("HOME") + "/.spotcache"
 
 		g.It("should create a config struct", func() {
