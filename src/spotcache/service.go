@@ -67,6 +67,7 @@ func (s *CacheService) ListenAndServe(ss *net.TCPListener) {
 	}
 
 	// open the cache db
+    log.Info("open the cache database...")
 	if err := cache.Open(); err != nil {
 		log.Error("error opening cache, aborting...")
 		panic(err)
@@ -131,25 +132,35 @@ func (s *CacheService) OpenClientHandler(conn net.Conn) {
 
 	for {
 		n, err := conn.Read(buf)
-		if err != nil {
+        if err != nil {
 			log.Warn("client connection error, connection lost...")
 			break
 		}
 
-		log.Info("REQ: %s", buf[:n])
+		log.Info("req: %s", buf[:n])
 
 		// read, decode and parse the request object
+        req, err := RequestFromBytes(buf[:n])
+        if err != nil {
+            log.Error("%v", err)
+            break
+        }
 
-		// create the command
+		// create the command and execute it
+        cmd := CreateCommand(req.ID, req.Op, req.Key, req.Value)
+        err = cmd.Exec()
+        if err != nil {
+            log.Error("%s", err)
+            break
+        }
 
-		// execute the command and fill the response
-
-		resp := fmt.Sprintf("%s", buf[:n])
-		log.Info("RSP: %s", resp)
+		log.Info("resp: %s\n", cmd.Resp)
 
 		// return the response to requester
-		fmt.Fprintf(conn, resp)
+		conn.Write(cmd.Resp)
 	}
+
+    log.Info("session %s closed...", sess)
 }
 
 // StartClientSession create a client session id and send to the new client (move to sock utils?)

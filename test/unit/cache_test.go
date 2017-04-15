@@ -23,9 +23,9 @@ func TestCache(t *testing.T) {
 		cfg := spotcache.NewConfigForEnvironment("test")
 		spotcache.CreateLogger(cfg)
 		cache := spotcache.NewCache(cfg)
-        knownKey := []byte("myknownkey")
-        knownValue := []byte("my known value")
-        zeroTTL := spotcache.TTLSeconds(10)
+		knownKey := []byte("myknownkey")
+		knownValue := []byte("my known value")
+		zeroTTL := spotcache.TTLSeconds(10)
 
 		g.Before(func() {
 			cache.Open()
@@ -41,9 +41,9 @@ func TestCache(t *testing.T) {
 		})
 
 		g.It("should put data with expire/ttl", func() {
-            err := cache.Put(knownKey, knownValue, zeroTTL)
-            g.Assert(err).Equal(nil)
-        })
+			err := cache.Put(knownKey, knownValue, zeroTTL)
+			g.Assert(err).Equal(nil)
+		})
 
 		g.It("should get data that has not expired and update ttl")
 		g.It("should attempt get with null return after data expires")

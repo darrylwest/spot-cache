@@ -13,7 +13,7 @@ install-deps:
 	go get github.com/syndtr/goleveldb/leveldb
 
 format:
-	( gofmt -s -w src/*.go src/spotcache/*.go clients/golang/*.go test/*/*.go examples/*.go )
+	( gofmt -s -w src/*.go src/spotcache/*.go test/*/*.go examples/*.go )
 
 lint:
 	@( golint src/... && golint test/... && golint examples && golint clients/golang )
@@ -47,6 +47,9 @@ shutdown:
 
 edit:
 	vi -O3 src/*/*.go test/unit/*.go src/*.go
+
+client:
+	go run examples/test-client.go
 
 .PHONY: format
 .PHONY: test

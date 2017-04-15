@@ -8,36 +8,48 @@
 package spotclient
 
 import (
-    "flag"
-    "fmt"
-    "os"
-    "path"
+	// "flag"
+	"fmt"
+	"os"
+	"path"
 )
 
+// Config - client configuration struct
 type Config struct {
-    Home string
-    Env string
-    Logpath string
-    Longnme string
-    Port int
-    Timeout int64
+	Home    string
+	Env     string
+	Logpath string
+	Logname string
+	Host    string
+	Port    int
+	Timeout int64
 }
 
+// NewDefaultConfig - create a new config using the standard defaults
 func NewDefaultConfig() *Config {
-    cfg := new(Config)
+	cfg := new(Config)
 
-    home := os.Getenv("SPOTCACHE_HOME")
-    if home == "" {
-        home = path.Join(os.Getenv("HOME"), ".spotcache")
-    }
+	home := os.Getenv("SPOTCACHE_HOME")
+	if home == "" {
+		home = path.Join(os.Getenv("HOME"), ".spotcache")
+	}
 
-    cfg.Home = home
-    cfg.Env = "production"
-    cfg.Logpath = path.Join(home, "logs")
-    cfg.Logname = Sprintf("spotclient-%d", os.Getpid())
-    cfg.Port = 3001
-    cfg.Timeout = int64(10 * 60)
+	cfg.Home = home
+	cfg.Env = "production"
+	cfg.Logpath = path.Join(home, "logs")
+	cfg.Logname = fmt.Sprintf("spotclient-%d", os.Getpid())
+	cfg.Host = "localhost"
+	cfg.Port = 3001
+	cfg.Timeout = int64(10 * 60)
 
-    return cfg
+	return cfg
 }
 
+// NewConfigForEnvironment - create new config for the given environment
+func NewConfigForEnvironment(env string) *Config {
+	cfg := NewDefaultConfig()
+
+	cfg.Env = env
+
+	return cfg
+}

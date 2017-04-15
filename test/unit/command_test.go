@@ -90,26 +90,26 @@ func TestCommand(t *testing.T) {
 		})
 
 		g.It("should parse a get command", func() {
-            key := []byte("testKey")
-            meta := []byte("")
-            request := builder.CreateGetRequest(key, meta)
+			key := []byte("testKey")
+			meta := []byte("")
+			request := builder.CreateGetRequest(key, meta)
 
-            g.Assert(request.Op).Equal(spotcache.GET)
-            bytes, err := request.ToBytes()
+			g.Assert(request.Op).Equal(spotcache.GET)
+			bytes, err := request.ToBytes()
 
-            g.Assert(err).Equal(nil)
-            g.Assert(len(bytes) > 30).IsTrue()
+			g.Assert(err).Equal(nil)
+			g.Assert(len(bytes) > 30).IsTrue()
 
-            req, err := spotcache.RequestFromBytes(bytes)
-            g.Assert(err).Equal(nil)
-            g.Assert(req.ID).Equal(request.ID)
+			req, err := spotcache.RequestFromBytes(bytes)
+			g.Assert(err).Equal(nil)
+			g.Assert(req.ID).Equal(request.ID)
 			g.Assert(req.Session).Equal(request.Session)
 			g.Assert(req.Op).Equal(request.Op)
 			g.Assert(req.MetaSize).Equal(request.MetaSize)
 			g.Assert(req.KeySize).Equal(request.KeySize)
 			g.Assert(req.DataSize).Equal(request.DataSize)
 			g.Assert(req.Key).Equal(request.Key)
-        })
+		})
 
 		g.It("should execute a get command", func() {
 			id := spotcache.CreateCommandID()
