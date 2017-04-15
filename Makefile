@@ -48,6 +48,9 @@ shutdown:
 edit:
 	vi -O3 src/*/*.go test/unit/*.go src/*.go
 
+client:
+	go run examples/test-client.go
+
 .PHONY: format
 .PHONY: test
 .PHONY: qtest

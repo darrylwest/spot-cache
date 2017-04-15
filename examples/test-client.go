@@ -13,21 +13,25 @@ import (
 	"os"
 	"time"
 
-	_ "spotcache"
+	"spotcache"
 )
 
-func getSession(conn net.Conn) string {
-	buf := make([]byte, 250)
+func getSession(conn net.Conn) spotcache.SessionType {
+	buf := make([]byte, 64)
 	n, err := conn.Read(buf)
 	if err != nil {
 		panic(err)
 	}
 
-	return string(buf[:n])
+    var ss spotcache.SessionType
+
+	copy(ss[:], buf[:n])
+    return ss
 }
 
 func main() {
-	id := time.Now().UnixNano()
+	// id := time.Now().UnixNano()
+	// key := fmt.Sprintf("client:%d", id)
 
 	port := 3001
 	host := fmt.Sprintf(":%d", port)
@@ -42,22 +46,24 @@ func main() {
 	defer conn.Close()
 	count := 0
 
-	key := fmt.Sprintf("client:%d", id)
-
 	sess := getSession(conn)
 	fmt.Printf("my session: %s\n", sess)
+
+    builder := spotcache.NewRequestBuilder(sess)
 
 	buf := make([]byte, 2048)
 	for {
 		count++
-		text := fmt.Sprintf("put:%d %s 'my value %d'", count, key, time.Now().Unix())
-		_, err := fmt.Fprintf(conn, text)
+        request := builder.CreateGetRequest([]byte("MyTestKey"), nil)
+        bytes, _ := request.ToBytes()
+
+		_, err := conn.Write(bytes)
 		if err != nil {
 			fmt.Println("lost connection...")
 			return
 		}
 
-		fmt.Printf("request: %s\n", text)
+		fmt.Printf("request: %v\n", request)
 
 		n, err := conn.Read(buf)
 		if err != nil {
