@@ -26,18 +26,20 @@ func getSession(conn net.Conn) spotcache.SessionType {
 	var ss spotcache.SessionType
 
 	copy(ss[:], buf[:n])
+
 	return ss
 }
 
-func sendPing(conn net.Conn) {
+func sendPing(builder *spotcache.RequestBuilder, conn net.Conn) error {
+	buf := make([]byte, 128)
 	fmt.Println("send a ping request")
-	request := builder.CreateGetRequest([]byte("MyTestKey"), nil)
+	request := builder.CreatePingRequest()
 	bytes, _ := request.ToBytes()
 
 	_, err := conn.Write(bytes)
 	if err != nil {
 		fmt.Println("lost connection...")
-		return
+		return err
 	}
 
 	fmt.Printf("request: %v\n", request)
@@ -45,10 +47,11 @@ func sendPing(conn net.Conn) {
 	n, err := conn.Read(buf)
 	if err != nil {
 		fmt.Println("lost connection...")
-		return
+		return err
 	}
 
 	fmt.Printf("resp: %s\n", buf[:n])
+    return nil
 }
 
 func main() {
@@ -95,7 +98,14 @@ func main() {
 
 		fmt.Printf("resp: %s\n", buf[:n])
 
-		time.Sleep(time.Second)
-		sendPing()
+
+        if count % 10 == 0 {
+            time.Sleep(time.Second)
+            err = sendPing(builder, conn)
+            if err != nil {
+                fmt.Println("ping died...")
+                return
+            }
+        }
 	}
 }
