@@ -20,6 +20,7 @@ type Config struct {
 	Env     string
 	Logpath string
 	Logname string
+	Host    string
 	Port    int
 	Timeout int64
 }
@@ -37,6 +38,7 @@ func NewDefaultConfig() *Config {
 	cfg.Env = "production"
 	cfg.Logpath = path.Join(home, "logs")
 	cfg.Logname = fmt.Sprintf("spotclient-%d", os.Getpid())
+	cfg.Host = "localhost"
 	cfg.Port = 3001
 	cfg.Timeout = int64(10 * 60)
 

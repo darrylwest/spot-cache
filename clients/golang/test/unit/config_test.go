@@ -32,7 +32,9 @@ func TestConfig(t *testing.T) {
 			cfg := spotclient.NewDefaultConfig()
 
 			g.Assert(cfg.Home).Equal(home)
+			g.Assert(cfg.Host).Equal("localhost")
 			g.Assert(cfg.Port).Equal(3001)
+
 			g.Assert(cfg.Timeout).Equal(int64(600))
 		})
 	})
