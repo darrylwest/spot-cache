@@ -16,11 +16,15 @@ import (
 
 // SpotClient - client struct
 type SpotClient struct {
+	Sess string
+	cfg  *Config
 }
 
-// NewClient - create the client
-func NewClient() *SpotClient {
-    client := &SpotClient{}
+// NewSpotClient - create the client
+func NewSpotClient(cfg *Config) *SpotClient {
+	client := &SpotClient{}
 
-    return client
+	client.cfg = cfg
+
+	return client
 }

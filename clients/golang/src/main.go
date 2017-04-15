@@ -18,12 +18,12 @@ func parseConfig() {
 func main() {
 	fmt.Println("hello...")
 
-    // read config
+	// read config
 
-    // open socket and get session
+	// open socket and get session
 
-    // create a request
-    // send the request and get a response
+	// create a request
+	// send the request and get a response
 
-    // close the session/socket
+	// close the session/socket
 }

@@ -8,33 +8,32 @@
 package unit
 
 import (
-    "os"
-    "spotclient"
-    "testing"
+	"os"
+	"spotclient"
+	"testing"
 
 	. "github.com/franela/goblin"
 )
 
 func TestConfig(t *testing.T) {
-    g := Goblin(t)
+	g := Goblin(t)
 
-    g.Describe("Config", func() {
+	g.Describe("Config", func() {
 		home := os.Getenv("HOME") + "/.spotcache"
 
 		g.It("should create a config struct", func() {
 			cfg := new(spotclient.Config)
 
 			g.Assert(cfg.Port).Equal(0)
-            g.Assert(cfg.Home).Equal("")
+			g.Assert(cfg.Home).Equal("")
 		})
 
 		g.It("should create a context struct with defaults set", func() {
 			cfg := spotclient.NewDefaultConfig()
 
-            g.Assert(cfg.Home).Equal(home)
+			g.Assert(cfg.Home).Equal(home)
 			g.Assert(cfg.Port).Equal(3001)
 			g.Assert(cfg.Timeout).Equal(int64(600))
 		})
-    })
+	})
 }
-
