@@ -49,7 +49,7 @@ func (s *CacheService) InitializeCache(cfg *Config) {
 
 // CreateListener create the listener for the specified address/port
 func (s *CacheService) CreateListener() (*net.TCPListener, error) {
-	host := fmt.Sprintf("127.0.0.1:%d", s.Port)
+	host := fmt.Sprintf("0.0.0.0:%d", s.Port)
 	laddr, err := net.ResolveTCPAddr("tcp", host)
 
 	ss, err := net.ListenTCP("tcp", laddr)
