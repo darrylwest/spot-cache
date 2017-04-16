@@ -125,7 +125,14 @@ func TestCommand(t *testing.T) {
 			g.Assert(cmd.Resp).Equal(knownValue)
 		})
 
-		g.It("should parse a has command")
+		g.It("should parse a has command", func() {
+			key := []byte("testKey")
+			meta := []byte("")
+			request := builder.CreateHasRequest(key, meta)
+
+			g.Assert(request.Op).Equal(spotcache.HAS)
+		})
+
 		g.It("should execute a has command", func() {
 			id := spotcache.CreateCommandID()
 			op := spotcache.HAS
@@ -140,6 +147,16 @@ func TestCommand(t *testing.T) {
 
 		g.It("should parse a del command")
 		g.It("should execute a del command")
+
+		g.It("should parse a keys command", func() {
+			key := []byte("")
+			meta := []byte("")
+			request := builder.CreateKeysRequest(key, meta)
+
+			g.Assert(request.Op).Equal(spotcache.KEYS)
+		})
+
+		g.It("should execute a keys command")
 
 		g.It("should execute a ping command", func() {
 			id := spotcache.CreateCommandID()

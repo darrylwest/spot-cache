@@ -51,7 +51,7 @@ func sendPing(builder *spotcache.RequestBuilder, conn net.Conn) error {
 	}
 
 	fmt.Printf("resp: %s\n", buf[:n])
-    return nil
+	return nil
 }
 
 func main() {
@@ -98,14 +98,13 @@ func main() {
 
 		fmt.Printf("resp: %s\n", buf[:n])
 
-
-        if count % 10 == 0 {
-            time.Sleep(time.Second)
-            err = sendPing(builder, conn)
-            if err != nil {
-                fmt.Println("ping died...")
-                return
-            }
-        }
+		if count%10 == 0 {
+			time.Sleep(time.Second)
+			err = sendPing(builder, conn)
+			if err != nil {
+				fmt.Println("ping died...")
+				return
+			}
+		}
 	}
 }
