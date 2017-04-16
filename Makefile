@@ -16,15 +16,15 @@ format:
 	( gofmt -s -w src/*.go src/spotcache/*.go test/*/*.go examples/*.go tools/*.go )
 
 lint:
-	@( golint src/... && golint test/... tools/... && golint examples && golint clients/golang )
+	@( golint src/... && golint test/... tools/... && golint examples )
 
 qtest:
 	@( [ -d $(HOME)/.spotcache ] || mkdir $(HOME)/.spotcache )
-	@( cd test/unit ; clear ; go test -cover )
+	@( cd test/unit && go test -cover )
 
 test:
 	@( [ -d $(HOME)/.spotcache ] || mkdir $(HOME)/.spotcache )
-	@( go vet src/spotcache/*.go ; go vet src/*.go ; cd test/unit ; go test -cover )
+	@( go vet src/spotcache/*.go && go vet src/spotclient/*.go && go vet src/*.go && cd test/unit && go test -cover )
 	@( make lint )
 
 watch:
