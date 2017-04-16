@@ -2,7 +2,6 @@ sudo: false
 language: go
 go:
   - 1.8.x
-  - 1.7.x
 
 install:
   - make install-deps
