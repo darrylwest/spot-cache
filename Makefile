@@ -34,7 +34,7 @@ run:
 	( go run src/main.go --env=development )
 
 start:
-	( ./bin/spotcached & )
+	( make build && ./bin/spotcached & )
 
 status:
 	@( echo "implement a socket client that will request status..." )

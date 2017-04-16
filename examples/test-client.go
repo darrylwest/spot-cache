@@ -54,12 +54,18 @@ func sendPing(builder *spotcache.RequestBuilder, conn net.Conn) error {
 	return nil
 }
 
+func parseArgs() *spotcache.Config {
+	cfg := spotcache.NewDefaultConfig()
+
+	return cfg
+}
+
 func main() {
 	// id := time.Now().UnixNano()
 	// key := fmt.Sprintf("client:%d", id)
+	cfg := parseArgs()
 
-	port := 3001
-	host := fmt.Sprintf(":%d", port)
+	host := fmt.Sprintf(":%d", cfg.Baseport)
 	fmt.Println("dailing: ", host)
 
 	conn, err := net.Dial("tcp", host)
@@ -98,7 +104,7 @@ func main() {
 
 		fmt.Printf("resp: %s\n", buf[:n])
 
-		if count%10 == 0 {
+		if count%50 == 0 {
 			time.Sleep(time.Second)
 			err = sendPing(builder, conn)
 			if err != nil {
