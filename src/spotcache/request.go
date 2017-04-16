@@ -60,6 +60,17 @@ type Request struct {
 	Value    []byte
 }
 
+// Response request object as created by the client
+type Response struct {
+	ID       IDType
+	Session  SessionType
+	Op       CommandOp
+	MetaSize uint16
+	DataSize uint32
+	Metadata []byte
+	Data     []byte
+}
+
 // RequestBuilder holds the session
 type RequestBuilder struct {
 	session SessionType
@@ -101,6 +112,22 @@ func (req *Request) updateRequest(key, value, metadata []byte) {
 	req.Metadata = metadata
 	req.Key = key
 	req.Value = value
+}
+
+func (req *Request) CreateResponse(value, metadata []byte) *Response {
+    resp := Response{}
+
+    resp.ID = req.ID
+    resp.Session = req.Session
+    resp.Op = req.Op
+
+	resp.MetaSize = uint16(len(metadata))
+    resp.DataSize = uint32(len(value))
+
+    resp.Metadata = metadata
+    resp.Data = value
+
+    return &resp
 }
 
 // CreatePutRequest create a put command with the current session
@@ -233,4 +260,12 @@ func (req *Request) String() string {
 		req.ID, req.Session, req.Op,
 		req.MetaSize, req.KeySize, req.DataSize,
 		req.Metadata, req.Key, req.Value)
+}
+
+func (res *Response) String() string {
+	return fmt.Sprintf(
+		"ID:%s,Session:%s,Op:%d,MetaSize:%d,DataSize:%d,Metadata:%s,Value:%v",
+		res.ID, res.Session, res.Op,
+		res.MetaSize, res.DataSize,
+		res.Metadata, res.Data)
 }
