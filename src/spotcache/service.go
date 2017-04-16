@@ -156,10 +156,17 @@ func (s *CacheService) OpenClientHandler(conn net.Conn) {
 
 		log.Info("resp: %s\n", cmd.Resp)
 
-		// TODO create a response object from request ID, Op, Key and Resp
+		// create a response object from request ID, Op, Key and command Resp
+        resp := req.CreateResponse(cmd.Resp, []byte(""))
+
+        bytes, err := resp.ToBytes()
+        if err != nil {
+            log.Error("%v", err)
+            break
+        }
 
 		// return the response object to requester
-		conn.Write(cmd.Resp)
+		conn.Write(bytes)
 	}
 
 	log.Info("session %s closed...", sess)
