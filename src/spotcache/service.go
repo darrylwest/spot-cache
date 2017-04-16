@@ -156,7 +156,9 @@ func (s *CacheService) OpenClientHandler(conn net.Conn) {
 
 		log.Info("resp: %s\n", cmd.Resp)
 
-		// return the response to requester
+        // TODO create a response object from request ID, Op, Key and Resp
+
+		// return the response object to requester
 		conn.Write(cmd.Resp)
 	}
 

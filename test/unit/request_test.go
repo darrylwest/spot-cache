@@ -8,6 +8,7 @@
 package unit
 
 import (
+    "fmt"
 	"reflect"
 	"testing"
 
@@ -28,7 +29,7 @@ func TestRequest(t *testing.T) {
 		builder := spotcache.NewRequestBuilder(session)
 		key := []byte(spotcache.CreateULID())
 		value := CreateRandomData()
-		metadata := []byte("expire:40;")
+		metadata := []byte("expire=40")
 
 		keysz := uint16(len(key))
 		metasz := uint16(len(metadata))
@@ -125,7 +126,47 @@ func TestRequest(t *testing.T) {
 
 		g.It("should create a shutdown request")
 
-		g.It("should create a byte stream from a request object")
+		g.It("should create a byte stream from a request object", func() {
+			req := builder.CreateGetRequest(key, metadata)
+            bytes, err := req.ToBytes()
+
+            g.Assert(err).Equal(nil)
+            s := fmt.Sprintf("%v", bytes)
+            g.Assert(len(s) > 80).IsTrue()
+        })
+
 		g.It("should read and parse a byte stream into a request object")
+
+        g.It("should create a response object from a request", func() {
+			req := builder.CreateGetRequest(key, metadata)
+
+            g.Assert(req != nil).IsTrue()
+
+            md := []byte("ttl=40")
+            resp := req.CreateResponse(value, md)
+
+            g.Assert(resp != nil).IsTrue()
+            g.Assert(resp.ID).Equal(req.ID)
+            g.Assert(resp.Session).Equal(req.Session)
+            g.Assert(resp.Op).Equal(req.Op)
+            g.Assert(resp.MetaSize).Equal(uint16(len(md)))
+            g.Assert(resp.DataSize).Equal(uint32(len(value)))
+            g.Assert(string(resp.Metadata)).Equal(string(md))
+            g.Assert(string(resp.Data)).Equal(string(value))
+        })
+
+        g.It("should create a byte stream from a response object", func() {
+
+            md := []byte("ttl=40")
+            resp := builder.CreateGetRequest(key, metadata).CreateResponse(value, md)
+            bytes, err := resp.ToBytes()
+
+            g.Assert(err).Equal(nil)
+            s := fmt.Sprintf("%v", bytes)
+            g.Assert(len(s) > 80).IsTrue()
+        })
+
+		g.It("should read and parse a byte stream into a response object")
 	})
 }
+

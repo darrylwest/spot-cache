@@ -1,6 +1,6 @@
 //
 // Request - message request structure and functions; this object isolates the command builder functions to make available to
-//           both server and client as well as tests
+//           both server and client as well as tests; this module also creates the Reponse object and associated utility functions
 //
 // @author darryl.west <darryl.west@raincitysoftware.com>
 // @created 2017-03-19 10:16:38
@@ -60,6 +60,17 @@ type Request struct {
 	Value    []byte
 }
 
+// Response request object as created by the client
+type Response struct {
+	ID       IDType
+	Session  SessionType
+	Op       CommandOp
+	MetaSize uint16
+	DataSize uint32
+	Metadata []byte
+	Data     []byte
+}
+
 // RequestBuilder holds the session
 type RequestBuilder struct {
 	session SessionType
@@ -101,6 +112,23 @@ func (req *Request) updateRequest(key, value, metadata []byte) {
 	req.Metadata = metadata
 	req.Key = key
 	req.Value = value
+}
+
+// CreateResponse create a response object from the reqest, response value and new meta data
+func (req *Request) CreateResponse(value, metadata []byte) *Response {
+    resp := Response{}
+
+    resp.ID = req.ID
+    resp.Session = req.Session
+    resp.Op = req.Op
+
+	resp.MetaSize = uint16(len(metadata))
+    resp.DataSize = uint32(len(value))
+
+    resp.Metadata = metadata
+    resp.Data = value
+
+    return &resp
 }
 
 // CreatePutRequest create a put command with the current session
@@ -201,6 +229,45 @@ func RequestFromBytes(buf []byte) (*Request, error) {
 	return &req, err
 }
 
+// ResponseFromBytes decode the little endian bytes and parse into response object
+func ResponseFromBytes(buf []byte) (*Response, error) {
+	raw := bytes.NewReader(buf)
+	ba := make([]byte, len(buf))
+
+	res := Response{}
+	// this may be unnecessary if the socket reader does the decoding...
+	err := binary.Read(raw, binary.LittleEndian, ba)
+
+	sz := len(res.ID)
+	idx, idy := 0, sz
+
+	copy(res.ID[0:sz], ba[idx:idy])
+
+	sz = len(res.Session)
+	idx, idy = idy, idy+sz
+	copy(res.Session[0:sz], ba[idx:idy])
+
+	sz = 1
+	idx, idy = idy, idy+sz
+	res.Op = CommandOp(ba[idx])
+
+	sz = 2
+	idx, idy = idy, idy+sz
+	res.MetaSize = uint16(ba[idx:idy][0])
+
+	sz = 4
+	idx, idy = idy, idy+sz
+	res.DataSize = uint32(ba[idx:idy][0])
+
+	idx, idy = idy, idy+int(res.MetaSize)
+	res.Metadata = ba[idx:idy]
+
+	idx, idy = idy, idy+int(res.DataSize)
+	res.Data = ba[idx:idy]
+
+	return &res, err
+}
+
 // ToBytes encode the request into a stream of little endian bytes; return error if encoding fails
 func (req *Request) ToBytes() ([]byte, error) {
 	buf := new(bytes.Buffer)
@@ -227,6 +294,30 @@ func (req *Request) ToBytes() ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
+// ToBytes encode the response into a stream of little endian bytes; return error if encoding fails
+func (res *Response) ToBytes() ([]byte, error) {
+	buf := new(bytes.Buffer)
+	var data = []interface{}{
+		res.ID,
+		res.Session,
+		res.Op,
+		res.MetaSize,
+		res.DataSize,
+		res.Metadata,
+		res.Data,
+	}
+
+	for _, v := range data {
+		err := binary.Write(buf, binary.LittleEndian, v)
+		if err != nil {
+			log.Error("encoding error %v", err)
+			return []byte(""), err
+		}
+	}
+
+	return buf.Bytes(), nil
+}
+
 func (req *Request) String() string {
 	return fmt.Sprintf(
 		"ID:%s,Session:%s,Op:%d,MetaSize:%d,KeySize:%d,DataSize:%d,Metadata:%s,Key:%s,Value:%v",
@@ -234,3 +325,12 @@ func (req *Request) String() string {
 		req.MetaSize, req.KeySize, req.DataSize,
 		req.Metadata, req.Key, req.Value)
 }
+
+func (res *Response) String() string {
+	return fmt.Sprintf(
+		"ID:%s,Session:%s,Op:%d,MetaSize:%d,DataSize:%d,Metadata:%s,Value:%v",
+		res.ID, res.Session, res.Op,
+		res.MetaSize, res.DataSize,
+		res.Metadata, res.Data)
+}
+
