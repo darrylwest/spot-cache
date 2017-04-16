@@ -121,7 +121,7 @@ func (s *CacheService) Shutdown() {
 
 // OpenClientHandler handle client requests as long as they stay connected
 func (s *CacheService) OpenClientHandler(conn net.Conn) {
-	buf := make([]byte, 8192)
+	buf := make([]byte, 64 * 1024)
 	defer conn.Close()
 	defer s.waitGroup.Done()
 
