@@ -79,6 +79,9 @@ func (s *CacheService) ListenAndServe(ss *net.TCPListener) {
 
 	defer s.waitGroup.Done()
 
+	// set the level to warn to speed up thrughput
+	log.SetLevel(3)
+
 	for {
 		select {
 		case <-s.stopchan:
@@ -157,13 +160,13 @@ func (s *CacheService) OpenClientHandler(conn net.Conn) {
 		log.Info("resp: %s\n", cmd.Resp)
 
 		// create a response object from request ID, Op, Key and command Resp
-        resp := req.CreateResponse(cmd.Resp, []byte(""))
+		resp := req.CreateResponse(cmd.Resp, []byte(""))
 
-        bytes, err := resp.ToBytes()
-        if err != nil {
-            log.Error("%v", err)
-            break
-        }
+		bytes, err := resp.ToBytes()
+		if err != nil {
+			log.Error("%v", err)
+			break
+		}
 
 		// return the response object to requester
 		conn.Write(bytes)

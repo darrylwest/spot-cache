@@ -29,7 +29,9 @@ func main() {
 		panic(err)
 	}
 
-	log.Info("Starting socket service started: %v, pid: %d\n", cfg, pid)
+	s := fmt.Sprintf("Starting socket service started: %v, pid: %d\n", cfg, pid)
+	fmt.Println(s)
+	log.Info(s)
 
 	go service.ListenAndServe(ss)
 	defer service.Shutdown()

@@ -50,7 +50,9 @@ func sendPing(builder *spotcache.RequestBuilder, conn net.Conn) error {
 		return err
 	}
 
-	fmt.Printf("resp: %s\n", buf[:n])
+	resp, _ := spotcache.ResponseFromBytes(buf[:n])
+	fmt.Printf("ping response: ID: %s SS: %s data:%s\n", resp.ID, resp.Session, string(resp.Data))
+
 	return nil
 }
 
@@ -61,8 +63,6 @@ func parseArgs() *spotcache.Config {
 }
 
 func main() {
-	// id := time.Now().UnixNano()
-	// key := fmt.Sprintf("client:%d", id)
 	cfg := parseArgs()
 
 	host := fmt.Sprintf(":%d", cfg.Baseport)
@@ -83,10 +83,12 @@ func main() {
 	builder := spotcache.NewRequestBuilder(sess)
 
 	buf := make([]byte, 2048)
+	messageCount := 0
+	t0 := time.Now().UnixNano()
 	for {
 		count++
-		request := builder.CreateGetRequest([]byte("MyTestKey"), nil)
-		bytes, _ := request.ToBytes()
+		req := builder.CreateGetRequest([]byte("MyTestKey"), nil)
+		bytes, _ := req.ToBytes()
 
 		_, err := conn.Write(bytes)
 		if err != nil {
@@ -94,7 +96,7 @@ func main() {
 			return
 		}
 
-		fmt.Printf("request: %v\n", request)
+		// fmt.Printf("request : %v\n", request)
 
 		n, err := conn.Read(buf)
 		if err != nil {
@@ -102,15 +104,29 @@ func main() {
 			return
 		}
 
-		fmt.Printf("resp: %s\n", buf[:n])
+		resp, err := spotcache.ResponseFromBytes(buf[:n])
+		if err != nil {
+			fmt.Println("error %v", err)
+			return
+		}
 
-		if count%50 == 0 {
+		if resp.ID != req.ID || resp.Session != resp.Session || resp.DataSize == 0 {
+			fmt.Printf("response error: ID:%s Session:%s Op: %d data:%s\n", resp.ID, resp.Session, resp.Op, string(resp.Data))
+		}
+
+		messageCount++
+
+		if count%1000 == 0 {
+			t1 := time.Now().UnixNano()
+			fmt.Printf("Total messages sent/received: %d %f millis\n", messageCount, (float64(t1)-float64(t0))/1e6)
 			time.Sleep(time.Second)
 			err = sendPing(builder, conn)
 			if err != nil {
 				fmt.Println("ping died...")
 				return
 			}
+
+			t0 = time.Now().UnixNano()
 		}
 	}
 }
