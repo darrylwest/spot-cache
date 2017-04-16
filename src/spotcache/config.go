@@ -21,7 +21,6 @@ type Config struct {
 	Logname  string
 	Dbpath   string
 	Baseport int
-	Unixsock string
 	Timeout  int64
 }
 
@@ -43,7 +42,6 @@ func NewDefaultConfig() *Config {
 	cfg.Dbpath = path.Join(home, "cachedb")
 
 	cfg.Baseport = 3001
-	cfg.Unixsock = path.Join(home, "spot.sock")
 
 	cfg.Timeout = int64(10 * 60) // seconds in unix time
 
@@ -73,7 +71,6 @@ func ParseArgs() *Config {
 	env := flag.String("env", dflt.Env, "set the environment, defaults to "+dflt.Env)
 
 	baseport := flag.Int("baseport", dflt.Baseport, "set the server's base port number (e.g., 3001)...")
-	unixsock := flag.String("unixsock", dflt.Unixsock, "set the service status/shutdown socket")
 
 	logpath := flag.String("logpath", dflt.Logpath, "set the log directory")
 	logname := flag.String("logname", dflt.Logname, "set the name of the rolling log file")
@@ -99,7 +96,6 @@ func ParseArgs() *Config {
 	cfg.Dbpath = *dbpath
 
 	cfg.Baseport = *baseport
-	cfg.Unixsock = *unixsock
 	cfg.Timeout = *timeout
 
 	return cfg

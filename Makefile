@@ -3,7 +3,7 @@ export GOPATH:=$(HOME)/.gopath:$(PWD)
 
 build: 
 	@[ -d bin ] || mkdir bin
-	( go build -o bin/spotcache src/main.go )
+	( go build -o bin/spotcached src/main.go )
 
 install-deps:
 	go get -u github.com/golang/lint/golint
@@ -34,7 +34,7 @@ run:
 	( go run src/main.go --env=development )
 
 start:
-	( ./bin/spotcache & )
+	( ./bin/spotcached & )
 
 status:
 	@( echo "implement a socket client that will request status..." )
