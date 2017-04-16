@@ -30,12 +30,16 @@ const (
 	GET         = CommandOp(2)
 	HAS         = CommandOp(3)
 	DELETE      = CommandOp(4)
+	BATCH       = CommandOp(9)
 	EXPIRE      = CommandOp(10)
 	TTL         = CommandOp(11)
 	SUBSCRIBE   = CommandOp(20)
 	UNSUBSCRIBE = CommandOp(21)
 	PUBLISH     = CommandOp(22)
-	STATUS      = CommandOp(64)
+	KEYS        = CommandOp(30)
+	BACKUP      = CommandOp(110)
+	CLEAR       = CommandOp(119)
+	STATUS      = CommandOp(127)
 	PING        = CommandOp(128)
 	SHUTDOWN    = CommandOp(255)
 )
@@ -70,21 +74,12 @@ func NewCommander(db *Cache) *Commander {
 	return &Commander{}
 }
 
-// ParseRequest parse the buffer and return a command structure, or error if parse is not possible
-func ParseRequest(buf []byte) (*Command, error) {
-	cmd := Command{}
-	// cmd.ID =
-	cmd.Op = PING
-
-	return &cmd, nil
-}
-
 // Exec execute the command as specified in the command structure
 func (cmd *Command) Exec() error {
 	// need a hash map of functions to support the API
 	var err error
 
-    log.Info("execute op: %s", cmd.Op)
+	log.Debug("execute op: %s", cmd.Op)
 
 	// TODO: put this into a hash map
 	switch cmd.Op {
@@ -103,6 +98,8 @@ func (cmd *Command) Exec() error {
 	case DELETE:
 		err = cache.Delete(cmd.Key)
 		cmd.Resp = yes
+	case KEYS:
+		cmd.Resp = no // not implemented yet...
 	case PING:
 		cmd.Resp = pong
 	case STATUS:

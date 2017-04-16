@@ -107,7 +107,22 @@ func TestRequest(t *testing.T) {
 		g.It("should create an unsubscribe request")
 		g.It("should create a publish request")
 		g.It("should create a status request")
-		g.It("should create a ping request")
+
+		g.It("should create a ping request", func() {
+			req := builder.CreatePingRequest()
+
+			g.Assert(reflect.TypeOf(req).String()).Equal("*spotcache.Request")
+			g.Assert(req.Op).Equal(spotcache.PING)
+			g.Assert(req.MetaSize).Equal(uint16(0))
+			g.Assert(req.KeySize).Equal(uint16(0))
+			g.Assert(req.DataSize).Equal(uint32(0))
+
+			z := make([]byte, 0)
+			g.Assert(req.Metadata).Equal(z)
+			g.Assert(req.Key).Equal(z)
+			g.Assert(req.Value).Equal(z)
+		})
+
 		g.It("should create a shutdown request")
 
 		g.It("should create a byte stream from a request object")

@@ -3,7 +3,7 @@ export GOPATH:=$(HOME)/.gopath:$(PWD)
 
 build: 
 	@[ -d bin ] || mkdir bin
-	( go build -o bin/spotcache src/main.go )
+	( go build -o bin/spotcached src/main.go )
 
 install-deps:
 	go get -u github.com/golang/lint/golint
@@ -13,10 +13,10 @@ install-deps:
 	go get github.com/syndtr/goleveldb/leveldb
 
 format:
-	( gofmt -s -w src/*.go src/spotcache/*.go test/*/*.go examples/*.go )
+	( gofmt -s -w src/*.go src/spotcache/*.go test/*/*.go examples/*.go tools/*.go )
 
 lint:
-	@( golint src/... && golint test/... && golint examples && golint clients/golang )
+	@( golint src/... && golint test/... tools/... && golint examples && golint clients/golang )
 
 qtest:
 	@( [ -d $(HOME)/.spotcache ] || mkdir $(HOME)/.spotcache )
@@ -34,7 +34,7 @@ run:
 	( go run src/main.go --env=development )
 
 start:
-	( ./bin/spotcache & )
+	( ./bin/spotcached & )
 
 status:
 	@( echo "implement a socket client that will request status..." )

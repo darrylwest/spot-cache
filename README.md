@@ -58,25 +58,29 @@ Unit tests are in the test folder.  Run them with 'make test'.  Integration test
 
 ### Command Operations
 
-| func     | params     | response         |
-|----------|------------|------------------|
-| get      | key        | data, err        |
-| put      | key, value | err              |
-| del      | key        | err              |
-| batch    | key, value | data, err        |
-| has      | key        | t/f, err         |
-| keys     | query      | data, err        |
-| expire   | key, seconds | err  |
-| ttl      | key   | seconds, err  |
-| subscribe | name | |
-| unsubscribe | name | |
-| publish  | name, message | |
-| ping     |            | pong |
-| status   |            | data |
-| shutdown |            | err  |
+| func     | params     | response         | description |
+|----------|------------|------------------|-------------|
+| get      | key        | data, err        | get the data for a given key |
+| put      | key, value | err              | put data for a key |
+| del      | key        | err              | delete data for a key |
+| has      | key        | t/f, err         | return true if key exists
+| batch    | key, value | data, err        | create/execute a batch of ops |
+| expire   | key, seconds | err  | set the expiration in seconds |
+| ttl      | key   | seconds, err  | return the expiration in seconds |
+| subscribe | name | | subscribe to a channel |
+| unsubscribe | name | | unsubscribe from a channel |
+| publish  | name, message | | publish to a channel |
+| keys     | query      | data, err | return a set of keys |
+| backup   |            | err  | do a snap backup of the current database |
+| clear    |            | err  | clear all data from the database |
+| ping     |            | pong | send a pong response |
+| status   |            | data | return the status of the cache |
+| shutdown |            | err  | shutdown the cache service |
 
 
 ### Socket Message Data
+
+#### Request Message Format
 
 The socket channel is binary based using little endian.  For go-lang the encoding/binary package provides an easy way to create a custom client.  
 
@@ -94,9 +98,21 @@ The message format is as follows:
 | data key  | n | mykey:2344 | specified by the key size
 | data value | n | my value for this key | 
 
+#### Response Message Format
+
+| description | bytes | examples | comments
+|-------------|------|-----|---|
+| id   | 26 | 01BB20AAGCDCW60MZZNP7F7T8H | the request's id
+| session | 12 | bbeof787vpkw | the request's session id
+| op   | 1  | see op codes | the request's op code |
+| meta size | 2 | any returned meta data |
+| data size | 4 | response data size |
+| meta data | n | |
+| data value | n | the response data |
+
 ## Contributors
 
-_Actively seeking contributors for testing, client implementations, etc._
+_This project is actively seeking contributors for testing, client implementations, etc._
 
 Here are the rules:
 
@@ -112,4 +128,4 @@ Apache 2.0
 
 _This project was inspired in part by [Suryandaru Triandana](https://github.com/syndtr/goleveldb)'s excellent port of leveldb to golang._
 
-###### Copyright © 2014-2017, Rain City Software | darryl.west | Version 0.90.107
+###### Copyright © 2014-2017, Rain City Software | darryl.west | Version 0.90.110

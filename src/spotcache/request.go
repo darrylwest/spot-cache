@@ -1,5 +1,6 @@
 //
-// Request - message request structure and functions
+// Request - message request structure and functions; this object isolates the command builder functions to make available to
+//           both server and client as well as tests
 //
 // @author darryl.west <darryl.west@raincitysoftware.com>
 // @created 2017-03-19 10:16:38
@@ -134,6 +135,23 @@ func (rb *RequestBuilder) CreateDeleteRequest(key, metadata []byte) *Request {
 	req := rb.NewRequest(DELETE)
 
 	req.updateRequest(key, zerobyte, zerobyte)
+
+	return &req
+}
+
+// CreateKeysRequest create a keys request
+func (rb *RequestBuilder) CreateKeysRequest(key, metadata []byte) *Request {
+	req := rb.NewRequest(KEYS)
+
+	req.updateRequest(key, zerobyte, zerobyte)
+
+	return &req
+}
+
+// CreatePingRequest create a simple ping request
+func (rb *RequestBuilder) CreatePingRequest() *Request {
+	req := rb.NewRequest(PING)
+	req.updateRequest(zerobyte, zerobyte, zerobyte)
 
 	return &req
 }

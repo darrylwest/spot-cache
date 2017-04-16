@@ -8,9 +8,10 @@ build:
 install-deps:
 	go get -u github.com/golang/lint/golint
 	go get github.com/oklog/ulid
-	go get -u github.com/darrylwest/cassava-logger/logger
 	go get github.com/franela/goblin
 	go get github.com/syndtr/goleveldb/leveldb
+	go get -u github.com/darrylwest/cassava-logger/logger
+    go get -u github.com/darrylwest/spot-cache/spotcache
 
 format:
 	( gofmt -s -w src/*.go src/spotclient/*.go test/*/*.go )
