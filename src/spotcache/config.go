@@ -41,7 +41,7 @@ func NewDefaultConfig() *Config {
 
 	cfg.Dbpath = path.Join(home, "cachedb")
 
-	cfg.Baseport = 3001
+	cfg.Baseport = 19501
 
 	cfg.Timeout = int64(10 * 60) // seconds in unix time
 
@@ -70,7 +70,7 @@ func ParseArgs() *Config {
 	home := flag.String("home", dflt.Home, "set the run-time home folder, defaults to "+os.Getenv("HOME"))
 	env := flag.String("env", dflt.Env, "set the environment, defaults to "+dflt.Env)
 
-	baseport := flag.Int("baseport", dflt.Baseport, "set the server's base port number (e.g., 3001)...")
+	baseport := flag.Int("baseport", dflt.Baseport, "set the server's base port number (e.g., 19501)...")
 
 	logpath := flag.String("logpath", dflt.Logpath, "set the log directory")
 	logname := flag.String("logname", dflt.Logname, "set the name of the rolling log file")

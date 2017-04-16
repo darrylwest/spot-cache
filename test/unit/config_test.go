@@ -25,8 +25,11 @@ func TestConfig(t *testing.T) {
 			cfg := spotcache.NewDefaultConfig()
 
 			g.Assert(cfg.Home).Equal(home)
-			g.Assert(cfg.Baseport).Equal(3001)
+			g.Assert(cfg.Baseport).Equal(19501)
 			g.Assert(cfg.Timeout).Equal(int64(600))
+			g.Assert(len(cfg.Logpath) > 0).IsTrue()
+			g.Assert(len(cfg.Logname) > 0).IsTrue()
+			g.Assert(len(cfg.Dbpath) > 0).IsTrue()
 		})
 	})
 }
