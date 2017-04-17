@@ -116,19 +116,19 @@ func (req *Request) updateRequest(key, value, metadata []byte) {
 
 // CreateResponse create a response object from the reqest, response value and new meta data
 func (req *Request) CreateResponse(value, metadata []byte) *Response {
-    resp := Response{}
+	resp := Response{}
 
-    resp.ID = req.ID
-    resp.Session = req.Session
-    resp.Op = req.Op
+	resp.ID = req.ID
+	resp.Session = req.Session
+	resp.Op = req.Op
 
 	resp.MetaSize = uint16(len(metadata))
-    resp.DataSize = uint32(len(value))
+	resp.DataSize = uint32(len(value))
 
-    resp.Metadata = metadata
-    resp.Data = value
+	resp.Metadata = metadata
+	resp.Data = value
 
-    return &resp
+	return &resp
 }
 
 // CreatePutRequest create a put command with the current session
@@ -333,4 +333,3 @@ func (res *Response) String() string {
 		res.MetaSize, res.DataSize,
 		res.Metadata, res.Data)
 }
-

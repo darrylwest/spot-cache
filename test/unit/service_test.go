@@ -32,7 +32,7 @@ func TestService(t *testing.T) {
 			service.Port = 4000
 			ss, err := service.CreateListener()
 			g.Assert(err).Equal(nil)
-			g.Assert(ss.Addr().String()).Equal("127.0.0.1:4000")
+			g.Assert(ss.Addr().String()).Equal("[::]:4000")
 		})
 
 		g.It("should open and serve then close the service", func(done Done) {

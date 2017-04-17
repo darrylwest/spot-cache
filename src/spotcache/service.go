@@ -49,7 +49,7 @@ func (s *CacheService) InitializeCache(cfg *Config) {
 
 // CreateListener create the listener for the specified address/port
 func (s *CacheService) CreateListener() (*net.TCPListener, error) {
-	host := fmt.Sprintf("127.0.0.1:%d", s.Port)
+	host := fmt.Sprintf("0.0.0.0:%d", s.Port)
 	laddr, err := net.ResolveTCPAddr("tcp", host)
 
 	ss, err := net.ListenTCP("tcp", laddr)
@@ -78,6 +78,9 @@ func (s *CacheService) ListenAndServe(ss *net.TCPListener) {
 	log.Info("listinging on port: %v", ss.Addr())
 
 	defer s.waitGroup.Done()
+
+	// set the level to warn to speed up thrughput
+	log.SetLevel(3)
 
 	for {
 		select {
@@ -118,7 +121,7 @@ func (s *CacheService) Shutdown() {
 
 // OpenClientHandler handle client requests as long as they stay connected
 func (s *CacheService) OpenClientHandler(conn net.Conn) {
-	buf := make([]byte, 8192)
+	buf := make([]byte, 64 * 1024)
 	defer conn.Close()
 	defer s.waitGroup.Done()
 
@@ -156,10 +159,17 @@ func (s *CacheService) OpenClientHandler(conn net.Conn) {
 
 		log.Info("resp: %s\n", cmd.Resp)
 
-        // TODO create a response object from request ID, Op, Key and Resp
+		// create a response object from request ID, Op, Key and command Resp
+		resp := req.CreateResponse(cmd.Resp, []byte(""))
+
+		bytes, err := resp.ToBytes()
+		if err != nil {
+			log.Error("%v", err)
+			break
+		}
 
 		// return the response object to requester
-		conn.Write(cmd.Resp)
+		conn.Write(bytes)
 	}
 
 	log.Info("session %s closed...", sess)
