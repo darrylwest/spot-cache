@@ -11,8 +11,8 @@
 
 _A fast, light-weight cache service written in golang and backed by leveldb._
 
-![build](https://travis-ci.org/darrylwest/spot-cache.svg?branch=master)
-![reportcard](https://goreportcard.com/badge/github.com/darrylwest/spot-cache)
+[![build](https://travis-ci.org/darrylwest/spot-cache.svg?branch=master)](https://travis-ci.org/darrylwest/spot-cache/)
+[![reportcard](https://goreportcard.com/badge/github.com/darrylwest/spot-cache)](github.com/darrylwest/spot-cache)
 
 # Overview
 
@@ -128,4 +128,4 @@ Apache 2.0
 
 _This project was inspired in part by [Suryandaru Triandana](https://github.com/syndtr/goleveldb)'s excellent port of leveldb to golang._
 
-###### Copyright © 2014-2017, Rain City Software | darryl.west | Version 0.90.112
+###### Copyright © 2014-2017, Rain City Software | darryl.west | Version 0.90.114
