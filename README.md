@@ -9,27 +9,27 @@
          /_/                                                       
 ```
 
-_A fast, light-weight cache service written in golang and backed by leveldb._
+_A lightning fast, light-weight cache service written in golang and backed by leveldb or bolt, or...._
 
 [![build](https://travis-ci.org/darrylwest/spot-cache.svg?branch=master)](https://travis-ci.org/darrylwest/spot-cache/)
 [![reportcard](https://goreportcard.com/badge/github.com/darrylwest/spot-cache)](https://goreportcard.com/report/github.com/darrylwest/spot-cache)
 
 # Overview
 
-Spot cache is a fast, highly available cache service written in golang and backed by leveldb.  Server connections are via TCP sockets with cluster/replication to support multiple machines.  It can also be used as a single instance in a small network of machines.
+Spot cache is a fast, highly available cache service written in golang with backing from leveldb or bolt.  Server connections are via TCP sockets with cluster/replication to support multiple machines.  It can also be used as a single instance in a small network of machines.
 
 Socket protocol is asynchronous request/replay that uses a thin envelope to match the correct response to it's request.
 
 
 ## Installation
 
-**Note: this project is in the early stages and doesn't expect to go live until then end of Q2-2017.**
+**Note: this project is in the early stages and doesn't expect to go live until the middle of Q3-2017.**
 
 ## Server
 
 ### Highlights
 
-* level-db backed
+* [level-db](https://github.com/syndtr/goleveldb) or [boltdb](https://github.com/boltdb/bolt) backed
 * socket API (request/response)
 * cluster/replication support
 * written in golang
@@ -128,4 +128,4 @@ Apache 2.0
 
 _This project was inspired in part by [Suryandaru Triandana](https://github.com/syndtr/goleveldb)'s excellent port of leveldb to golang._
 
-###### Copyright © 2014-2017, Rain City Software | darryl.west | Version 0.90.114
+###### Copyright © 2014-2017, Rain City Software | darryl.west | Version 0.90.115
