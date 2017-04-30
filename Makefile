@@ -16,7 +16,7 @@ format:
 	( gofmt -s -w src/*.go src/spotcache/*.go test/*/*.go examples/*.go tools/*.go )
 
 lint:
-	@( golint src/... && golint test/... tools/... && golint examples )
+	@( golint src/... && golint test/... && golint tools/... && golint examples )
 
 qtest:
 	@( [ -d $(HOME)/.spotcache ] || mkdir $(HOME)/.spotcache )
