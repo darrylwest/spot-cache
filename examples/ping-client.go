@@ -65,7 +65,7 @@ func parseArgs() *spotcache.Config {
 func main() {
 	cfg := parseArgs()
 
-	host := fmt.Sprintf(":%d", cfg.Baseport)
+	host := fmt.Sprintf("127.0.0.1:%d", cfg.Baseport)
 	fmt.Println("dailing: ", host)
 
 	conn, err := net.Dial("tcp", host)

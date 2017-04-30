@@ -5,6 +5,9 @@ build:
 	@[ -d bin ] || mkdir bin
 	( go build -o bin/spotcached src/main.go )
 
+build-linux:
+	CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o docker/spotcached src/main.go
+
 install-deps:
 	go get -u github.com/golang/lint/golint
 	go get github.com/oklog/ulid
@@ -50,7 +53,7 @@ edit:
 	vi -O3 src/*/*.go test/unit/*.go src/*.go
 
 client:
-	go run examples/test-client.go
+	go run examples/ping-client.go
 
 .PHONY: format
 .PHONY: test
