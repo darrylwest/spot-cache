@@ -79,8 +79,8 @@ func (s *CacheService) ListenAndServe(ss *net.TCPListener) {
 
 	defer s.waitGroup.Done()
 
-	// set the level to warn to speed up thrughput
-	log.SetLevel(3)
+	// TODO : set through command line & dynamically
+	log.SetLevel(2) // info
 
 	for {
 		select {
@@ -127,11 +127,13 @@ func (s *CacheService) OpenClientHandler(conn net.Conn) {
 
 	sess, err := StartClientSession(conn)
 	if err != nil {
-		log.Info("session error, aboring...")
+		log.Warn("session error: %v, aboring...", err)
 		return
 	}
 
 	log.Info("session started: %s", sess)
+
+    messageCount := 0
 
 	for {
 		n, err := conn.Read(buf)
@@ -140,7 +142,7 @@ func (s *CacheService) OpenClientHandler(conn net.Conn) {
 			break
 		}
 
-		log.Info("req: %s", buf[:n])
+		log.Debug("req: %s", buf[:n])
 
 		// read, decode and parse the request object
 		req, err := RequestFromBytes(buf[:n])
@@ -157,7 +159,7 @@ func (s *CacheService) OpenClientHandler(conn net.Conn) {
 			break
 		}
 
-		log.Info("resp: %s\n", cmd.Resp)
+		log.Debug("resp: %s\n", cmd.Resp)
 
 		// create a response object from request ID, Op, Key and command Resp
 		resp := req.CreateResponse(cmd.Resp, []byte(""))
@@ -170,9 +172,14 @@ func (s *CacheService) OpenClientHandler(conn net.Conn) {
 
 		// return the response object to requester
 		conn.Write(bytes)
+
+        messageCount++
+        if messageCount%10000 == 0 {
+            log.Info("message count: %d for session %s", messageCount, sess)
+        }
 	}
 
-	log.Info("session %s closed...", sess)
+	log.Info("session %s closed, total messages: %d...", sess, messageCount)
 }
 
 // StartClientSession create a client session id and send to the new client (move to sock utils?)

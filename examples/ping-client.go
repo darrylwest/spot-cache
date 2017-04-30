@@ -116,7 +116,7 @@ func main() {
 
 		messageCount++
 
-		if count%1000 == 0 {
+		if count%5000 == 0 {
 			t1 := time.Now().UnixNano()
 			fmt.Printf("Total messages sent/received: %d %f millis\n", messageCount, (float64(t1)-float64(t0))/1e6)
 			time.Sleep(time.Second)
