@@ -56,11 +56,25 @@ func TestCache(t *testing.T) {
 		})
 
 		// Put
-		g.It("should return ok after Put object")
+		g.It("should return ok after Put object", func() {
+            err := cache.Put(knownKey, []byte("my new thing"), zeroTTL)
+            g.Assert(err).Equal(nil)
+        })
 
 		// Get
-		g.It("should return ok and an object from Get when the object exists")
-		g.It("should return false and nil from Has if a object/key does not exist")
+		g.It("should return ok and an object from Get when the object exists", func() {
+            val := []byte("this is my new value object ok?")
+            cache.Put(knownKey, val, zeroTTL)
+            value, err := cache.Get(knownKey)
+            g.Assert(err).Equal(nil)
+            g.Assert(value).Equal(val)
+        })
+
+		g.It("should return false and nil from Has if a object/key does not exist", func() {
+            val, err := cache.Get([]byte("badbadkey"))
+            g.Assert(err != nil).IsTrue()
+            g.Assert(val).Equal([]byte(nil))
+        })
 
 		// Has
 		g.It("should return true from Has if a key exists")
