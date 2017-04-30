@@ -21,6 +21,7 @@ func CreateLogger(cfg *Config) *logger.Logger {
 		handler, err := logger.NewRotatingDayHandler(filename)
 
 		if err != nil {
+            fmt.Printf("%s\n", err)
 			panic("logger could not be created...")
 		}
 
