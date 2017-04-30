@@ -1,0 +1,8 @@
+FROM scratch
+
+MAINTAINER darryl.west@raincitysoftware.com
+
+ADD spotcached /
+
+CMD ["/spotcached"]
+
