@@ -9,7 +9,7 @@
          /_/                                                       
 ```
 
-_A lightning fast, light-weight cache service written in golang and backed by leveldb._
+_A lightning fast, light-weight cache service written in golang and backed by leveldb, Boltdb, or RethinkDb._
 
 [![build](https://travis-ci.org/darrylwest/spot-cache.svg?branch=master)](https://travis-ci.org/darrylwest/spot-cache/)
 [![reportcard](https://goreportcard.com/badge/github.com/darrylwest/spot-cache)](https://goreportcard.com/report/github.com/darrylwest/spot-cache)
