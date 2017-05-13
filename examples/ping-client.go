@@ -70,7 +70,7 @@ func main() {
 
 	conn, err := net.Dial("tcp", host)
 	if err != nil {
-		fmt.Println("error connecting to host ", host)
+		fmt.Printf("ERROR connecting to host %s\n%v", host, err)
 		os.Exit(1)
 	}
 
@@ -92,21 +92,21 @@ func main() {
 
 		_, err := conn.Write(bytes)
 		if err != nil {
-			fmt.Println("lost connection...")
+			fmt.Print("ERROR lost connection: %v", err)
 			return
 		}
 
-		// fmt.Printf("request : %v\n", request)
+		// fmt.Printf("request : %v\n", req)
 
 		n, err := conn.Read(buf)
 		if err != nil {
-			fmt.Println("lost connection...")
+			fmt.Print("ERROR lost connection: %v", err)
 			return
 		}
 
 		resp, err := spotcache.ResponseFromBytes(buf[:n])
 		if err != nil {
-			fmt.Println("error %v", err)
+			fmt.Println("ERROR %v", err)
 			return
 		}
 
@@ -116,7 +116,7 @@ func main() {
 
 		messageCount++
 
-		if count%5000 == 0 {
+		if count%10000 == 0 {
 			t1 := time.Now().UnixNano()
 			fmt.Printf("Total messages sent/received: %d %f millis\n", messageCount, (float64(t1)-float64(t0))/1e6)
 			time.Sleep(time.Second)

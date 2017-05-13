@@ -25,19 +25,18 @@ func TestCommand(t *testing.T) {
 		// no = []byte(spotcache.ResponseFalse)
 		pong       = []byte(spotcache.ResponsePong)
 		knownValue = []byte("this is my test value")
-		cache      *spotcache.Cache
 	)
 
 	g.Describe("Command", func() {
 		cfg := spotcache.NewConfigForEnvironment("test")
+        spotcache.CreateLogger(cfg)
 		var session spotcache.SessionType
 		copy(session[:12], []byte(spotcache.CreateSessionID()))
 		builder := spotcache.NewRequestBuilder(session)
+        cache := spotcache.NewCache(cfg)
+        spotcache.NewCommander(cache)
 
 		g.Before(func() {
-			spotcache.CreateLogger(cfg)
-			cache = spotcache.NewCache(cfg)
-
 			cache.Open()
 		})
 

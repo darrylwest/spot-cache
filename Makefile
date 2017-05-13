@@ -14,6 +14,7 @@ install-deps:
 	go get -u github.com/darrylwest/cassava-logger/logger
 	go get github.com/franela/goblin
 	go get github.com/syndtr/goleveldb/leveldb
+	go get github.com/boltdb/bolt/...
 
 format:
 	( gofmt -s -w src/*.go src/spotcache/*.go test/*/*.go examples/*.go tools/*.go )
