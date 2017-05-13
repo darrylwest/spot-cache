@@ -19,16 +19,17 @@ import (
 	"spotcache"
 )
 
-var maxCount int = 1000
+var maxCount = 1000
 
+// User a sample domain object
 type User struct {
-    id string
-    dateCreated time.Time
-    lastUpdated time.Time
-    version int64
-    username string
-    group string
-    status string
+	id          string
+	dateCreated time.Time
+	lastUpdated time.Time
+	version     int64
+	username    string
+	group       string
+	status      string
 }
 
 func getSession(conn net.Conn) spotcache.SessionType {
@@ -46,33 +47,33 @@ func getSession(conn net.Conn) spotcache.SessionType {
 }
 
 func createUser(group string) User {
-    now := time.Now()
+	now := time.Now()
 
-    user := User{}
-    user.id = unique.CreateULID()
-    user.dateCreated = now
-    user.lastUpdated = now
+	user := User{}
+	user.id = unique.CreateULID()
+	user.dateCreated = now
+	user.lastUpdated = now
 
-    if rbytes, err := unique.RandomBytes(16); err == nil {
-        user.username = fmt.Sprintf("%x", rbytes)
-    }
+	if rbytes, err := unique.RandomBytes(16); err == nil {
+		user.username = fmt.Sprintf("%x", rbytes)
+	}
 
-    user.group = group
+	user.group = group
 
-    user.status = "new"
+	user.status = "new"
 
-    return user
+	return user
 }
 
 func createUserList() []User {
-    group := unique.CreateTSID()
-    list := make([]User, maxCount)
+	group := unique.CreateTSID()
+	list := make([]User, maxCount)
 
-    for i := 0; i < maxCount; i++ {
-        list[i] = createUser(group)
-    }
+	for i := 0; i < maxCount; i++ {
+		list[i] = createUser(group)
+	}
 
-    return list[:]
+	return list[:]
 }
 
 func parseArgs() *spotcache.Config {
@@ -82,17 +83,17 @@ func parseArgs() *spotcache.Config {
 }
 
 func main() {
-    cfg := parseArgs()
+	cfg := parseArgs()
 
-    fmt.Println("max count: ", maxCount)
-    fmt.Println(cfg);
+	fmt.Println("max count: ", maxCount)
+	fmt.Println(cfg)
 
-    list := createUserList()
+	list := createUserList()
 
-    for _, user := range list {
-        fmt.Println(user)
-    }
+	for _, user := range list {
+		fmt.Println(user)
+	}
 
-    // connect and get the session
+	// connect and get the session
 
 }
