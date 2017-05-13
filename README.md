@@ -128,4 +128,4 @@ Apache 2.0
 
 _This project was inspired in part by [Suryandaru Triandana](https://github.com/syndtr/goleveldb)'s excellent port of leveldb to golang._
 
-###### Copyright © 2014-2017, Rain City Software | darryl.west | Version 0.90.116
+###### Copyright © 2014-2017, Rain City Software | darryl.west | Version 0.90.117
