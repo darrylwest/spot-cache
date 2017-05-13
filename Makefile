@@ -10,8 +10,8 @@ build-linux:
 
 install-deps:
 	go get -u github.com/golang/lint/golint
-	go get github.com/oklog/ulid
 	go get -u github.com/darrylwest/cassava-logger/logger
+	go get -u github.com/darrylwest/go-unique/unique
 	go get github.com/franela/goblin
 	go get github.com/syndtr/goleveldb/leveldb
 	go get github.com/boltdb/bolt/...

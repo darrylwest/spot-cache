@@ -27,7 +27,7 @@ func TestRequest(t *testing.T) {
 		copy(session[:12], []byte(spotcache.CreateSessionID()))
 
 		builder := spotcache.NewRequestBuilder(session)
-		key := []byte(spotcache.CreateULID())
+		key := []byte(CreateULID())
 		value := CreateRandomData()
 		metadata := []byte("expire=40")
 
