@@ -72,8 +72,8 @@ func TestCache(t *testing.T) {
 
 		g.It("should return false and nil from Has if a object/key does not exist", func() {
             val, err := cache.Get([]byte("badbadkey"))
-            g.Assert(err != nil).IsTrue()
             g.Assert(val).Equal([]byte(nil))
+            g.Assert(err != nil).IsTrue()
         })
 
 		// Has

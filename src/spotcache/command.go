@@ -69,6 +69,7 @@ type Command struct {
 
 // NewCommander create a new command object
 func NewCommander(db *Cache) *Commander {
+    log.Info("create the commander from cache %v", db)
 	cache = db
 
 	return &Commander{}
@@ -79,7 +80,7 @@ func (cmd *Command) Exec() error {
 	// need a hash map of functions to support the API
 	var err error
 
-	log.Debug("execute op: %s", cmd.Op)
+	log.Info("execute op: %s", cmd.Op)
 
 	// TODO: put this into a hash map
 	switch cmd.Op {

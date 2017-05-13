@@ -39,7 +39,7 @@ func NewDefaultConfig() *Config {
 	cfg.Logpath = path.Join(home, "logs")
 	cfg.Logname = "spotcache"
 
-	cfg.Dbpath = path.Join(home, "cachedb")
+	cfg.Dbpath = path.Join(home, "cache.db")
 
 	cfg.Baseport = 19501
 
