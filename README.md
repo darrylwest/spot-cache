@@ -9,17 +9,16 @@
          /_/                                                       
 ```
 
-_A lightning fast, light-weight cache service written in golang and backed by leveldb, Boltdb, or RethinkDb._
+_A lightning fast, light-weight cache service written in golang and backed by Boltdb, leveldb or RethinkDb._
 
 [![build](https://travis-ci.org/darrylwest/spot-cache.svg?branch=master)](https://travis-ci.org/darrylwest/spot-cache/)
 [![reportcard](https://goreportcard.com/badge/github.com/darrylwest/spot-cache)](https://goreportcard.com/report/github.com/darrylwest/spot-cache)
 
 # Overview
 
-Spot cache is a fast, highly available cache service written in golang with backing from leveldb or bolt.  Server connections are via TCP sockets with cluster/replication to support multiple machines.  It can also be used as a single instance in a small network of machines.
+Spot cache is a fast, highly available cache service written in golang with backing from various key/value stores including Boltdb, level-db and RethinkDb.  Server connections are via TCP sockets with cluster/replication to support multiple machines.  It can also be used as a single instance in a small network of machines.
 
 Socket protocol is asynchronous request/replay that uses a thin envelope to match the correct response to it's request.
-
 
 ## Installation
 
@@ -29,7 +28,7 @@ Socket protocol is asynchronous request/replay that uses a thin envelope to matc
 
 ### Highlights
 
-* [level-db](https://github.com/syndtr/goleveldb) or [boltdb](https://github.com/boltdb/bolt) backed
+* [boltdb](https://github.com/boltdb/bolt) or [level-db](https://github.com/syndtr/goleveldb) backed (_currently only bolt is supported_)
 * socket API (request/response)
 * cluster/replication support
 * written in golang
