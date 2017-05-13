@@ -80,7 +80,7 @@ func (cmd *Command) Exec() error {
 	// need a hash map of functions to support the API
 	var err error
 
-	log.Info("execute op: %s", cmd.Op)
+	log.Debug("execute op: %d", cmd.Op)
 
 	// TODO: put this into a hash map
 	switch cmd.Op {

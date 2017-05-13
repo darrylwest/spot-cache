@@ -86,21 +86,18 @@ func (c Cache) Put(key, value []byte, ttl TTLSeconds) error {
     });
 }
 
-// Get return the data from key
+// Get return the data from key; return nil,nil on not found
 func (c Cache) Get(key []byte) ([]byte, error) {
     var value []byte
 
 	err := db.View(func(tx *bolt.Tx) error {
         b := tx.Bucket(c.bucket)
         value = b.Get(key)
-        if value == nil {
-            return fmt.Errorf("value not found for key %s", key);
-        }
 
         return nil
     })
 
-    log.Info("Get %s %v %v", key, value, err)
+    log.Debug("Get %s %v %v", key, value, err)
 
     return value, err
 }
@@ -115,7 +112,7 @@ func (c Cache) Has(key []byte) (bool, error) {
         return nil
     })
 
-    log.Info("has %s %v", key, has)
+    log.Debug("has %s %v", key, has)
 
 	return has, err
 }
