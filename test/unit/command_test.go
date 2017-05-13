@@ -29,12 +29,12 @@ func TestCommand(t *testing.T) {
 
 	g.Describe("Command", func() {
 		cfg := spotcache.NewConfigForEnvironment("test")
-        spotcache.CreateLogger(cfg)
+		spotcache.CreateLogger(cfg)
 		var session spotcache.SessionType
 		copy(session[:12], []byte(spotcache.CreateSessionID()))
 		builder := spotcache.NewRequestBuilder(session)
-        cache := spotcache.NewCache(cfg)
-        spotcache.NewCommander(cache)
+		cache := spotcache.NewCache(cfg)
+		spotcache.NewCommander(cache)
 
 		g.Before(func() {
 			cache.Open()

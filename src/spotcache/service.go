@@ -121,7 +121,7 @@ func (s *CacheService) Shutdown() {
 
 // OpenClientHandler handle client requests as long as they stay connected
 func (s *CacheService) OpenClientHandler(conn net.Conn) {
-	buf := make([]byte, 64 * 1024)
+	buf := make([]byte, 64*1024)
 	defer conn.Close()
 	defer s.waitGroup.Done()
 
@@ -133,7 +133,7 @@ func (s *CacheService) OpenClientHandler(conn net.Conn) {
 
 	log.Info("session started: %s", sess)
 
-    messageCount := 0
+	messageCount := 0
 
 	for {
 		n, err := conn.Read(buf)
@@ -173,10 +173,10 @@ func (s *CacheService) OpenClientHandler(conn net.Conn) {
 		// return the response object to requester
 		conn.Write(bytes)
 
-        messageCount++
-        if messageCount%10000 == 0 {
-            log.Info("message count: %d for session %s", messageCount, sess)
-        }
+		messageCount++
+		if messageCount%10000 == 0 {
+			log.Info("message count: %d for session %s", messageCount, sess)
+		}
 	}
 
 	log.Info("session %s closed, total messages: %d...", sess, messageCount)

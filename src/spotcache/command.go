@@ -69,7 +69,7 @@ type Command struct {
 
 // NewCommander create a new command object
 func NewCommander(db *Cache) *Commander {
-    log.Info("create the commander from cache %v", db)
+	log.Info("create the commander from cache %v", db)
 	cache = db
 
 	return &Commander{}
