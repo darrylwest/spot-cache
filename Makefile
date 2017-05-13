@@ -53,8 +53,11 @@ shutdown:
 edit:
 	vi -O3 src/*/*.go test/unit/*.go src/*.go
 
-client:
+ping-client:
 	go run examples/ping-client.go
+
+writer-client:
+	go run examples/writer-client.go
 
 .PHONY: format
 .PHONY: test
