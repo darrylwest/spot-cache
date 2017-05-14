@@ -36,7 +36,7 @@ func NewSpotClient(cfg *Config) *SpotClient {
 func (client *SpotClient) Connect() (net.Conn, error) {
 	host := fmt.Sprintf("%s:%d", client.cfg.Host, client.cfg.Port)
 
-	// fmt.Println(host);
+	fmt.Printf("dialing %s\n", host);
 
 	conn, err := net.Dial("tcp", host)
 

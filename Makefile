@@ -36,6 +36,7 @@ test:
 
 test-client:
 	@( go vet src/spotclient/*.go && cd test/client && go test -cover )
+	@( make lint )
 
 watch:
 	./watcher.js

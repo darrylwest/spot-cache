@@ -9,11 +9,12 @@ package main
 
 import (
 	"fmt"
-	// "spotclient"
+	"spotclient"
 )
 
 func main() {
-	// cfg := spotclient
+	cfg := spotclient.ParseArgs()
+    client := spotclient.NewSpotClient(cfg)
 
-	fmt.Printf("spot client cli\n")
+    fmt.Printf("%v\n", client)
 }

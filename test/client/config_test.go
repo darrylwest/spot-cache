@@ -8,7 +8,6 @@
 package clienttest
 
 import (
-	"fmt"
 	"spotclient"
 	"testing"
 
@@ -24,11 +23,22 @@ func TestConfig(t *testing.T) {
             cfg := spotclient.NewConfigForEnvironment("test")
 
 			g.Assert(cfg != nil).IsTrue()
-
-			fmt.Println(cfg)
+            g.Assert(cfg.Env).Equal("test")
+            g.Assert(cfg.Host).Equal("localhost")
+            g.Assert(cfg.Port).Equal(19501)
+            g.Assert(cfg.Timeout).Equal(int64(600))
 		})
 
-		// implement parse
+		g.It("should parse the command line args and return a config object", func() {
+            cfg := spotclient.ParseArgs()
+			g.Assert(cfg != nil).IsTrue()
+
+			g.Assert(cfg != nil).IsTrue()
+            g.Assert(cfg.Env).Equal("production")
+            g.Assert(cfg.Host).Equal("localhost")
+            g.Assert(cfg.Port).Equal(19501)
+            g.Assert(cfg.Timeout).Equal(int64(600))
+        })
 	})
 }
 

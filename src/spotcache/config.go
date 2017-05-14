@@ -55,7 +55,7 @@ func NewConfigForEnvironment(env string) *Config {
 	cfg.Env = env
 
 	if !IsProduction(env) {
-		cfg.Logname = env + "-spotcache"
+		cfg.Logname = env + "-spotcached"
 	}
 
 	return cfg
