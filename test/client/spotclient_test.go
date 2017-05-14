@@ -16,7 +16,7 @@ import (
 	. "github.com/franela/goblin"
 )
 
-func TestConfig(t *testing.T) {
+func TestClient(t *testing.T) {
 	g := Goblin(t)
 
 	g.Describe("SpotClient", func() {
