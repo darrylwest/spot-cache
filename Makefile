@@ -3,10 +3,10 @@ export GOPATH:=$(HOME)/.gopath:$(PWD)
 
 build: 
 	@[ -d bin ] || mkdir bin
-	( go build -o bin/spotcached src/main.go )
+	( go build -o bin/spotcached src/spotcached.go )
 
 build-linux:
-	CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o docker/spotcached src/main.go
+	CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o docker/spotcached src/spotcached.go
 
 install-deps:
 	go get -u github.com/golang/lint/golint
@@ -35,7 +35,7 @@ watch:
 	./watcher.js
 
 run:
-	( go run src/main.go --env=development )
+	( go run src/spotcached.go --env=development )
 
 start:
 	( make build )
