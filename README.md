@@ -38,12 +38,26 @@ Socket protocol is asynchronous request/replay that uses a thin envelope to matc
 
 ### Cluster Configuration
 
+Clusters of 3/5/7 where a quorum is required to respond to writes.  
 
+_TBD_ 
 
 ## Client Implementations
 
 * golang, nodejs, python implementations
 * minimal API
+
+### Go Client Applications
+
+The client application is designed to be primarily used as a module included in an application but there is a stand-alone client app (_spotclient_) that can be used in CLI mode.
+
+Use:
+
+```bash
+spotclient ping|get key|set key value|has key|delete key|status|backup file [options]
+
+```
+ 
 
 ## Examples
 
@@ -127,4 +141,4 @@ Apache 2.0
 
 _This project was inspired in part by [Suryandaru Triandana](https://github.com/syndtr/goleveldb)'s excellent port of leveldb to golang._
 
-###### Copyright © 2014-2017, Rain City Software | darryl.west | Version 0.10.187
+###### Copyright © 2014-2017, Rain City Software | darryl.west | Version 0.91.119
