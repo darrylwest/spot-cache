@@ -19,7 +19,7 @@ import (
 type SpotClient struct {
 	CreateTime time.Time
 	cfg        *Config
-	Sess       string
+	Session    string
 }
 
 // NewSpotClient - create the client

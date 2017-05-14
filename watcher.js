@@ -11,12 +11,12 @@ let files = [];
 let tid;
 let lastRun;
 
-const run = function() {
+const run = function(target) {
     process.stdout.write( clearScreen ); 
 
     try {
         var cmd = 'make';
-        var runner = spawn( cmd, [ 'test' ] );
+        var runner = spawn( cmd, [ target ] );
 
         runner.stdout.on('data', function( data ) {
             process.stdout.write( data );
@@ -49,14 +49,31 @@ const changeHandler = function(event, filename) {
 
         if (!tid) {
             tid = setTimeout(function() {
-                run();
+                run('test');
             }, 500);
         }
     }
 };
 
-fs.watch( './src/', { recursive:true}, changeHandler );
-fs.watch( './test/unit', { recursive:true}, changeHandler );
+const clientHandler = function(event, filename) {
+    if (filename.endsWith( '.go') > 0) {
+        console.log( 'file change: ', filename);
+
+        files.push( filename );
+
+        if (!tid) {
+            tid = setTimeout(function() {
+                run('test-client');
+            }, 500);
+        }
+    }
+};
+
+fs.watch( './src/spotcache', { recursive:false }, changeHandler );
+fs.watch( './test/unit', { recursive:false}, changeHandler );
+
+fs.watch( './src/spotclient', { recursive:false}, clientHandler );
+fs.watch( './test/client', { recursive:false}, clientHandler );
 
 process.stdout.write( clearScreen ); 
 console.log('watching go files...');

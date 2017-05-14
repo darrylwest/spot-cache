@@ -45,6 +45,9 @@ func NewDefaultConfig() *Config {
 	return cfg
 }
 
+//func ParseArgs() *Config {
+//}
+
 // NewConfigForEnvironment - create new config for the given environment
 func NewConfigForEnvironment(env string) *Config {
 	cfg := NewDefaultConfig()

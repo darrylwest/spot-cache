@@ -44,20 +44,22 @@ _TBD_
 
 ## Client Implementations
 
-* golang, nodejs, python implementations
-* minimal API
+* golang - in progress
+* nodejs - planned
+* python - planned
 
-### Go Client Applications
+### Go Client CLI
 
 The client application is designed to be primarily used as a module included in an application but there is a stand-alone client app (_spotclient_) that can be used in CLI mode.
 
 Use:
 
 ```bash
-spotclient ping|get key|set key value|has key|delete key|status|backup file [options]
+spotcache-cli ping|get key|set key value|has key|delete key|status|backup file [options]
 
 ```
  
+_What, no REPL?_
 
 ## Examples
 
