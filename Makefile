@@ -3,8 +3,8 @@ export GOPATH:=$(HOME)/.gopath:$(PWD)
 
 build: 
 	@[ -d bin ] || mkdir bin
-	( go build -o bin/spotcached src/spotcached.go )
 	( go build -o bin/spotcache-cli src/spotcache-cli.go )
+	( go build -o bin/spotcached src/spotcached.go )
 
 build-linux:
 	CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o docker/spotcached src/spotcached.go

@@ -44,11 +44,9 @@ func (client *SpotClient) getSession(conn net.Conn) SessionType {
         panic(err)
     }
 
-    var ss SessionType
-
     copy(client.Session[:], buf[:n])
 
-    return ss
+    return client.Session
 }
 
 // Exec - run the command
@@ -62,7 +60,9 @@ func (client SpotClient) Exec() error {
     defer conn.Close();
 
     sess := client.getSession(conn)
-    fmt.Printf("session %s\n", sess);
+    fmt.Printf("session: %s\n", sess);
+
+    time.Sleep(1 * time.Second)
 
     return err
 }
