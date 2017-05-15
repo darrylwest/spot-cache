@@ -20,6 +20,7 @@ type SpotClient struct {
 	CreateTime time.Time
 	cfg        *Config
 	Session    spotcache.SessionType
+    builder    *spotcache.RequestBuilder
 }
 
 
@@ -47,10 +48,10 @@ func (client *SpotClient) getSession(conn net.Conn) spotcache.SessionType {
 }
 
 // SendPing - sends a basic ping to the server
-func (client *SpotClient) SendPing(builder *spotcache.RequestBuilder, conn net.Conn) error {
+func (client *SpotClient) SendPing(conn net.Conn, count int, interval time.Duration) error {
     buf := make([]byte, 128)
     fmt.Println("send a ping request")
-    request := builder.CreatePingRequest()
+    request := client.builder.CreatePingRequest()
     bytes, _ := request.ToBytes()
 
     if _, err := conn.Write(bytes); err != nil {
@@ -66,8 +67,13 @@ func (client *SpotClient) SendPing(builder *spotcache.RequestBuilder, conn net.C
         return err
     }
 
-    resp, _ := spotcache.ResponseFromBytes(buf[:n])
-    fmt.Printf("ping response: ID: %s SS: %s data:%s\n", resp.ID, resp.Session, string(resp.Data))
+    for i := 0; i < count; i++ {
+        if i > 0 {
+            time.Sleep(interval);
+        }
+        resp, _ := spotcache.ResponseFromBytes(buf[:n])
+        fmt.Printf("ping response #%d: ID: %s SS: %s data:%s\n", (i + 1), resp.ID, resp.Session, string(resp.Data))
+    }
 
     return nil
 }
@@ -85,9 +91,10 @@ func (client SpotClient) Exec() error {
     sess := client.getSession(conn)
     fmt.Printf("session: %s\n", sess);
 
+    client.builder = spotcache.NewRequestBuilder(sess)
+
     // now send a ping
-    builder := spotcache.NewRequestBuilder(sess)
-    client.SendPing(builder, conn)
+    client.SendPing(conn, 1e6, time.Second * 10)
 
     return err
 }
