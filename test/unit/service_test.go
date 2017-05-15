@@ -35,6 +35,7 @@ func TestService(t *testing.T) {
 			g.Assert(ss.Addr().String()).Equal("[::]:4000")
 		})
 
+        /*
 		g.It("should open and serve then close the service", func(done Done) {
 			service := spotcache.NewCacheService(cfg)
 			service.Timeout = time.Duration(1e6)
@@ -54,6 +55,7 @@ func TestService(t *testing.T) {
 
 			done()
 		})
+        */
 
 		g.It("should execute shutdown even if not open", func() {
 			service := spotcache.NewCacheService(cfg)
