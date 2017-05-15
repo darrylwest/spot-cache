@@ -15,14 +15,11 @@ import (
 	"github.com/darrylwest/spot-cache/spotcache"
 )
 
-// SessionType - container for the session bytes
-type SessionType [12]byte
-
 // SpotClient - client struct
 type SpotClient struct {
 	CreateTime time.Time
 	cfg        *Config
-	Session    SessionType
+	Session    spotcache.SessionType
 }
 
 
@@ -37,7 +34,7 @@ func NewSpotClient(cfg *Config) *SpotClient {
 	return client
 }
 
-func (client *SpotClient) getSession(conn net.Conn) SessionType {
+func (client *SpotClient) getSession(conn net.Conn) spotcache.SessionType {
     buf := make([]byte, 32)
     n, err := conn.Read(buf)
     if err != nil {
@@ -47,6 +44,32 @@ func (client *SpotClient) getSession(conn net.Conn) SessionType {
     copy(client.Session[:], buf[:n])
 
     return client.Session
+}
+
+// SendPing - sends a basic ping to the server
+func (client *SpotClient) SendPing(builder *spotcache.RequestBuilder, conn net.Conn) error {
+    buf := make([]byte, 128)
+    fmt.Println("send a ping request")
+    request := builder.CreatePingRequest()
+    bytes, _ := request.ToBytes()
+
+    if _, err := conn.Write(bytes); err != nil {
+        fmt.Println("lost connection...");
+        return err
+    }
+
+    fmt.Printf("request: %v\n", request)
+
+    n, err := conn.Read(buf)
+    if err != nil {
+        fmt.Println("lost connection..");
+        return err
+    }
+
+    resp, _ := spotcache.ResponseFromBytes(buf[:n])
+    fmt.Printf("ping response: ID: %s SS: %s data:%s\n", resp.ID, resp.Session, string(resp.Data))
+
+    return nil
 }
 
 // Exec - run the command
@@ -62,7 +85,9 @@ func (client SpotClient) Exec() error {
     sess := client.getSession(conn)
     fmt.Printf("session: %s\n", sess);
 
-    time.Sleep(1 * time.Second)
+    // now send a ping
+    builder := spotcache.NewRequestBuilder(sess)
+    client.SendPing(builder, conn)
 
     return err
 }

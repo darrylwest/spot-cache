@@ -10,6 +10,7 @@ package clienttest
 import (
     "fmt"
 	"spotclient"
+    // "spotcache"
 	"testing"
 	"time"
 
@@ -24,12 +25,10 @@ func TestClient(t *testing.T) {
 		now := time.Now()
 
 		g.It("should create a client struct", func() {
-            var sess spotclient.SessionType
 
 			client := spotclient.NewSpotClient(cfg)
 			g.Assert(client != nil).IsTrue()
 			g.Assert(client.CreateTime.After(now)).IsTrue()
-			g.Assert(client.Session).Equal(sess)
 
 			fmt.Sprintf("%v", client)
 		})
