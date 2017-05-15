@@ -15,12 +15,16 @@ import (
 	"github.com/darrylwest/spot-cache/spotcache"
 )
 
+// SessionType - container for the session bytes
+type SessionType [12]byte
+
 // SpotClient - client struct
 type SpotClient struct {
 	CreateTime time.Time
 	cfg        *Config
-	Session    string
+	Session    SessionType
 }
+
 
 
 // NewSpotClient - create the client
@@ -33,11 +37,32 @@ func NewSpotClient(cfg *Config) *SpotClient {
 	return client
 }
 
+func (client *SpotClient) getSession(conn net.Conn) SessionType {
+    buf := make([]byte, 32)
+    n, err := conn.Read(buf)
+    if err != nil {
+        panic(err)
+    }
+
+    var ss SessionType
+
+    copy(client.Session[:], buf[:n])
+
+    return ss
+}
+
 // Exec - run the command
 func (client SpotClient) Exec() error {
     var err error
 
     fmt.Printf("exec %v\n", client.cfg.Args) 
+
+    // implement ping first...
+    conn, _ := client.Connect()
+    defer conn.Close();
+
+    sess := client.getSession(conn)
+    fmt.Printf("session %s\n", sess);
 
     return err
 }
