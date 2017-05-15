@@ -20,6 +20,7 @@ type Config struct {
 	Host    string
 	Port    int
 	Timeout int64
+    Args    []string
 }
 
 // NewDefaultConfig - create a new config using the standard defaults
@@ -53,7 +54,6 @@ func ParseArgs() *Config {
 
     fmt.Printf("%s Version %s\n", path.Base(os.Args[0]), Version())
 
-    fmt.Printf("args: %v\n", flag.Args());
 
     if *vers == true {
         os.Exit(0)
@@ -64,6 +64,9 @@ func ParseArgs() *Config {
     cfg.Env = *env
     cfg.Host = *host
     cfg.Port = *port
+
+    // copy over the res of the args
+    cfg.Args = flag.Args()
 
     cfg.Timeout = dflt.Timeout
 

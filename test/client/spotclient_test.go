@@ -29,7 +29,7 @@ func TestClient(t *testing.T) {
 			g.Assert(client.CreateTime.After(now)).IsTrue()
 			g.Assert(client.Session).Equal("")
 
-			println(fmt.Sprintf("%v", client))
+			fmt.Sprintf("%v", client)
 		})
 
 		// implement ping, status, get, put/set, has, delete, backup

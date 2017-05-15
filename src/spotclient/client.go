@@ -22,6 +22,7 @@ type SpotClient struct {
 	Session    string
 }
 
+
 // NewSpotClient - create the client
 func NewSpotClient(cfg *Config) *SpotClient {
 	client := &SpotClient{}
@@ -32,13 +33,25 @@ func NewSpotClient(cfg *Config) *SpotClient {
 	return client
 }
 
+// Exec - run the command
+func (client SpotClient) Exec() error {
+    var err error
+
+    fmt.Printf("exec %v\n", client.cfg.Args) 
+
+    return err
+}
+
 // Connect - return the connection
 func (client *SpotClient) Connect() (net.Conn, error) {
 	host := fmt.Sprintf("%s:%d", client.cfg.Host, client.cfg.Port)
 
 	fmt.Printf("dialing %s\n", host);
-
 	conn, err := net.Dial("tcp", host)
+    if err != nil {
+        panic(err)
+    }
+
 
 	return conn, err
 }
