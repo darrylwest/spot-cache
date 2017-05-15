@@ -1,4 +1,4 @@
-// main
+// spotcached - primary server
 //
 // @author darryl.west <darryl.west@raincitysoftware.com>
 // @created 2017-03-10 14:13:11

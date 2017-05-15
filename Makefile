@@ -3,6 +3,7 @@ export GOPATH:=$(HOME)/.gopath:$(PWD)
 
 build: 
 	@[ -d bin ] || mkdir bin
+	( go build -o bin/spotcache-cli src/spotcache-cli.go )
 	( go build -o bin/spotcached src/spotcached.go )
 
 build-linux:
@@ -17,7 +18,7 @@ install-deps:
 	go get github.com/boltdb/bolt/...
 
 format:
-	( gofmt -s -w src/*.go src/spotcache/*.go test/*/*.go examples/*.go tools/*.go )
+	( gofmt -s -w src/*.go src/spotcache/*.go src/spotclient/*.go test/*/*.go examples/*.go tools/*.go )
 
 lint:
 	@( golint src/... && golint test/... && golint tools/... && golint examples )
@@ -25,10 +26,16 @@ lint:
 qtest:
 	@( [ -d $(HOME)/.spotcache ] || mkdir $(HOME)/.spotcache )
 	@( cd test/unit && go test -cover )
+	@( cd test/client && go test -cover )
 
 test:
 	@( [ -d $(HOME)/.spotcache ] || mkdir $(HOME)/.spotcache )
-	@( go vet src/spotcache/*.go && go vet src/spotclient/*.go && go vet src/*.go && cd test/unit && go test -cover )
+	@( go vet src/spotclient/*.go && cd test/client && go test -cover )
+	@( go vet src/spotcache/*.go && go vet src/*.go && cd test/unit && go test -cover )
+	@( make lint )
+
+test-client:
+	@( go vet src/spotclient/*.go && cd test/client && go test -cover )
 	@( make lint )
 
 watch:
@@ -41,6 +48,7 @@ start:
 	( make build )
 	./bin/spotcached &
 
+# requires cli
 status:
 	@( echo "implement a socket client that will request status..." )
 
@@ -53,6 +61,7 @@ shutdown:
 edit:
 	vi -O3 src/*/*.go test/unit/*.go src/*.go
 
+# examples...
 ping-client:
 	go run examples/ping-client.go
 
