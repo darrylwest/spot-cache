@@ -49,30 +49,32 @@ func (client *SpotClient) getSession(conn net.Conn) spotcache.SessionType {
 
 // SendPing - sends a basic ping to the server
 func (client *SpotClient) SendPing(conn net.Conn, count int, interval time.Duration) error {
+    fmt.Printf("send a ping %d requests...\n", count)
+
     buf := make([]byte, 128)
-    fmt.Println("send a ping request")
-    request := client.builder.CreatePingRequest()
-    bytes, _ := request.ToBytes()
-
-    if _, err := conn.Write(bytes); err != nil {
-        fmt.Println("lost connection...");
-        return err
-    }
-
-    fmt.Printf("request: %v\n", request)
-
-    n, err := conn.Read(buf)
-    if err != nil {
-        fmt.Println("lost connection..");
-        return err
-    }
-
     for i := 0; i < count; i++ {
         if i > 0 {
             time.Sleep(interval);
         }
+
+        request := client.builder.CreatePingRequest()
+        bytes, _ := request.ToBytes()
+
+        if _, err := conn.Write(bytes); err != nil {
+            fmt.Println("lost connection...");
+            return err
+        }
+
+        fmt.Printf("ping request  #%d: %v\n", (i+1), request)
+
+        n, err := conn.Read(buf)
+        if err != nil {
+            fmt.Println("lost connection..");
+            return err
+        }
+
         resp, _ := spotcache.ResponseFromBytes(buf[:n])
-        fmt.Printf("ping response #%d: ID: %s SS: %s data:%s\n", (i + 1), resp.ID, resp.Session, string(resp.Data))
+        fmt.Printf("ping response #%d: ID:%s SS: %s data:%s\n", (i + 1), resp.ID, resp.Session, string(resp.Data))
     }
 
     return nil
