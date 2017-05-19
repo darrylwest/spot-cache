@@ -35,11 +35,6 @@ func NewDefaultConfig() *Config {
 	return cfg
 }
 
-// Version - show the current client version
-func Version() string {
-    return "1.0.0"
-}
-
 // ParseArgs - parse the command line args to set host, port, env etc
 func ParseArgs() *Config {
     dflt := NewDefaultConfig()

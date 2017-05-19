@@ -23,8 +23,6 @@ type SpotClient struct {
     builder    *spotcache.RequestBuilder
 }
 
-
-
 // NewSpotClient - create the client
 func NewSpotClient(cfg *Config) *SpotClient {
 	client := &SpotClient{}
@@ -110,7 +108,6 @@ func (client *SpotClient) Connect() (net.Conn, error) {
     if err != nil {
         panic(err)
     }
-
 
 	return conn, err
 }
