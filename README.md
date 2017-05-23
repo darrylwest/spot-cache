@@ -9,14 +9,16 @@
          /_/                                                       
 ```
 
-_A lightning fast, light-weight cache service written in golang and backed by Boltdb, leveldb or RethinkDb._
+_A lightning fast, light-weight cache service written in golang and backed by Boltdb._
 
 [![build](https://travis-ci.org/darrylwest/spot-cache.svg?branch=master)](https://travis-ci.org/darrylwest/spot-cache/)
 [![reportcard](https://goreportcard.com/badge/github.com/darrylwest/spot-cache)](https://goreportcard.com/report/github.com/darrylwest/spot-cache)
 
 # Overview
 
-Spot cache is a fast, highly available cache service written in golang with backing from various key/value stores including Boltdb, level-db and RethinkDb.  Server connections are via TCP sockets with cluster/replication to support multiple machines.  It can also be used as a single instance in a small network of machines.
+Spot cache is a fast, highly available cache service written in golang with backing from various key/value stores like Boltdb, Badger, level-db, RethinkDb, etc.  Server connections are via TCP sockets with cluster/replication to support multiple machines.  It can also be used as a single instance in a small network of machines.
+
+_Currently Boltdb is the only backing data store._
 
 Socket protocol is asynchronous request/replay that uses a thin envelope to match the correct response to it's request.
 
@@ -28,7 +30,7 @@ Socket protocol is asynchronous request/replay that uses a thin envelope to matc
 
 ### Highlights
 
-* [boltdb](https://github.com/boltdb/bolt) or [level-db](https://github.com/syndtr/goleveldb) backed (_currently only bolt is supported_)
+* [boltdb](https://github.com/boltdb/bolt) backed
 * socket API (request/response)
 * cluster/replication support
 * written in golang
@@ -143,4 +145,4 @@ Apache 2.0
 
 _This project was inspired in part by [Suryandaru Triandana](https://github.com/syndtr/goleveldb)'s excellent port of leveldb to golang._
 
-###### Copyright © 2014-2017, Rain City Software | darryl.west | Version 0.91.119
+###### Copyright © 2014-2017, Rain City Software | darryl.west | Version 0.91.120

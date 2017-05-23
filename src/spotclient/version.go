@@ -3,14 +3,14 @@
 // @author darryl.west <darryl.west@raincitysoftware.com>
 // @created 2017-03-11 09:59:37
 
-package spotcache
+package spotclient
 
 import "fmt"
 
 const (
-	major = 0
-	minor = 91
-	patch = 120
+	major = 1
+	minor = 0
+	patch = 1
 )
 
 // Version - return the version number as a single string

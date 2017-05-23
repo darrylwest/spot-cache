@@ -8,9 +8,9 @@
 package clienttest
 
 import (
-    "fmt"
+	"fmt"
 	"spotclient"
-    // "spotcache"
+	// "spotcache"
 	"testing"
 	"time"
 
