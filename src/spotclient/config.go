@@ -10,8 +10,8 @@ package spotclient
 import (
 	"flag"
 	"fmt"
-    "os"
-    "path"
+	"os"
+	"path"
 )
 
 // Config - client configuration struct
@@ -20,7 +20,7 @@ type Config struct {
 	Host    string
 	Port    int
 	Timeout int64
-    Args    []string
+	Args    []string
 }
 
 // NewDefaultConfig - create a new config using the standard defaults
@@ -37,35 +37,34 @@ func NewDefaultConfig() *Config {
 
 // ParseArgs - parse the command line args to set host, port, env etc
 func ParseArgs() *Config {
-    dflt := NewDefaultConfig()
+	dflt := NewDefaultConfig()
 
-    vers := flag.Bool("version", false, "show the version and exit")
+	vers := flag.Bool("version", false, "show the version and exit")
 
-    env := flag.String("env", dflt.Env, "set the environment, defaults to "+dflt.Env)
-    host := flag.String("host", dflt.Host, "set the server's host, defaults to "+dflt.Host)
-    port := flag.Int("port", dflt.Port, fmt.Sprintf("set the listening port, defaults to %d", dflt.Port))
+	env := flag.String("env", dflt.Env, "set the environment, defaults to "+dflt.Env)
+	host := flag.String("host", dflt.Host, "set the server's host, defaults to "+dflt.Host)
+	port := flag.Int("port", dflt.Port, fmt.Sprintf("set the listening port, defaults to %d", dflt.Port))
 
-    flag.Parse()
+	flag.Parse()
 
-    fmt.Printf("%s Version %s\n", path.Base(os.Args[0]), Version())
+	fmt.Printf("%s Version %s\n", path.Base(os.Args[0]), Version())
 
+	if *vers == true {
+		os.Exit(0)
+	}
 
-    if *vers == true {
-        os.Exit(0)
-    }
+	cfg := new(Config)
 
-    cfg := new(Config)
+	cfg.Env = *env
+	cfg.Host = *host
+	cfg.Port = *port
 
-    cfg.Env = *env
-    cfg.Host = *host
-    cfg.Port = *port
+	// copy over the res of the args
+	cfg.Args = flag.Args()
 
-    // copy over the res of the args
-    cfg.Args = flag.Args()
+	cfg.Timeout = dflt.Timeout
 
-    cfg.Timeout = dflt.Timeout
-
-    return cfg
+	return cfg
 }
 
 // NewConfigForEnvironment - create new config for the given environment

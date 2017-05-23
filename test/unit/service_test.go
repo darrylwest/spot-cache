@@ -35,27 +35,27 @@ func TestService(t *testing.T) {
 			g.Assert(ss.Addr().String()).Equal("[::]:4000")
 		})
 
-        /*
-		g.It("should open and serve then close the service", func(done Done) {
-			service := spotcache.NewCacheService(cfg)
-			service.Timeout = time.Duration(1e6)
+		/*
+			g.It("should open and serve then close the service", func(done Done) {
+				service := spotcache.NewCacheService(cfg)
+				service.Timeout = time.Duration(1e6)
 
-			ss, err := service.CreateListener()
-			g.Assert(err).Equal(nil)
+				ss, err := service.CreateListener()
+				g.Assert(err).Equal(nil)
 
-			service.InitializeCache(cfg)
+				service.InitializeCache(cfg)
 
-			go func() {
-				service.ListenAndServe(ss)
-				g.Assert(service.CreateDate.Year()).Equal(time.Now().UTC().Year())
-			}()
+				go func() {
+					service.ListenAndServe(ss)
+					g.Assert(service.CreateDate.Year()).Equal(time.Now().UTC().Year())
+				}()
 
-			time.Sleep(time.Millisecond * 100)
-			service.Shutdown()
+				time.Sleep(time.Millisecond * 100)
+				service.Shutdown()
 
-			done()
-		})
-        */
+				done()
+			})
+		*/
 
 		g.It("should execute shutdown even if not open", func() {
 			service := spotcache.NewCacheService(cfg)

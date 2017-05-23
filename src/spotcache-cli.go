@@ -14,9 +14,9 @@ import (
 
 func main() {
 	cfg := spotclient.ParseArgs()
-    client := spotclient.NewSpotClient(cfg)
-    err := client.Exec()
-    if err != nil {
-        fmt.Printf("%v\n", err)
-    }
+	client := spotclient.NewSpotClient(cfg)
+	err := client.Exec()
+	if err != nil {
+		fmt.Printf("%v\n", err)
+	}
 }
