@@ -24,7 +24,7 @@ Socket protocol is asynchronous request/replay that uses a thin envelope to matc
 
 ## Installation
 
-**Note: this project is in the early stages and doesn't expect to go live until the middle of Q3-2017.**
+**Note: this project is in the early stages and doesn't expect to go live until the middle of Q3-2018.**
 
 ## Server
 
@@ -143,6 +143,4 @@ Here are the rules:
 
 Apache 2.0
 
-_This project was inspired in part by [Suryandaru Triandana](https://github.com/syndtr/goleveldb)'s excellent port of leveldb to golang._
-
-###### Copyright © 2014-2017, Rain City Software | darryl.west | Version 0.91.120
+###### Copyright © 2014-2018, Rain City Software | darryl.west | Version 0.91.120
