@@ -94,7 +94,7 @@ func (client SpotClient) Exec() error {
 	client.builder = spotcache.NewRequestBuilder(sess)
 
 	// now send a ping
-	client.SendPing(conn, 1e6, time.Second*10)
+	client.SendPing(conn, 1e6, time.Millisecond*10)
 
 	return err
 }
