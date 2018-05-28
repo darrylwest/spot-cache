@@ -136,7 +136,7 @@ Here are the rules:
 * RainCitySoftware develops all software using TDD.  All submitted code must include a complete set of unit tests, and if appropriate, functional tests.
 * We follow golang's idioms and best practices.  All code must be formatted using go-fmt.
 * Please submit pull requests. After code reviews and possible modifications your code will be merged.
-* Code of conduct: you known the drill. The ACM's [Code of Ethics and Professional Conduct](https://www.acm.org/about-acm/acm-code-of-ethics-and-professional-conduct) says it all--don't be a dick.
+* Code of conduct: The ACM's [Code of Ethics and Professional Conduct](https://www.acm.org/about-acm/acm-code-of-ethics-and-professional-conduct) says it all--don't be a dick.
 
 
 ## License
@@ -144,3 +144,4 @@ Here are the rules:
 Apache 2.0
 
 ###### Copyright © 2014-2018, Rain City Software | darryl.west | Version 0.91.120
+:q
