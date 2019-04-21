@@ -54,7 +54,7 @@ status:
 	@( echo "implement a socket client that will request status..." )
 
 ping:
-	@( echo "implement a socket client that will request a ping..." )
+	go run src/spotcache-cli.go
 
 shutdown:
 	@( echo "implement a socket client that will request a shutdown..." )
@@ -69,8 +69,4 @@ ping-client:
 writer-client:
 	go run examples/writer-client.go
 
-.PHONY: format
-.PHONY: test
-.PHONY: qtest
-.PHONY: watch
-.PHONY: run
+.PHONY: format test qtest watch run
